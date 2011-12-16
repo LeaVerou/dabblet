@@ -1021,6 +1021,13 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	});
 	
+	if(localStorage.settings) {
+		Dabblet.settings.apply(JSON.parse(localStorage.settings));
+	}
+	else {
+		Dabblet.settings.apply();
+	}
+	
 	var path = location.pathname.slice(1);
 	
 	if(path) {
@@ -1038,13 +1045,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		if('dabblet.html' in localStorage) {
 			html.textContent = localStorage['dabblet.html'];
-		}
-		
-		if(localStorage.settings) {
-			Dabblet.settings.apply(JSON.parse(localStorage.settings));
-		}
-		else {
-			Dabblet.settings.apply();
 		}
 	}
 });

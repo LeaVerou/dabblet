@@ -768,7 +768,7 @@ header.focus {
 		-webkit-transform: translateZ(0) rotate(-90deg);
 	}
 	
-	.previewer[data-negative] > svg {
+	#angle[data-negative] > svg {
 		transform:  scaleX(-1) rotate(-90deg);
 		-webkit-transform:  translateZ(0) scaleX(-1) rotate(-90deg);
 	}
