@@ -457,7 +457,11 @@ var Dabblet = {
 	},
 	
 	wipe: function() {
-		if(confirm('Are you sure? You will lose ' + (gist.saved? '' : 'unsaved changes and ') + 'your saved draft.')) {
+		var question = 'Are you sure? You will lose ' +
+						(gist.saved? '' : 'unsaved changes and ') +
+						'your saved draft.';
+						
+		if(confirm(question)) {
 			localStorage.removeItem('dabblet.css');
 			localStorage.removeItem('dabblet.html');
 			window.onbeforeunload = null;
