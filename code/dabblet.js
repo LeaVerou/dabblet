@@ -953,7 +953,7 @@ window.onbeforeunload = function(){
 		css.onblur();
 		html.onblur();
 		
-		return confirm('You have unsaved changes. Are you sure?');
+		return 'You have unsaved changes.';
 	}
 };
 
