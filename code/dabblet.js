@@ -843,11 +843,15 @@ Dabblet.previewer('abslength', function(previewer, code) {
 		
 		previewer.style.display = 'block';
 		
-		if(previewer.offsetWidth > innerWidth) {
+		var width = previewer.offsetWidth;
+		
+		if(width > innerWidth) {
 			valid = false;
 		}
-		
-		previewer.setAttribute('data-size', previewer.offsetWidth < 20? (previewer.offsetWidth < 10? 'tiny' : 'small') : 'normal');
+		else {
+			var size = width < 20? (width < 10? 'tiny' : 'small') : 'normal';
+			previewer.setAttribute('data-size', size);
+		}
 	}
 	
 	return valid;
