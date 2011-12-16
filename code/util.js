@@ -60,30 +60,6 @@ function xhr(o) {
 	return xhr;
 }
 
-function queryToObject(search) {
-	var obj = {};
-	
-	search.slice(1).split('&').forEach(function(pair){
-		var i = pair.indexOf('=');
-		
-		obj[pair.slice(0,i)] = pair.slice(i+1);
-	});
-	
-	return obj;
-}
-
-function objectToQuery(obj) {
-	var search = [];
-	
-	for(var key in obj) {
-		if(key && obj[key]) {
-			search.push(key + '=' + obj[key]);
-		}
-	}
-	
-	return '?' + search.join('&');
-}
-
 function script(url, callback, doc) {
 	doc = doc || document;
 	

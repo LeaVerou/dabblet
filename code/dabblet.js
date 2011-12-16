@@ -1004,23 +1004,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		a.title = 'New dabblet';
 	}
 	
-	var search = queryToObject(location.search);
-	
-	// Set fields according to query params
-	$$('input[data-scope]').forEach(function(input){
-		var name = input.name;
-		
-		if(search[name]) {
-			input.checked = search[name] == input.value;
-		}
-		
-		input.onclick = function(evt){
-			if(this.checked) {
-				Dabblet.settings.apply(this.name, this.value);
-			}
-		}
-	});
-	
 	if(localStorage.settings) {
 		Dabblet.settings.apply(JSON.parse(localStorage.settings));
 	}
