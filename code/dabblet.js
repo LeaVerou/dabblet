@@ -863,6 +863,10 @@ Dabblet.previewer('abslength', function(previewer, code) {
 });
 
 Dabblet.previewer('time', function(previewer, code) {
+	if(code === '0s') {
+		return false;
+	}
+	
 	$$('animate', previewer).forEach(function(animation) {
 		animation.setAttribute('dur', code);
 	});
@@ -1286,11 +1290,34 @@ document.onkeydown = function(evt) {
 				break;
 		}
 		
+		var currentPage = Dabblet.settings.current('page');
+		
+		if(evt.shiftKey) {
+			if(character === '[' || code === 219) {
+				if(evt.shiftKey) {
+					// Go to previous tab
+					var page = ({
+						'html': 'css',
+						'result': 'html'
+					})[currentPage];
+				}
+			}
+			else if (character === ']' || code === 221) {
+				if(evt.shiftKey) {
+					// Go to next tab
+					var page = ({
+						'css': 'html',
+						'html': 'result'
+					})[currentPage];
+				}
+			}
+		}
+		
 		if(page) {
-			var currentPage = Dabblet.settings.current('page');
-			
 			if(currentPage !== page) {
 				Dabblet.settings.apply('page', page);
+				
+				evt.stopPropagation();
 				return false;
 			}
 		}
