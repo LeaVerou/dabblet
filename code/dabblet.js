@@ -537,14 +537,22 @@ var Dabblet = {
 					var valid = updater(previewer, token.textContent);
 
 					if(valid) {
+						previewer.style.display = 'block';
+						
 						if(changedToken) {
 							var offsets = offset(token);
-
-							style.bottom = offsets.bottom + token.offsetHeight + 'px';
+							
+							style.bottom = style.top = 'auto';
 							style.left = offsets.left + Math.min(200, token.offsetWidth/2) + 'px';
+							
+							if (offsets.top - previewer.offsetHeight > 0) {
+								style.bottom = offsets.bottom + token.offsetHeight + 'px';
+								previewer.classList.remove('down');
+							} else {
+								style.top = offsets.top + token.offsetHeight + 'px';
+								previewer.classList.add('down');
+							}
 						}
-						
-						previewer.style.display = 'block';
 					}
 				}
 				
