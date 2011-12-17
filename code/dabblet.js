@@ -871,7 +871,7 @@ Dabblet.previewer('time', function(previewer, code) {
 		unit = (code.match(/[a-z]+$/i) || [])[0];
 
 	$$('animate', previewer).forEach(function(animation) {
-		animation.setAttribute('dur', 2*num);
+		animation.setAttribute('dur', 2*num + unit);
 	});
 	
 	return true;
