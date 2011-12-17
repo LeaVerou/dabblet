@@ -221,7 +221,7 @@ header:hover,
 header:active,
 header.focus {
 	top: 0;
-	transition-delay: 0;
+	transition-delay: 0s;
 }
 
 	header > h1 {

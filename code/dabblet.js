@@ -775,9 +775,9 @@ var Dabblet = {
 					if(this.checked) {
 						Dabblet.settings.applyOne(name, this.value);
 						
-						if(evt && this.getAttribute('data-scope')) {
+						/*if(evt && this.getAttribute('data-scope')) {
 							gist.saved = false;
-						}
+						}*/
 					}
 				}).call(input);
 			});
@@ -1060,11 +1060,13 @@ $$('pre').forEach(function(pre){
 				});
 				
 				break;
-			case 9:
-				Dabblet.codeActions.call(this, 'indent', {
-					inverse: evt.shiftKey
-				});
-				return false;
+			case 9: // Tab
+				if(!cmdOrCtrl) {
+					Dabblet.codeActions.call(this, 'indent', {
+						inverse: evt.shiftKey
+					});
+					return false;
+				}
 			case 13:
 				Dabblet.codeActions.call(this, 'newline');
 				return false;
@@ -1215,7 +1217,9 @@ $$('pre').forEach(function(pre){
 	
 	pre.onblur = function() {
 		if(!gist.saved) {
-			localStorage['dabblet.' + this.id] = this.textContent;
+			// Save draft
+			localStorage['dabblet.css'] = css.textContent;
+			localStorage['dabblet.html'] = html.textContent;
 		}
 		
 		Dabblet.hidePreviewers();
