@@ -867,8 +867,11 @@ Dabblet.previewer('time', function(previewer, code) {
 		return false;
 	}
 	
+	var num = parseFloat(code),
+		unit = (code.match(/[a-z]+$/i) || [])[0];
+
 	$$('animate', previewer).forEach(function(animation) {
-		animation.setAttribute('dur', code);
+		animation.setAttribute('dur', 2*num);
 	});
 	
 	return true;

@@ -210,7 +210,7 @@ header {
 	z-index: 10;
 	padding: .4em .5em 0;
 	border-bottom: 10px solid black;
-	background: url(img/noise.png), linear-gradient(hsl(200, 10%, 20%), hsla(200, 10%, 20%, .8));
+	background: url(img/noise.png), linear-gradient(hsl(200, 10%, 20%), hsla(200, 10%, 20%, .85));
 	color: white;
 	line-height: 1.1;
 	font-weight: bold;

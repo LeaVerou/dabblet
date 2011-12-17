@@ -40,7 +40,7 @@ var _ = window.Incrementable = function(textField, multiplier, units) {
 			me.changed = false;
 			
 			// Up or down arrow pressed, check if there's something
-			// increment/decrement-able where the caret is
+			// increment/decrement-able under the caret
 			var caret = this.selectionStart, text = this.value,
 				regex = new RegExp('^([\\s\\S]{0,' + caret + '}[^-0-9\\.])(-?[0-9]*(?:\\.?[0-9]+)(?:' + me.units + '))\\b', 'i'),
 				property = 'value' in this? 'value' : 'textContent';
