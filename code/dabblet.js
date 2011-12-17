@@ -741,12 +741,13 @@ var Dabblet = {
 			var settings = {};
 			
 			$$('input[data-scope]' + (name? '[name="' + name + '"]' : '')).forEach(function(input){
+			
 				if(!('checked' in input) || input.checked) {
 					settings[input.name] = input.value;
 				}
 			});
 			
-			return settings;
+			return name? settings[name] : settings;
 		},
 		
 		apply: function() {
@@ -1286,8 +1287,12 @@ document.onkeydown = function(evt) {
 		}
 		
 		if(page) {
-			Dabblet.settings.apply('page', page);
-			return false;
+			var currentPage = Dabblet.settings.current('page');
+			
+			if(currentPage !== page) {
+				Dabblet.settings.apply('page', page);
+				return false;
+			}
 		}
 	}
 	
