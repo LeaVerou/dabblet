@@ -609,6 +609,7 @@ header.focus {
 	display: none;
 	position: absolute;
 	bottom: 120%; left: 120%; /* off the page */
+	margin-top: 10px;
 	margin-bottom: 10px;
 	border-radius: 8px;
 	box-shadow: 1px 1px 8px rgba(0,0,0,.7);
@@ -684,6 +685,10 @@ header.focus {
 		background: white;
 		transform: rotate(45deg);
 		box-shadow: inherit;
+	}
+	
+	.previewer.flipped:before {
+		top: -6px;
 	}
 	
 	#abslength:before {
