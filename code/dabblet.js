@@ -540,18 +540,20 @@ var Dabblet = {
 						previewer.style.display = 'block';
 						
 						if(changedToken) {
-							var offsets = offset(token);
-							
-							style.bottom = style.top = 'auto';
-							style.left = offsets.left + Math.min(200, token.offsetWidth/2) + 'px';
+							var offsets = offset(token),
+								property = 'top';
 							
 							if (offsets.top - previewer.offsetHeight > 0) {
-								style.bottom = offsets.bottom + token.offsetHeight + 'px';
-								previewer.classList.remove('down');
-							} else {
-								style.top = offsets.top + token.offsetHeight + 'px';
-								previewer.classList.add('down');
+								property = 'bottom';
+								previewer.classList.remove('flipped');
 							}
+							else {
+								previewer.classList.add('flipped');
+							}
+							
+							style.bottom = style.top = '';
+							style[property] = offsets[property] + token.offsetHeight + 'px';
+							style.left = offsets.left + Math.min(200, token.offsetWidth/2) + 'px';
 						}
 					}
 				}
