@@ -1288,7 +1288,7 @@ document.onkeydown = function(evt) {
 		character = String.fromCharCode(code),
 		cmdOrCtrl = evt.metaKey || evt.ctrlKey;
 	
-	if(cmdOrCtrl) {
+	if(cmdOrCtrl && !evt.altKey) {
 		switch(character) {
 			case 'S':
 				gist.save();
