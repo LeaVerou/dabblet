@@ -537,14 +537,24 @@ var Dabblet = {
 					var valid = updater(previewer, token.textContent);
 
 					if(valid) {
+						previewer.style.display = 'block';
+						
 						if(changedToken) {
-							var offsets = offset(token);
-
-							style.bottom = offsets.bottom + token.offsetHeight + 'px';
+							var offsets = offset(token),
+								property = 'top';
+							
+							if (offsets.top - previewer.offsetHeight > 0) {
+								property = 'bottom';
+								previewer.classList.remove('flipped');
+							}
+							else {
+								previewer.classList.add('flipped');
+							}
+							
+							style.bottom = style.top = '';
+							style[property] = offsets[property] + token.offsetHeight + 'px';
 							style.left = offsets.left + Math.min(200, token.offsetWidth/2) + 'px';
 						}
-						
-						previewer.style.display = 'block';
 					}
 				}
 				
