@@ -142,7 +142,7 @@ body[data-loading] > #loader {
 .editor.page {
 	display: none;
 	overflow: hidden;
-	font: 150%/1.5 Monaco, Consolas, monospace;
+	font: 150%/1.5 Monaco, Consolas, Inconsolata, 'Deja Vu Sans Mono', 'Droid Sans Mono', 'Andale Mono', 'Lucida Console', monospace;
 }
 
 body:not([data-view="behind"]) > .editor.page {
