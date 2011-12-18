@@ -540,14 +540,15 @@ var Dabblet = {
 						previewer.style.display = 'block';
 						
 						if(changedToken) {
-							var offsets = offset(token),
-								property = 'top';
+							var offsets = offset(token), property;
+								
 							
 							if (offsets.top - previewer.offsetHeight > 0) {
 								property = 'bottom';
 								previewer.classList.remove('flipped');
 							}
 							else {
+								property = 'top';
 								previewer.classList.add('flipped');
 							}
 							
