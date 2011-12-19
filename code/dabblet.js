@@ -987,7 +987,7 @@ $$('pre').forEach(function(pre){
 			Highlight.init(this);
 			
 			// Dirty fix to #2
-			if(!/\n$/.test(this.textContent)) {
+			if(!/\n$/.test(code)) {
 				this.innerHTML = this.innerHTML + '\n';
 			}
 
