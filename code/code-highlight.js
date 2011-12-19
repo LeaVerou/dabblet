@@ -60,6 +60,7 @@ var _ = self.Highlight = {
 					number: number
 				}, 'gi'),
 			'fontfamily': /(("|')[\w\s]+\2,\s*|\w+,\s*)*(sans-serif|serif|monospace|cursive|fantasy)\b/gi,
+			'ignore': /&(lt|gt|amp);/gi,
 			'punctuation': /[\{\};:]/g
 		},
 		html: {
