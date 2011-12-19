@@ -985,6 +985,11 @@ $$('pre').forEach(function(pre){
 				se = this.selectionEnd;
 		
 			Highlight.init(this);
+			
+			// Dirty fix to #2
+			if(!/\n$/.test(this.textContent)) {
+				this.innerHTML = this.innerHTML + '\n';
+			}
 
 			if(ss !== null || se !== null) {
 				this.setSelectionRange(ss, se);
