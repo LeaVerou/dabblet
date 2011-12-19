@@ -65,7 +65,7 @@ var _ = self.Highlight = {
 		html: {
 			'comment': /&lt;!--[\w\W]*?--(>|&gt;)/g,
 			'tag': {
-				'pattern': /&lt;\/?[\w\W]+?(>|&gt;)/gi,
+				'pattern': /(&lt;|<)\/?[\w\W]+?(>|&gt;)/gi,
 				'inside': {
 					'attr-value': {
 						'pattern': /[\w-]+=(('|").*?(\2)|[^\s>]+(?=>|&|\s))/gi,

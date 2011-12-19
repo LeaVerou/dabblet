@@ -1146,10 +1146,16 @@ document.onkeydown = function(evt) {
 		}
 	}
 	
-	if(code == 27 // Esc 
-	  && document.activeElement && document.activeElement.blur) { 
-		document.activeElement.blur();
-		return false;
+	if(code == 27) { // Esc 
+		var active = document.activeElement;
+		
+		if (active && active != document.body && active.blur) { 
+			active.blur();
+			return false;
+		}
+		else if (location.hash) {
+			location.hash = '';
+		}
 	}
 	
 	if(code == 112) { // F1 
