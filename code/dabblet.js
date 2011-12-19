@@ -442,7 +442,7 @@ var Dabblet = {
 		
 		document.body.setAttribute('data-page', page);
 		
-		Dabblet.hidePreviewers();
+		Previewer.hideAll();
 		
 		pre.focus && pre.focus();
 		
@@ -497,80 +497,6 @@ var Dabblet = {
 			if(result.contentDocument.body) {
 				result.contentDocument.body.innerHTML = code;
 			}
-		}
-	},
-	
-	previewer: function(name, updater) {
-		var property = name + 'Token',
-			previewer = window[name];
-		
-		!this.previewers && (this.previewers = {});
-		
-		this.previewers[name] = previewer;
-		
-		Object.defineProperty(this, name, {
-			get: function() {
-				return this[property];
-			},
-			set: function(token) {
-				// Hide all previewers except this
-				var previewers = this.previewers;
-				
-				for(var pname in previewers) {
-					if(pname != name) {
-						this[pname + 'Token'] = null;
-						previewers[pname].style.display = '';
-					}
-				}
-				
-				var oldToken = this[property],
-					changedToken = oldToken != token,
-				    style = previewer.style;
-				
-				if(changedToken && oldToken) {
-					oldToken.removeAttribute('data-active');
-				}
-				
-				this[property] = token;
-				
-				if(token) {
-					var valid = updater(previewer, token.textContent);
-
-					if(valid) {
-						previewer.style.display = 'block';
-						
-						if(changedToken) {
-							var offsets = offset(token), property;
-								
-							
-							if (offsets.top - previewer.offsetHeight > 0) {
-								property = 'bottom';
-								previewer.classList.remove('flipped');
-							}
-							else {
-								property = 'top';
-								previewer.classList.add('flipped');
-							}
-							
-							style.bottom = style.top = '';
-							style[property] = offsets[property] + token.offsetHeight + 'px';
-							style.left = offsets.left + Math.min(200, token.offsetWidth/2) + 'px';
-						}
-					}
-				}
-				
-				if(!token || !valid) {
-					oldToken && (style.display = '');
-				}
-			}
-		});
-	},
-	
-	hidePreviewers: function() {
-		var previewers = this.previewers;
-		
-		for(var name in previewers) {
-			this[name] = null;
 		}
 	},
 	
@@ -833,137 +759,6 @@ var Dabblet = {
 	}
 };
 
-Dabblet.previewer('color', function(previewer, code) {
-	var style = previewer.style;
-						
-	style.backgroundColor = '';
-	style.backgroundColor = code;
-	
-	return !!style.backgroundColor;
-});
-
-Dabblet.previewer('abslength', function(previewer, code) {
-	var style = previewer.style,
-		abs = code.replace(/^-/, '');
-						
-	style.width = '';
-	style.width = abs;
-	
-	var valid = !!style.width;
-	
-	if(valid) {
-		var num = parseFloat(abs),
-			unit = (code.match(/[a-z]+$/i) || [])[0];
-		
-		style.marginLeft = -num/2 + unit;
-		
-		previewer.style.display = 'block';
-		
-		var width = previewer.offsetWidth;
-		
-		if(width > innerWidth) {
-			valid = false;
-		}
-		else {
-			var size = width < 20? (width < 10? 'tiny' : 'small') : 'normal';
-			previewer.setAttribute('data-size', size);
-		}
-	}
-	
-	return valid;
-});
-
-Dabblet.previewer('time', function(previewer, code) {
-	if(code === '0s') {
-		return false;
-	}
-	
-	var num = parseFloat(code),
-		unit = (code.match(/[a-z]+$/i) || [])[0];
-
-	$$('animate', previewer).forEach(function(animation) {
-		animation.setAttribute('dur', 2*num + unit);
-	});
-	
-	return true;
-});
-
-Dabblet.previewer('angle', function(previewer, code) {
-	var num = parseFloat(code),
-		unit = (code.match(/[a-z]+$/i) || [])[0],
-		max, percentage;
-		
-	switch(unit) {
-		case 'deg':
-			max = 360;
-			break;
-		case 'grad':
-			max = 400;
-			break;
-		case 'rad':
-			max = 2 * Math.PI;
-			break;
-		case 'turn':
-			max = 1;
-	}
-	
-	percentage = 100 * num/max;
-	percentage %= 100;
-	
-	previewer[(num < 0? 'set' : 'remove') + 'Attribute']('data-negative', '');
-	
-	$('circle', previewer).setAttribute('stroke-dasharray', Math.abs(percentage) + ',500')
-	
-	return true;
-});
-
-Dabblet.previewer('fontfamily', function(previewer, code) {
-	var style = previewer.style;
-						
-	style.fontFamily = '';
-	style.fontFamily = code;
-
-	return !!style.fontFamily;
-});
-
-Dabblet.previewer('gradient', function(previewer, code) {
-	var inner = previewer.firstChild,
-		style = inner.style;
-	
-	style.cssText = StyleFix.fix('background-image: ' + code);
-
-	return !!style.backgroundImage;
-});
-
-Dabblet.previewer('easing', function(previewer, code) {
-	code = ({
-		'linear': '0,0,1,1',
-		'ease': '.25,.1,.25,1',
-		'ease-in': '.42,0,1,1',
-		'ease-out': '0,0,.58,1',
-		'ease-in-out':'.42,0,.58,1'
-	})[code] || code;
-	
-	var p = code.match(/-?\d*\.?\d+/g);
-	
-	if(p.length === 4) {
-		p = p.map(function(p, i) { return (i % 2? 1 - p : p) * 100; });
-			
-		$('path', previewer).setAttribute('d', 'M0,100 C' + p[0] + ',' + p[1] + ', ' + p[2] + ',' + p[3] + ', 100,0');
-		
-		var lines = $$('line', previewer);
-		
-		lines[0].setAttribute('x2', p[0]);
-		lines[0].setAttribute('y2', p[1]);
-		lines[1].setAttribute('x2', p[2]);
-		lines[1].setAttribute('y2', p[3]);
-		
-		return true;
-	}
-	
-	return false;
-});
-
 window.ACCESS_TOKEN = localStorage['access_token'];
 
 currentuser.onclick = function(){
@@ -1209,30 +1004,34 @@ $$('pre').forEach(function(pre){
 			}
 		}
 		
-		if(id === 'css') {
-			var selection = getSelection();
+		this.onclick();
+	};
+	
+	pre.onclick = function(evt) {
+		if(this.id !== 'css') { return; }
+		
+		var selection = getSelection();
+		
+		if(selection.rangeCount) {
+			var range = selection.getRangeAt(0),
+				element = range.startContainer;
 			
-			if(selection.rangeCount) {
-				var range = selection.getRangeAt(0),
-					element = range.startContainer;
-				
-				if(element.nodeType == 3) {
-					element = element.parentNode;
-				}
-				
-				var tokenType = (element.className.match(/^token ([\w-]+)/) || [])[1],
-					hasPreviewer = tokenType && (tokenType in Dabblet.previewers);
-
-				if(hasPreviewer) {
-					element.setAttribute('data-active', '');
-					Dabblet[tokenType] = element;
-				}
-				else {
-					Dabblet.hidePreviewers();
-				}
+			if(element.nodeType == 3) {
+				element = element.parentNode;
+			}
+			
+			var type = Previewer.get(element);
+			
+			if(type) {
+				Previewer.active = element;
+				Previewer.s[type].token = element;
+			}
+			else {
+				Previewer.hideAll();
+				Previewer.active = null;
 			}
 		}
-	};
+	}
 	
 	pre.onblur = function() {
 		if(!gist.saved) {
@@ -1241,25 +1040,30 @@ $$('pre').forEach(function(pre){
 			localStorage['dabblet.html'] = html.textContent;
 		}
 		
-		Dabblet.hidePreviewers();
+		Previewer.hideAll();
 	};
 	
 	pre.onmouseover = function(evt) {
-		var target = evt.target;
+		var target = evt.target,
+		    type = Previewer.get(target);
 		
-		var tokenType = (target.className.match(/^token ([\w-]+)/) || [])[1];
+		if (type) {
 
-		if(tokenType && (tokenType in Dabblet.previewers) && Dabblet[tokenType] != target) {
-			Dabblet[tokenType] = target;
+			var previewer = Previewer.s[type];
 			
-			target.onmouseout = function() {
-				Dabblet[tokenType] = this.onmouseout = null;
+			if (previewer.token != target) {
+				previewer.token = target;
 				
-				var active = $('.token[data-active]', css);
-				
-				if (active) {
-					tokenType = (active.className.match(/^token ([\w-]+)/) || [])[1];
-					Dabblet[tokenType] = active;
+				target.onmouseout = function() {
+					previewer.token = this.onmouseout = null;
+					
+					// Show the previewer again on the active token
+					var active = Previewer.active;
+					
+					if (active) {
+						var type = Previewer.get(active);
+						Previewer.s[type].token = active;
+					}
 				}
 			}
 		}
