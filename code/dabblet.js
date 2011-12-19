@@ -1283,6 +1283,7 @@ css.onfocus = function() {
 	});
 };
 
+// Note: Has to be keydown to be able to cancel the event
 document.onkeydown = function(evt) {
 	var code = evt.keyCode,
 		character = String.fromCharCode(code),
@@ -1307,23 +1308,19 @@ document.onkeydown = function(evt) {
 		var currentPage = Dabblet.settings.current('page');
 		
 		if(evt.shiftKey) {
-			if(character === '[' || code === 219) {
-				if(evt.shiftKey) {
-					// Go to previous tab
-					var page = ({
-						'html': 'css',
-						'result': 'html'
-					})[currentPage];
-				}
+			if(code === 219) {
+				// Go to previous tab
+				var page = ({
+					'html': 'css',
+					'result': 'html'
+				})[currentPage];
 			}
 			else if (character === ']' || code === 221) {
-				if(evt.shiftKey) {
-					// Go to next tab
-					var page = ({
-						'css': 'html',
-						'html': 'result'
-					})[currentPage];
-				}
+				// Go to next tab
+				var page = ({
+					'css': 'html',
+					'html': 'result'
+				})[currentPage];
 			}
 		}
 		
