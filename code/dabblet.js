@@ -1111,6 +1111,9 @@ document.onkeydown = function(evt) {
 			case 'S':
 				gist.save();
 				return false;
+			case 'N':
+				Dabblet.wipe();
+				return false;
 			case '1':
 				var page = 'css';
 				break;
