@@ -4,3 +4,6 @@ RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.html [L]
+
+# Compress code
+AddOutputFilterByType DEFLATE text/plain text/html text/xml text/css text/javascript image/svg+xml application/xml application/xhtml+xml application/rss+xml application/javascript application/x-javascript
