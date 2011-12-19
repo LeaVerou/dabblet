@@ -442,7 +442,7 @@ var Dabblet = {
 		
 		document.body.setAttribute('data-page', page);
 		
-		Previewer.hideAll();
+		self.Previewer && Previewer.hideAll();
 		
 		pre.focus && pre.focus();
 		
@@ -1008,6 +1008,10 @@ $$('pre').forEach(function(pre){
 	};
 	
 	pre.onclick = function(evt) {
+		if(!self.Previewer) {
+			return;
+		}
+		
 		if(this.id !== 'css') { return; }
 		
 		var selection = getSelection();
@@ -1040,10 +1044,14 @@ $$('pre').forEach(function(pre){
 			localStorage['dabblet.html'] = html.textContent;
 		}
 		
-		Previewer.hideAll();
+		self.Previewer && Previewer.hideAll();
 	};
 	
 	pre.onmouseover = function(evt) {
+		if(!self.Previewer) {
+			return;
+		}
+		
 		var target = evt.target,
 		    type = Previewer.get(target);
 		
