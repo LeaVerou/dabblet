@@ -1112,7 +1112,9 @@ document.onkeydown = function(evt) {
 				gist.save();
 				return false;
 			case 'N':
-				Dabblet.wipe();
+				if(Dabblet.wipe()) {
+					location.pathname = '/';	
+				}
 				return false;
 			case '1':
 				var page = 'css';
