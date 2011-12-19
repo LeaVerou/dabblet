@@ -4,6 +4,8 @@
 
 <meta charset="utf-8" />
 <title>dabblet.com</title>
+<meta name="author" content="Lea Verou" />
+<meta name="description" content="An interactive CSS playground and code sharing tool. Dabblet saves to Github gists and offers many conveniences for CSS editing." />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <link rel="shortcut icon" href="/favicon.png" />
@@ -86,37 +88,43 @@ min-height:100%;</pre>
 <pre id="html" lang="html" contenteditable spellcheck="false">&lt;!-- content to be placed inside &lt;body>…&lt;/body> --></pre>
 </div>
 
-<div id="color" class="previewer"></div>
-<div id="abslength" class="previewer"></div>
-<div id="time" class="previewer">
-	<svg>
-		<circle cx="32" cy="32" r="15.9">
-			<animate attributeName="stroke-dasharray" values="0,500;100,500;0,500" dur="5s" repeatCount="indefinite" />
-			<animate attributeName="stroke-dashoffset" values="0;0;-100" dur="5s" repeatCount="indefinite" />
-		</circle>
-	</svg>
-</div>
-<div id="angle" class="previewer">
-	<svg>
-		<circle cx="32" cy="32" r="15.9" stroke-dasharray="0,500" />
-	</svg>
-</div>
-<div id="fontfamily" class="previewer">ABCabc123#$%</div>
-<div id="gradient" class="previewer"><div></div></div>
-<div id="easing" class="previewer">
-	<svg width="100" height="100" viewBox="-20 -20 140 140">
-		<defs>
-			<marker id="marker" viewBox="0 0 4 4" refX="2" refY="2" markerUnits="strokeWidth">
-				<circle cx="2" cy="2" r="1.5" />
-			</marker>
-		</defs>
-		<path d="M0,100 C20,50, 40,30, 100,0" />
-		<line x1="0" y1="100" x2="20" y2="50" />
-		<line x1="100" y1="0" x2="40" y2="30" />
-	</svg>
-</div>
-
-<div id="loader">Loading…</div>
+<section id="help" class="popup">
+	<h1>Help &amp; About</h1>
+	<a href="#" class="close" title="Close">×</a>
+	<div class="content"><div>
+		<p>dabblet is an interactive playground for quickly testing snippets of CSS and HTML code.
+		It uses <a href="http://leaverou.github.com/prefixfree" target="_blank">-prefix-free</a>, 
+		so that you won't have to add any prefixes in your CSS code. You can save your work in 
+		<a href="http://gist.github.com">Github gists</a>, embed it in other websites and share it
+		with others. <a href="http://twitter.com/dabblet">Follow @dabblet on twitter</a></p>
+		
+		<p>It currently only supports modern versions of Chrome, Safari and Firefox but I'm hoping
+		to expand browser support soon.</p>
+		
+		<p>It’s handcoded by <a href="http://lea.verou.me">Lea Verou</a> with care 
+		but <a href="https://github.com/leaverou/dabblet/contributors" target="_blank">some other nice folks</a> helped too.</p>
+		
+		<h2>Keyboard shortcuts</h2>
+		<a href="#keyboard">View keyboard shortcuts</a>
+		
+		<h2>Where can I report bugs?</h2>
+		<p>Please report any bugs and suggest features in <a href="https://github.com/LeaVerou/dabblet/issues" target="_blank">dabblet’s bug tracker</a>. 
+		An extensive description and (for bugs) a reduced testcase are appreciated. Thanks for your effort towards making dabblet better!</p>
+		
+		<h2>What about JavaScript?</h2>
+		<p>You may use &lt;script> tags as usual in your HTML markup in order to execute JavaScript code in your dabblet.
+		However, keep in mind that dabblet is CSS-focused. If your demo needs a lot of JavaScript, you might
+		find something like <a href="http://jsfiddle.net/">jsFiddle</a> 
+		or <a href="http://jsbin.com/" target="_blank">JSBin</a> more helpful.
+		
+		<h2>License</h2>
+		<p>All posted code belongs to the poster and no license is enforced.</p>
+		<p>I am not responsible or liable for any loss or damage of any kind during the usage of dabblet or provided code.</p>
+		<p>dabblet itself is open source software and is distributed under a 
+		<a href="http://www.opensource.org/licenses/NPOSL-3.0">NPOSL-3.0 license</a>. 
+		<a href="http://github.com/LeaVerou/dabblet">Fork dabblet on github</a>.
+	</div></div>
+</section>
 
 <section id="keyboard" class="popup">
 	<h1>Keyboard shortcuts</h1>
@@ -195,43 +203,37 @@ min-height:100%;</pre>
 	</div>
 </section>
 
-<section id="help" class="popup">
-	<h1>Help &amp; About</h1>
-	<a href="#" class="close" title="Close">×</a>
-	<div class="content"><div>
-		<p>dabblet is an interactive playground for quickly testing snippets of CSS and HTML code.
-		It uses <a href="http://leaverou.github.com/prefixfree" target="_blank">-prefix-free</a>, 
-		so that you won't have to add any prefixes in your CSS code. You can save your work in 
-		<a href="http://gist.github.com">Github gists</a>, embed it in other websites and share it
-		with others. <a href="http://twitter.com/dabblet">Follow @dabblet on twitter</a></p>
-		
-		<p>It currently only supports modern versions of Chrome, Safari and Firefox but I'm hoping
-		to expand browser support soon.</p>
-		
-		<p>It’s handcoded by <a href="http://lea.verou.me">Lea Verou</a> with care 
-		but <a href="https://github.com/leaverou/dabblet/contributors" target="_blank">some other nice folks</a> helped too.</p>
-		
-		<h2>Keyboard shortcuts</h2>
-		<a href="#keyboard">View keyboard shortcuts</a>
-		
-		<h2>Where can I report bugs?</h2>
-		<p>Please report any bugs and suggest features in <a href="https://github.com/LeaVerou/dabblet/issues" target="_blank">dabblet’s bug tracker</a>. 
-		An extensive description and (for bugs) a reduced testcase are appreciated. Thanks for your effort towards making dabblet better!</p>
-		
-		<h2>What about JavaScript?</h2>
-		<p>You may use &lt;script> tags as usual in your HTML markup in order to execute JavaScript code in your dabblet.
-		However, keep in mind that dabblet is CSS-focused. If your demo needs a lot of JavaScript, you might
-		find something like <a href="http://jsfiddle.net/">jsFiddle</a> 
-		or <a href="http://jsbin.com/" target="_blank">JSBin</a> more helpful.
-		
-		<h2>License</h2>
-		<p>All posted code belongs to the poster and no license is enforced.</p>
-		<p>I am not responsible or liable for any loss or damage of any kind during the usage of dabblet or provided code.</p>
-		<p>dabblet itself is open source software and is distributed under a 
-		<a href="http://www.opensource.org/licenses/NPOSL-3.0">NPOSL-3.0 license</a>. 
-		<a href="http://github.com/LeaVerou/dabblet">Fork dabblet on github</a>.
-	</div></div>
-</section>
+<div id="color" class="previewer"></div>
+<div id="abslength" class="previewer"></div>
+<div id="time" class="previewer">
+	<svg>
+		<circle cx="32" cy="32" r="15.9">
+			<animate attributeName="stroke-dasharray" values="0,500;100,500;0,500" dur="5s" repeatCount="indefinite" />
+			<animate attributeName="stroke-dashoffset" values="0;0;-100" dur="5s" repeatCount="indefinite" />
+		</circle>
+	</svg>
+</div>
+<div id="angle" class="previewer">
+	<svg>
+		<circle cx="32" cy="32" r="15.9" stroke-dasharray="0,500" />
+	</svg>
+</div>
+<div id="fontfamily" class="previewer">ABCabc123#$%</div>
+<div id="gradient" class="previewer"><div></div></div>
+<div id="easing" class="previewer">
+	<svg width="100" height="100" viewBox="-20 -20 140 140">
+		<defs>
+			<marker id="marker" viewBox="0 0 4 4" refX="2" refY="2" markerUnits="strokeWidth">
+				<circle cx="2" cy="2" r="1.5" />
+			</marker>
+		</defs>
+		<path d="M0,100 C20,50, 40,30, 100,0" />
+		<line x1="0" y1="100" x2="20" y2="50" />
+		<line x1="100" y1="0" x2="40" y2="30" />
+	</svg>
+</div>
+
+<div id="loader">Loading…</div>
 
 <script src="/code/util.js"></script>
 <script src="/code/selection.js"></script>
