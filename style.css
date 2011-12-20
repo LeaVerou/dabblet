@@ -63,6 +63,13 @@ html {
 	font: 100%/1.5 "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
+body {
+	position: relative;
+	height: 100%;
+	border-top: 10px solid transparent;
+	box-sizing: border-box;
+}
+
 a {
 	color: inherit;
 	text-decoration: none;
@@ -164,7 +171,7 @@ body[data-view="behind"] .editor.page > pre > span.token {
 }
 
 	.editor.page > pre {
-		padding: 2em 1.5em 1em;
+		padding: 1em 1.5em;
 		box-sizing: border-box;
 		background: transparent;
 		font: inherit;
@@ -216,7 +223,8 @@ header {
 	z-index: 10;
 	padding: .4em .5em 0;
 	border-bottom: 10px solid black;
-	background: url(img/noise.png), linear-gradient(hsl(200, 10%, 20%), hsla(200, 10%, 20%, .85));
+	margin-top: -10px;
+	background: url(img/noise.png), linear-gradient(hsl(200, 10%, 20%), hsla(200, 10%, 20%, .9));
 	color: white;
 	line-height: 1.1;
 	font-weight: bold;
