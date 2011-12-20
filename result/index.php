@@ -7,7 +7,7 @@ $gist_id = $_SERVER['REQUEST_URI'];
 
 $gist_id = substr($gist_id, strrpos($gist_id, '/') + 1);
 
-if($gist_id) {
+if(is_numeric($gist_id)) {
 	$raw = file_get_contents("https://api.github.com/gists/$gist_id");
 	
 	if($raw) {
