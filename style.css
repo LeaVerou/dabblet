@@ -93,6 +93,10 @@ kbd[title] {
 	display: none !important;
 }
 
+input:focus + label[for] {
+	outline: auto;
+}
+
 @keyframes loader {
 	from {
 		background-position: 0 0;
@@ -301,11 +305,6 @@ header.focus {
 		background-color: rgba(0,0,0,.3);
 	}
 	
-	header input {
-		position: absolute;
-		clip: rect(0,0,0,0);
-	}
-	
 	#currentuser {
 		max-width: 8em;
 		overflow: hidden;
@@ -318,8 +317,10 @@ header.focus {
 	
 		.user > img {
 			max-height: 1.4em;
-			margin: -.2em .3em -.2em 0;
+			margin: -.2em .3em -.2em -1.6em;
 			vertical-align:bottom;
+			border-radius: 1px;
+			box-shadow: 0 0 0 1px rgba(0,0,0,.2);
 		}
 		
 		#currentuser > img {
@@ -331,14 +332,10 @@ header.focus {
 		background-color: transparent;
 	}
 	
-	@keyframes flip {
-		from {
-			transform: perspective(600px) rotate3d(1,0,0,180deg);
-		}
-		
-		to {
-			transform: perspective(600px) rotate3d(1,0,0,0deg);
-		}
+	#view > input,
+	.tabs > input {
+		position: absolute;
+		clip: rect(0,0,0,0);
 	}
 	
 	.tabs > label {
@@ -352,15 +349,21 @@ header.focus {
 		box-shadow: .05em .1em .25em rgba(0,0,0,.7) inset;
 	}
 	
+	@keyframes flip {
+		from {
+			transform: perspective(600px) rotate3d(1,0,0,180deg);
+		}
+		
+		to {
+			transform: perspective(600px) rotate3d(1,0,0,0deg);
+		}
+	}
+	
 	.tabs > input:checked + label {
 		background: black;
 		top: 2.5em;
 		border-radius: 0 0 .3em .3em;
 		animation: 1s flip;
-	}
-	
-	input:focus + label[for] {
-		outline: auto;
 	}
 	
 	header .button:hover,
@@ -397,7 +400,7 @@ header.focus {
 		display: block;
 	}
 	
-		#view label {
+		#view > label {
 			width: 10em;
 			margin: .15em;
 			overflow: hidden;
@@ -405,7 +408,7 @@ header.focus {
 			line-height: 25px;
 		}
 		
-		#view label:before {
+		#view > label:before {
 			content: '';
 			float: left;
 			width: 25px;
@@ -414,16 +417,21 @@ header.focus {
 			background: url(img/settings.png);
 		}
 		
-		#view label[for="view-split"]:before {
+		#view > label[for="view-split"]:before {
 			background-position: 0 -25px;
 		}
 		
-		#view label[for="view-split-vertical"]:before {
+		#view > label[for="view-split-vertical"]:before {
 			background-position: 0 -50px;
 		}
 		
-		#view label[for="view-separate"]:before {
+		#view > label[for="view-separate"]:before {
 			background-position: 0 -75px;
+		}
+		
+		fieldset:not([id]) > label {
+			font-weight: normal;
+			font-size: 90%;
 		}
 	
 		menu > .command {
@@ -441,7 +449,7 @@ header.focus {
 			menu > .command:before {
 				content: '';
 				display: inline-block;
-				width: 1.2em;
+				width: 1.4em;
 			}
 			
 			menu > .command[data-keyboard]:after {

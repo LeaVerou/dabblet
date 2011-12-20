@@ -137,10 +137,7 @@ var gist = {
 						"content": htmlMarkup
 					} : null,
 					"settings.json": {
-						"content": JSON.stringify({
-							"page": document.body.getAttribute('data-page'),
-							"view": document.body.getAttribute('data-view')
-						})
+						"content": JSON.stringify(Dabblet.settings.current(null, 'file'))
 					}
 				}
 			}
@@ -241,6 +238,7 @@ var gist = {
 		$$('a[data-href*="{gist-id}"]').forEach(function(a) {
 			a.href = a.getAttribute('data-href').replace(/\{gist-id\}/gi, id);
 			a.removeAttribute('data-disabled');
+			a.removeAttribute('aria-hidden');
 		});
 		
 		gist.saved = true;
@@ -415,45 +413,7 @@ UndoManager.prototype = {
 
 var Dabblet = {
 	title: function(code) {
-		return (code.match(/^\/\*[\s\*\r\n]+(.+?)($|\*\/)/m) || [,'Untitled'])[1];
-	},
-	
-	goto: function(page) {
-		var currentid = document.body.getAttribute('data-page'),
-			current = window[currentid],
-			input = window['page-' + page],
-			pre = window[page];
-
-		if(current == pre) {
-			return;
-		} 
-			
-		if(current) {
-			var ss = current.selectionStart,
-				se = current.selectionEnd;
-			
-			ss && current.setAttribute('data-ss', ss);
-			se && current.setAttribute('data-se', se);
-		}
-
-		if(input.value != page || input.checked === false) {
-			input.click();
-		}
-		
-		document.body.setAttribute('data-page', page);
-		
-		self.Previewer && Previewer.hideAll();
-		
-		pre.focus && pre.focus();
-		
-		var ss = pre.getAttribute('data-ss'),
-			se = pre.getAttribute('data-se');
-			
-		if((ss || se) && pre.setSelectionRange) {
-			setTimeout(function(){
-				pre.setSelectionRange(ss, se);
-			}, 2);
-		}
+		return (code && code.match(/^\/\*[\s\*\r\n]+(.+?)($|\*\/)/m) || [,'Untitled'])[1];
 	},
 	
 	wipe: function() {
@@ -480,6 +440,8 @@ var Dabblet = {
 			var style = result.contentWindow.style;
 			
 			if(style) {
+				code = code || css.textContent;
+				
 				var title = Dabblet.title(code),
 					raw = code.indexOf('{') > -1;
 			
@@ -489,7 +451,9 @@ var Dabblet = {
 					code = 'html{' + code + '}';
 				}
 				
-				style.textContent = StyleFix.fix(code, raw);
+				var prefixfree = !!Dabblet.settings.cached.prefixfree;
+				
+				style.textContent = prefixfree? StyleFix.fix(code, raw) : code;
 			}
 		},
 		
@@ -674,13 +638,76 @@ var Dabblet = {
 	},
 	
 	settings: {
-		current: function(name) {
+		cached: {},
+		
+		handlers: {
+			page: function(page) {
+				var currentid = document.body.getAttribute('data-page'),
+					current = window[currentid],
+					input = window['page-' + page],
+					pre = window[page];
+		
+				if(current == pre) {
+					return;
+				} 
+					
+				if(current) {
+					var ss = current.selectionStart,
+						se = current.selectionEnd;
+					
+					ss && current.setAttribute('data-ss', ss);
+					se && current.setAttribute('data-se', se);
+				}
+		
+				if(input.value != page || input.checked === false) {
+					input.click();
+				}
+				
+				document.body.setAttribute('data-page', page);
+				
+				self.Previewer && Previewer.hideAll();
+				
+				pre.focus && pre.focus();
+				
+				var ss = pre.getAttribute('data-ss'),
+					se = pre.getAttribute('data-se');
+					
+				if((ss || se) && pre.setSelectionRange) {
+					setTimeout(function(){
+						pre.setSelectionRange(ss, se);
+					}, 2);
+				}
+			},
+			
+			prefixfree: function(enabled) {
+				Dabblet.settings.cached.prefixfree = enabled;
+				
+				if(result.contentWindow.style) {
+					Dabblet.update.CSS();
+				}
+			}
+		},
+		
+		current: function(name, scope) {
 			var settings = {};
 			
-			$$('input[data-scope]' + (name? '[name="' + name + '"]' : '')).forEach(function(input){
+			var selector = 'input[data-scope' +
+							(scope? '="' + scope + '"' : '') + ']' +
+							(name? '[name="' + name + '"]' : '');
 			
+			$$(selector).forEach(function(input){
+				if(!(input.name in settings)) {
+					// Assign default value
+					if('checked' in input) {
+						settings[input.name] = input.hasAttribute('checked')? input.value : '';
+					}
+				}
+				
 				if(!('checked' in input) || input.checked) {
-					settings[input.name] = input.value;
+					settings[input.name] = input.value; 
+				}
+				else if(input.type === 'checkbox') {
+					settings[input.name] = ''; 
 				}
 			});
 			
@@ -710,16 +737,24 @@ var Dabblet = {
 				var name = input.name;
 				
 				(input.onclick = function(evt){
-					if(this.checked) {
-						Dabblet.settings.applyOne(name, this.value);
-						
-						/*if(evt && this.getAttribute('data-scope')) {
-							gist.saved = false;
-						}*/
+					switch(this.type) {
+						case 'radio':
+							if(this.checked) {
+								Dabblet.settings.applyOne(name, this.value);
+							}
+							return;
+						case 'checkbox':
+							Dabblet.settings.applyOne(name, this.checked? this.value : '');
+							return;
+						default:
+							Dabblet.settings.applyOne(name, this.value);
+							return;
 					}
 				}).call(input);
 			});
 			
+			// Update cached settings
+			this.cached = this.current();
 		},
 		
 		applyOne: function(name, value) {			
@@ -732,17 +767,8 @@ var Dabblet = {
 				control.checked = control.value == value;
 			}
 			
-			if(!gist.id) {
-				var stored = localStorage.settings? JSON.parse(localStorage.settings) : {};
-				
-				if(!(name in stored) || stored[name] != value) {
-					stored[name] = value;
-					localStorage.settings = JSON.stringify(stored);
-				}
-			}
-			
-			if(name === 'page') {
-				Dabblet.goto(value);
+			if(name in this.handlers) {
+				this.handlers[name](value);
 			}
 			else {
 				document.body.setAttribute('data-' + name, value);
@@ -755,6 +781,19 @@ var Dabblet = {
 					document.body.style.WebkitAnimation = '';
 				},1);
 			}
+			
+			// Update localStorage if not in gist
+			if(!gist.id) {
+				var stored = localStorage.settings? JSON.parse(localStorage.settings) : {};
+				
+				if(!(name in stored) || stored[name] != value) {
+					stored[name] = value;
+					localStorage.settings = JSON.stringify(stored);
+				}
+			}
+			
+			// Update cached settings
+			this.cached[name] = value;
 		}
 	}
 };
@@ -826,12 +865,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		a.title = 'New dabblet';
 	}
 	
-	if(localStorage.settings) {
-		Dabblet.settings.apply(JSON.parse(localStorage.settings));
-	}
-	else {
-		Dabblet.settings.apply();
-	}
+	Dabblet.settings.apply();
 	
 	var path = location.pathname.slice(1);
 	
@@ -850,6 +884,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		if('dabblet.html' in localStorage) {
 			html.textContent = localStorage['dabblet.html'];
+		}
+		
+		if(localStorage.settings) {
+			Dabblet.settings.apply(JSON.parse(localStorage.settings));
 		}
 	}
 });
