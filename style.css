@@ -93,8 +93,10 @@ kbd[title] {
 	display: none !important;
 }
 
-input:focus + label[for] {
+input:focus + label[for],
+label.focus {
 	outline: auto;
+	outline: 2px auto -webkit-focus-ring-color;
 }
 
 @keyframes loader {
@@ -392,7 +394,7 @@ header.focus {
 	}
 	
 	.with-dropdown:hover > .dropdown,
-	.with-dropdown:focus > .dropdown,
+	.with-dropdown.focus > .dropdown,
 	.with-dropdown:active > .dropdown,
 	.dropdown:hover,
 	.dropdown:active,
