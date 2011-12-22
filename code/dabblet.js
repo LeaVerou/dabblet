@@ -878,11 +878,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 	
 	if(!gist.id) {	
-		if('dabblet.css' in localStorage) {
+		if(localStorage['dabblet.css'] !== undefined) {
 			css.textContent = localStorage['dabblet.css'];
 		}
 		
-		if('dabblet.html' in localStorage) {
+		if(localStorage['dabblet.html'] !== undefined) {
 			html.textContent = localStorage['dabblet.html'];
 		}
 		
