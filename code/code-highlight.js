@@ -94,6 +94,7 @@ var _ = self.Highlight = {
 		}
 		
 		var text = code.textContent
+					.replace(/&/g, '&amp;')
 					.replace(/</g, '&lt;')
 					.replace(/>/g, '&gt;')
 					.replace(/\u00a0/g, ' ');
