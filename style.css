@@ -11,7 +11,7 @@
 header,
 .popup,
 .dropdown {
-	background: hsla(200, 10%, 20%, .9) url(img/noise.png);	
+	background: hsla(200, 10%, 20%, .9) url(img/noise.png);
 	color: white;
 	text-shadow: 0 -1px 1px black, 0 -1px 2px black;
 }
@@ -110,7 +110,7 @@ label.focus {
 	from {
 		background-position: 0 0;
 	}
-	
+
 	to {
 		background-position: -700px 0;
 	}
@@ -131,7 +131,7 @@ label.focus {
 	font-weight: bold;
 	text-align: center;
 	text-shadow: 0 1px white;
-	
+
 	animation: 1s loader infinite steps(7);
 }
 
@@ -231,6 +231,10 @@ header {
 	transition: .5s 1s;
 }
 
+header.sticky {
+	top: 0;
+}
+
 header:hover,
 header:active,
 header.focus {
@@ -246,7 +250,7 @@ header.focus {
 		text-shadow: .05em .05em .1em black;
 		-webkit-transform: translateZ(0); /* fix for chopped letters */
 	}
-	
+
 	header > .with-dropdown {
 		float: left;
 	}
@@ -257,7 +261,7 @@ header.focus {
 		white-space: nowrap;
 		-webkit-font-smoothing: antialiased;
 	}
-	
+
 	.controls-group {
 		float: right;
 		min-width: 16.4em;
@@ -277,7 +281,7 @@ header.focus {
 		cursor: pointer;
 		text-shadow: inherit;
 	}
-	
+
 	header .button,
 	header button {
 		float: left;
@@ -285,46 +289,46 @@ header.focus {
 		margin: 0 .2em;
 		white-space: nowrap;
 		background-image: url(img/noise.png);
-		box-shadow: rgba(255, 255, 255, .4) 0 1px 0 inset, 
-					rgba(255, 255, 255, .3) 0 25px 30px -12px inset, 
+		box-shadow: rgba(255, 255, 255, .4) 0 1px 0 inset,
+					rgba(255, 255, 255, .3) 0 25px 30px -12px inset,
 					rgba(0, 0, 0, .6) 0 1px 2px;
 		text-shadow: 0 -1px 1px black, 0 -1px 2px black;
 	}
-	
+
 	header button.with-symbol,
 	header .button.with-symbol {
 		font-family: Dabblet, sans-serif;
 	}
-	
+
 	body[data-unsaved] button[title="Save"] {
 		text-shadow: 0 0 .2em #6cf, 0 0 .4em #6cf;
 	}
-	
+
 	header > .with-dropdown > button:after,
 	header > .with-dropdown > .button:after {
 		content: ' ▾';
 	}
-	
+
 	header .button:active,
 	header button:active,
 	input:checked + label.button {
 		box-shadow: 0 2px 6px black inset;
 	}
-	
+
 	input:checked + label.button {
 		background-color: rgba(0,0,0,.3);
 	}
-	
+
 	#currentuser {
 		max-width: 8em;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	
+
 	#currentuser:not(:hover) {
 		background-color: transparent;
 	}
-	
+
 		.user > img {
 			max-height: 1.4em;
 			margin: -.2em .3em -.2em -1.6em;
@@ -332,22 +336,22 @@ header.focus {
 			border-radius: 1px;
 			box-shadow: 0 0 0 1px rgba(0,0,0,.2);
 		}
-		
+
 		#currentuser > img {
 			margin-left: -.3em;
 		}
-		
+
 	a.button[href="#help"] {
 		float: right;
 		background-color: transparent;
 	}
-	
+
 	#view > input,
 	.tabs > input {
 		position: absolute;
 		clip: rect(0,0,0,0);
 	}
-	
+
 	.tabs > label {
 		position: relative;
 		display: inline-block;
@@ -358,24 +362,24 @@ header.focus {
 		transform-origin: top;
 		box-shadow: .05em .1em .25em rgba(0,0,0,.7) inset;
 	}
-	
+
 	@keyframes flip {
 		from {
 			transform: perspective(600px) rotate3d(1,0,0,180deg);
 		}
-		
+
 		to {
 			transform: perspective(600px) rotate3d(1,0,0,0deg);
 		}
 	}
-	
+
 	.tabs > input:checked + label {
 		background: black;
 		top: 2.5em;
 		border-radius: 0 0 .3em .3em;
 		animation: 1s flip;
 	}
-	
+
 	header .button:hover,
 	header .button:active,
 	header button:hover,
@@ -384,7 +388,7 @@ header.focus {
 	.tabs > label:active {
 		background-color: black;
 	}
-	
+
 	.dropdown {
 		display: none;
 		position: absolute;
@@ -396,11 +400,11 @@ header.focus {
 		font-family: sans-serif;
 		text-align: left;
 	}
-	
+
 	.with-dropdown {
-		padding-bottom: 3px;	
+		padding-bottom: 3px;
 	}
-	
+
 	.with-dropdown:hover > .dropdown,
 	.with-dropdown.focus > .dropdown,
 	.with-dropdown:active > .dropdown,
@@ -409,7 +413,7 @@ header.focus {
 	.dropdown.focus {
 		display: block;
 	}
-	
+
 		#view > label {
 			width: 10em;
 			margin: .15em;
@@ -417,7 +421,7 @@ header.focus {
 			text-align: left;
 			line-height: 25px;
 		}
-		
+
 		#view > label:before {
 			content: '';
 			float: left;
@@ -426,53 +430,63 @@ header.focus {
 			margin-right: 10px;
 			background: url(img/settings.png);
 		}
-		
+
 		#view > label[for="view-split"]:before {
 			background-position: 0 -25px;
 		}
-		
+
 		#view > label[for="view-split-vertical"]:before {
 			background-position: 0 -50px;
 		}
-		
+
 		#view > label[for="view-separate"]:before {
 			background-position: 0 -75px;
 		}
-		
+
+		#options > label {
+			display: block;
+			margin-bottom: 5px;
+			font-weight: normal;
+		}
+
+		#options > label:last-child {
+			margin-bottom: 0;
+		}
+
 		fieldset:not([id]) > label {
 			font-weight: normal;
 			font-size: 90%;
 		}
-	
+
 		menu > .command {
 			display: block;
 			padding: .4em;
 			border-radius: .3em;
 			cursor: pointer;
 		}
-		
+
 		menu > .command[data-disabled] {
 			opacity: .5;
 			cursor: not-allowed;
 		}
-			
+
 			menu > .command:before {
 				content: '';
 				display: inline-block;
 				width: 1.4em;
 			}
-			
+
 			menu > .command[data-keyboard]:after {
 				content: attr(data-keyboard);
 				float: right;
 				opacity: .6;
 			}
-			
+
 			menu > input:checked + label.command:before {
 				content: '✔';
 				color: hsla(0,0%,100%,.5);
 			}
-		
+
 		menu > hr {
 			height: 2px;
 			border: 0;
@@ -483,7 +497,7 @@ header.focus {
 			background-repeat: repeat-x;
 			background-size: 100% 1px;
 		}
-		
+
 .popup {
 	display: none;
 	position: absolute;
@@ -505,7 +519,7 @@ header.focus {
 		color: white;
 		font-size: 160%;
 	}
-	
+
 	.popup > .close {
 		position: absolute;
 		top: 10px;
@@ -517,7 +531,7 @@ header.focus {
 		text-align: center;
 		border-radius: 50%;
 	}
-	
+
 	.popup > .content {
 		height: 100%;
 		padding: 1em;
@@ -526,15 +540,15 @@ header.focus {
 		background-clip: padding-box;
 		border-radius: 3px;
 	}
-	
+
 		.popup > .content h2 {
 			margin: 1em 0 .3em;
 		}
-		
+
 		.popup > .content p {
 			margin: 1em 0;
 		}
-		
+
 			.popup > .content a {
 				font-weight: bold;
 			}
@@ -542,31 +556,31 @@ header.focus {
 	.popup table {
 		border-spacing: 0;
 	}
-	
+
 		.popup thead {
 			background: rgba(0,0,0,.1);
 		}
-		
+
 			.popup td {
-				border-bottom: 1px solid rgba(0,0,0,.3);	
+				border-bottom: 1px solid rgba(0,0,0,.3);
 				padding: .3em .5em;
 				vertical-align: top;
 			}
-			
+
 			.popup tbody td:first-child {
 				width: 10em;
 			}
-			
+
 			.popup tbody td:first-child > kbd {
 				font-size: 120%;
 			}
-			
+
 			.popup tbody td:first-child > .note {
 				font-size: 65%;
 			}
-		
+
 /**
- * Code hightlighting 
+ * Code hightlighting
  */
 .token {
 	/* See issue #3 */
@@ -635,7 +649,7 @@ header.focus {
 
 #color,
 #gradient {
-	background: linear-gradient(45deg, #bbb 25%,  transparent 25%, transparent 75%, #bbb 75%, #bbb) 5px 5px, 
+	background: linear-gradient(45deg, #bbb 25%,  transparent 25%, transparent 75%, #bbb 75%, #bbb) 5px 5px,
 		linear-gradient(45deg, #bbb 25%,  #eee 25%,  #eee 75%, #bbb 75%, #bbb) 15px 15px;
 	background-size:20px 20px;
 }
@@ -687,7 +701,7 @@ header.focus {
 	padding: 5px;
 	margin-left: -50px;
 }
-	
+
 	/* pointer */
 	.previewer:before {
 		content: '';
@@ -704,35 +718,35 @@ header.focus {
 		transform: rotate(45deg);
 		box-shadow: inherit;
 	}
-	
+
 	.previewer.flipped:before {
 		top: -6px;
 	}
-	
+
 	#abslength:before {
 		bottom: -7px;
 		background: url(img/noise.png),
 					linear-gradient(-45deg, hsla(200, 10%, 20%, 0) 47%, hsl(200, 10%, 20%) 48%);
 	}
-	
+
 	#abslength[data-size="small"]:before {
 		width: 6px;
 		height: 6px;
 		bottom: -3px;
 		margin-left: -3px;
 	}
-	
+
 	#abslength[data-size="tiny"]:before {
 		transform: none;
 		width: 0;
 		margin-left: 0;
 	}
-	
+
 	#time:before,
 	#angle:before {
 		bottom: -4px;
 	}
-	
+
 	.previewer:after,
 	#gradient > div {
 		content: '';
@@ -742,45 +756,45 @@ header.focus {
 		border-radius: inherit;
 		box-shadow: 1px 1px 5px rgba(0,0,0,.5) inset;
 	}
-	
+
 	#color:after {
 		background-color: inherit;
 	}
-	
+
 	#abslength:after {
 		border: 0;
-		background: 
+		background:
 			repeating-linear-gradient(left, transparent, transparent 19px, rgba(255,255,255,.6) 19px, rgba(255,255,255,.6) 20px) left top no-repeat,
 			repeating-linear-gradient(left, transparent, transparent 4px, rgba(255,255,255,.4) 4px, rgba(255,255,255,.4) 5px) left top no-repeat,
 			url(img/noise.png), linear-gradient(hsla(200, 10%, 20%, .8), hsl(200, 10%, 20%));
 		background-size: 100% 10px, 100% 5px, auto, auto;
 		box-shadow: none;
 	}
-	
+
 	#time:after,
 	#angle:after {
 		background: url(img/noise.png);
 		z-index: 2;
 	}
-	
+
 	#fontfamily:after {
 		background: url(img/noise.png), linear-gradient(bottom, hsl(24, 20%, 95%), hsla(24, 20%, 95%,0) .5em);
 	}
-	
+
 	#gradient:after {
 		content: none;
 	}
-	
+
 	#easing:after {
 		z-index: 2;
 	}
-	
+
 	.previewer > svg {
 		display: block;
 		z-index: 1;
 		position: relative;
 	}
-	
+
 	#angle > svg,
 	#time > svg {
 		margin: 5px;
@@ -791,16 +805,16 @@ header.focus {
 		transform: rotate(-90deg);
 		-webkit-transform: translateZ(0) rotate(-90deg);
 	}
-	
+
 	#angle[data-negative] > svg {
 		transform:  scaleX(-1) rotate(-90deg);
 		-webkit-transform:  translateZ(0) scaleX(-1) rotate(-90deg);
 	}
-	
+
 	#easing > svg {
 		background: url(img/noise.png), linear-gradient(hsla(200, 10%, 20%, .8), hsl(200, 10%, 20%));
 	}
-		
+
 		#time circle,
 		#angle circle {
 			stroke: hsl(200, 10%, 20%);
@@ -808,19 +822,19 @@ header.focus {
 			fill: transparent;
 			stroke-width: 31.8;
 		}
-		
+
 		#easing circle {
 			stroke: white;
 			fill: hsl(200, 10%, 20%);
 		}
-		
+
 		#easing path {
 			 fill: none;
 			 stroke: white;
 			 stroke-width: 4;
 			 stroke-linecap: round;
 		}
-		
+
 		#easing line {
 			stroke: white;
 			stroke-opacity:.5;
@@ -842,12 +856,12 @@ header.focus {
 		content: '';
 		content: none;
 	}
-	
+
 	.dropdown {
 		max-width: 200px;
 		margin-left: -10em;
 	}
-	
+
 	#currentuser {
 		max-width: 3em;
 	}
@@ -857,20 +871,20 @@ header.focus {
 	header {
 		top: -5.4em;
 	}
-	
+
 	.controls-group {
 		margin-top: .2em;
 	}
-	
+
 	body[data-view="behind"] .editor.page,
 	body[data-view="separate"] .editor.page {
 		font-size: 120%;
 	}
-	
+
 	a.button[href="#help"] {
-	
+
 	}
-	
+
 	.popup {
 		width: 290px;
 		padding: .5em .5em 5em;
@@ -885,7 +899,7 @@ header.focus {
 		width: 800px;
 		margin-left: -400px;
 	}
-	
+
 		.popup > .content > div {
 			column-count: 2;
 			column-gap: 2em;

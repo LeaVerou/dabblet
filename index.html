@@ -19,66 +19,70 @@
 
 <header>
 	<h1><a href="/">dabblet</a></h1>
-	
+
 	<a id="currentuser" target="_blank" class="user button">Log in</a>
-	
+
 	<div class="with-dropdown" title="Settings">
 		<button class="with-symbol" title="Settings">⚙</button>
 		<form id="settings" class="dropdown">
 			<fieldset id="view">
 				<legend>View mode</legend>
-				
+
 				<input type="radio" name="view" value="behind" id="view-behind" data-scope="file" />
 				<label for="view-behind" class="button" title="Behind code">Behind code</label>
-				
+
 				<input type="radio" name="view" value="split" id="view-split" checked data-scope="file" />
 				<label for="view-split" class="button" title="Horizontal split">Horizontal split</label>
-				
+
 				<input type="radio" name="view" value="split-vertical" id="view-split-vertical" data-scope="file" />
 				<label for="view-split-vertical" class="button" title="Vertical split">Vertical split</label>
-				
+
 				<input type="radio" name="view" value="separate" id="view-separate" data-scope="file" />
 				<label for="view-separate" class="button" title="Separate">Separate</label>
 			</fieldset>
-			
-			<fieldset>
-				<legend>Libraries</legend>
+
+			<fieldset id="options">
+				<legend>Options</legend>
+				<label>
+					<input type="checkbox" name="autohide_topbar" value="1" data-scope="file" checked />
+					Auto hide top bar
+				</label>
 				<label>
 					<input type="checkbox" name="prefixfree" value="1" data-scope="file" checked />
-					Use -prefix-free
+					Use -prefix-free library
 				</label>
 			</fieldset>
 		</form>
 	</div>
-	
+
 	<div class="with-dropdown">
 		<button id="save-button" class="with-symbol" title="Save">💾</button>
 		<menu class="dropdown">
 			<a id="save-cmd" tabindex="0" class="command" data-keyboard="⌘S" data-disabled>Save</a>
 			<a onclick="gist.save({forceNew: true})" id="save-new-cmd" class="command" tabindex="0" data-disabled>Save as new</a>
 			<a onclick="gist.save({anon: true})" class="command" tabindex="0">Save anonymously</a>
-			
+
 			<hr />
-			
+
 			<a href="/" onclick="Dabblet.wipe()" class="command" data-keyboard="⌘N">New dabblet</a>
-			
+
 			<hr />
-			
+
 			<a data-href="https://gist.github.com/{gist-id}" target="_blank" class="command" data-disabled>View gist</a>
 			<a data-href="/result/gist/{gist-id}" class="command" target="_blank" aria-hidden="true">View full page result</a>
 			<a class="user command" target="_blank" aria-hidden="true" id="gist-user"></a>
 		</menu>
 	</div>
-	
+
 	<div class="controls-group">
 		<a href="#help" class="button" title="Help &amp; credits">?</a>
 		<div class="tabs">
 			<input type="radio" name="page" value="css" id="page-css" checked data-scope="file" />
 			<label for="page-css" title="⌘1">CSS</label>
-			
+
 			<input type="radio" name="page" value="html" id="page-html" data-scope="file"/>
 			<label for="page-html" title="⌘2">HTML</label>
-			
+
 			<input type="radio" name="page" value="result" id="page-result" data-scope="file" />
 			<label for="page-result" title="⌘3">Result</label>
 		</div>
@@ -105,35 +109,35 @@ min-height:100%;</pre>
 	<a href="#" class="close" title="Close">×</a>
 	<div class="content"><div>
 		<p>dabblet is an interactive playground for quickly testing snippets of CSS and HTML code.
-		It uses <a href="http://leaverou.github.com/prefixfree" target="_blank">-prefix-free</a>, 
-		so that you won't have to add any prefixes in your CSS code. You can save your work in 
+		It uses <a href="http://leaverou.github.com/prefixfree" target="_blank">-prefix-free</a>,
+		so that you won't have to add any prefixes in your CSS code. You can save your work in
 		<a href="http://gist.github.com">Github gists</a>, embed it in other websites and share it
 		with others. <a href="http://twitter.com/dabblet">Follow @dabblet on twitter</a></p>
-		
+
 		<p>It currently only supports modern versions of Chrome, Safari and Firefox but I'm hoping
 		to expand browser support soon.</p>
-		
-		<p>It’s handcoded by <a href="http://lea.verou.me">Lea Verou</a> with care 
+
+		<p>It’s handcoded by <a href="http://lea.verou.me">Lea Verou</a> with care
 		but <a href="https://github.com/leaverou/dabblet/contributors" target="_blank">some other nice folks</a> helped too.</p>
-		
+
 		<h2>Keyboard shortcuts</h2>
 		<a href="#keyboard">View keyboard shortcuts</a>
-		
+
 		<h2>Where can I report bugs?</h2>
-		<p>Please report any bugs and suggest features in <a href="https://github.com/LeaVerou/dabblet/issues" target="_blank">dabblet’s bug tracker</a>. 
+		<p>Please report any bugs and suggest features in <a href="https://github.com/LeaVerou/dabblet/issues" target="_blank">dabblet’s bug tracker</a>.
 		An extensive description and (for bugs) a reduced testcase are appreciated. Thanks for your effort towards making dabblet better!</p>
-		
+
 		<h2>What about JavaScript?</h2>
 		<p>You may use &lt;script> tags as usual in your HTML markup in order to execute JavaScript code in your dabblet.
 		However, keep in mind that dabblet is CSS-focused. If your demo needs a lot of JavaScript, you might
-		find something like <a href="http://jsfiddle.net/">jsFiddle</a> 
+		find something like <a href="http://jsfiddle.net/">jsFiddle</a>
 		or <a href="http://jsbin.com/" target="_blank">JSBin</a> more helpful.
-		
+
 		<h2>License</h2>
 		<p>All posted code belongs to the poster and no license is enforced.</p>
 		<p>I am not responsible or liable for any loss or damage of any kind during the usage of dabblet or provided code.</p>
-		<p>dabblet itself is open source software and is distributed under a 
-		<a href="http://www.opensource.org/licenses/NPOSL-3.0">NPOSL-3.0 license</a>. 
+		<p>dabblet itself is open source software and is distributed under a
+		<a href="http://www.opensource.org/licenses/NPOSL-3.0">NPOSL-3.0 license</a>.
 		<a href="http://github.com/LeaVerou/dabblet">Fork dabblet on github</a>.
 	</div></div>
 </section>
@@ -142,7 +146,7 @@ min-height:100%;</pre>
 	<h1>Keyboard shortcuts</h1>
 	<a href="#" class="close" title="Close">×</a>
 	<div class="content">
-		<p>I’m a heavy keyboard user myself, so lots of effort has been put into making dabblet 
+		<p>I’m a heavy keyboard user myself, so lots of effort has been put into making dabblet
 		a breeze to use with the keyboard:</p>
 		<table>
 			<thead>
