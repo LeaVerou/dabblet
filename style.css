@@ -448,6 +448,7 @@ body.tabediting header {
 		font-size: 110%;
 		line-height: 2;
 		-webkit-font-smoothing: antialiased;
+		-webkit-transform: translateZ(0); /* fix for unhoverable tabs */
 	}
 	
 		@keyframes wobble {
@@ -554,6 +555,7 @@ body.tabediting header {
 		background-origin: border-box;
 		font-family: sans-serif;
 		text-align: left;
+		-webkit-transform: translateZ(0); /* fix for unhoverable dropdowns */
 	}
 	
 	/* pointer */
