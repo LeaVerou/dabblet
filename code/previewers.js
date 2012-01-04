@@ -21,30 +21,31 @@ var _ = self.Previewer = function(id, updater, type) {
 			if(token !== null) {
 				_.hideAll(id);
 			}
-						
+
 			var oldToken = this._token,
 				changedToken = oldToken != token,
-			    style = this.previewer.style;
+				previewer = this.previewer,
+			    style = previewer.style;
 			
 			this._token = token;
 			
 			if(token) {
-				var valid = this.updater.call(this.previewer, token.textContent);
+				var valid = this.updater.call(previewer, token.textContent);
 
 				if(valid) {
-					style.display = 'block';
+					previewer.classList.add('active');
 					
 					if(changedToken) {
-						var offsets = offset(token), property;
+						var offsets = $u.offset(token), property;
 							
 						
-						if (offsets.top - this.previewer.offsetHeight > 0) {
+						if (offsets.top - previewer.offsetHeight > 0) {
 							property = 'bottom';
-							this.previewer.classList.remove('flipped');
+							previewer.classList.remove('flipped');
 						}
 						else {
 							property = 'top';
-							this.previewer.classList.add('flipped');
+							previewer.classList.add('flipped');
 						}
 						
 						style.bottom = style.top = '';
@@ -54,8 +55,9 @@ var _ = self.Previewer = function(id, updater, type) {
 				}
 			}
 			
-			if(!token || !valid) {
-				oldToken && (style.display = '');
+			if(!token || !valid && oldToken) {
+				previewer.classList.remove('active');
+				previewer.style.display = '';
 			}
 		}
 	});
@@ -235,4 +237,35 @@ new Previewer('easing', function(code) {
 	}
 	
 	return false;
+});
+
+new Previewer('url', function(code) {
+	var href = code.replace(/^url\(('|")?|('|")?\)$/g, ''),
+		img = $('img',this),
+		that = this;
+	
+	img.src = href;
+	
+	img.onload = function() {
+		this.className = '';
+		that.style.marginLeft = '-' + this.offsetWidth/2 + 'px';
+	};
+	
+	img.onerror = function() {
+		this.onload();
+		this.className = 'error';
+	};
+	
+	return true;
+});
+
+new Previewer('entity', function(code) {
+	if(code.charAt(0) === '\\') {
+		this.textContent = String.fromCharCode(parseInt(code.slice(1), 16));
+	}
+	else {
+		this.innerHTML = code;
+	}
+	
+	return this.textContent.length === 1;
 });

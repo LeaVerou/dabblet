@@ -37,6 +37,7 @@ var _ = self.Highlight = {
 		},
 		css: {
 			'comment': /\/\*[\w\W]*?\*\//g,
+			'url': /url\((?:'|")?(.+?)(?:'|")?\)/gi,
 			'atrule': /@[\w-]+?(\s+[^{]+)?(?=\s*{)/gi,
 			'selector': /[^\{\}\s][^\{\}]+(?=\s*\{)/g,
 			'property': /(\b|\B)[a-z-]+(?=\s*:)/ig,
@@ -60,6 +61,7 @@ var _ = self.Highlight = {
 					number: number
 				}, 'gi'),
 			'fontfamily': /(("|')[\w\s]+\2,\s*|\w+,\s*)*(sans-serif|serif|monospace|cursive|fantasy)\b/gi,
+			'entity': /\\[\da-f]{1,8}/gi,
 			'ignore': /&(lt|gt|amp);/gi,
 			'punctuation': /[\{\};:]/g
 		},
@@ -78,7 +80,8 @@ var _ = self.Highlight = {
 					'attr-name': /\s[\w-]+(?=\s)/gi,
 					'punctuation': /&lt;\/?|&gt;/g
 				}
-			}
+			},
+			'entity': /&amp;#?[\da-z]{1,8};/gi
 		}
 	},
 	

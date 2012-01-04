@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8" />
+<title>Help ✿ dabblet.com</title>
+<link rel="stylesheet" href="style.css" />
+
+<script>window._gaq = [['_setAccount', 'UA-27750908-1'], ['_trackPageview']];</script>
+<!--<script src="http://www.google-analytics.com/ga.js" async></script>-->
+
+</head>
+<body>
+
+<hgroup>
+	<h1>dabblet</h1>
+	<h2>help</h2>
+</hgroup>
+
+<section id="intro">
+	<p>dabblet is an interactive playground for quickly testing snippets of CSS and HTML code.
+	It uses <a href="http://leaverou.github.com/prefixfree" target="_blank">-prefix-free</a>, 
+	so that you won't have to add any prefixes in your CSS code. You can save your work in 
+	<a href="http://gist.github.com">Github gists</a>, embed it in other websites and share it
+	with others.</p>
+	
+	<p>It currently only supports modern versions of Chrome, Safari and Firefox but I'm hoping
+	to expand browser support soon.</p>
+	
+	<p>It’s handcoded by <a href="http://lea.verou.me">Lea Verou</a> with care 
+	but <a href="https://github.com/leaverou/dabblet/contributors" target="_blank">some other nice folks</a> helped too.
+	Special thanks go to <a href="http://twitter.com/#!/kizmarh">Roman Komarov</a> who helped tremendously
+	with his tips &amp; thorough QA.</p>
+	
+	<p id="quick-links">
+		Dabblet is on
+		<a href="http://twitter.com/dabblet" target="_blank">Twitter</a>
+		<a href="http://github.com/LeaVerou/dabblet" target="_blank">Github</a>
+		<a href="irc://chat.freenode.net/">IRC</a>
+	</p>
+</section>
+
+<nav>
+	<h1>Contents</h1>
+	
+	<ol>
+		<li><a href="#faq">F.A.Q</a></li>
+		<li><a href="#keyboard">Keyboard shortcuts</a></li>
+		<li><a href="#license">License</a></li>
+		<li><a href="#press">Press</a></li>
+	</ol>
+</nav>
+
+<section id="faq">
+	<h1><abbr>F.A.Q.</abbr></h1>
+	
+	<h2 id="where-can-i-report-bugs">Where can I report bugs?</h2>
+	<p>Please report any bugs and suggest features in <a href="https://github.com/LeaVerou/dabblet/issues" target="_blank">dabblet’s bug tracker</a>. 
+	An extensive description and (for bugs) a reduced testcase are appreciated. Thanks for your effort towards making dabblet better!</p>
+	
+	<h2 id="what-about-js">What about JavaScript?</h2>
+	<p>You may use &lt;script> tags as usual in your HTML markup in order to execute JavaScript code in your dabblet.
+	However, keep in mind that dabblet is CSS-focused. If your demo needs a lot of JavaScript, you might
+	find something like <a href="http://jsfiddle.net/">jsFiddle</a> 
+	or <a href="http://jsbin.com/" target="_blank">JSBin</a> more helpful.
+</section>
+
+<section id="keyboard">
+	<h1>Keyboard shortcuts</h1>
+
+	<p>I’m a heavy keyboard user myself, so lots of effort has been put into making dabblet 
+	a breeze to use with the keyboard:</p>
+	<table>
+		<thead>
+			<tr>
+				<td>Action</td>
+				<td>Result</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><kbd title="Cmd">⌘</kbd><kbd>S</kbd></td>
+				<td>Save if not saved, update if saved, fork if not own</td>
+			</tr>
+			<tr>
+				<td><kbd title="Cmd">⌘</kbd><kbd>1</kbd>-<kbd>8</kbd></td>
+				<td>Go to first, second, third etc tab, provided they exist.</td>
+			</tr>
+			<tr>
+				<td><kbd title="Cmd">⌘</kbd><kbd>9</kbd></td>
+				<td>Go to the last tab</td>
+			</tr>
+			<tr>
+				<td><kbd title="Cmd">⌘</kbd><kbd title="Shift">⇧</kbd><kbd>[</kbd></td>
+				<td>Go to previous tab</td>
+			</tr>
+			<tr>
+				<td><kbd title="Cmd">⌘</kbd><kbd title="Shift">⇧</kbd><kbd>]</kbd></td>
+				<td>Go to next tab</td>
+			</tr>
+			<tr>
+				<td><kbd title="Tab">⇥</kbd><div class="note">in editing mode</div></td>
+				<td>Enters a Tab (<code>\t</code>) character</td>
+			</tr>
+			<tr>
+				<td><kbd title="Tab">⇥</kbd> <div class="note">after selecting text</div></td>
+				<td>Indents the selected lines (including partially selected lines)</td>
+			</tr>
+			<tr>
+				<td><kbd title="Shift">⇧</kbd><kbd title="Tab">⇥</kbd> <div class="note">after selecting text</div></td>
+				<td>Removes one indent (Tab or space) from the beginning of each (partially) selected line.</td>
+			</tr>
+			<tr>
+				<td><kbd title="Cmd">⌘</kbd><kbd>/</kbd><div class="note">in editing mode</div></td>
+				<td>Comments the current selection (or line if there is none) or uncomments if within a comment</td>
+			</tr>
+			<tr>
+				<td><kbd title="Alt">⌥</kbd><kbd title="Up arrow">↑</kbd> / <kbd title="Alt">⌥</kbd><kbd title="Down arrow">↓</kbd></td>
+				<td>Increment/decrement value by 1</td>
+			</tr>
+			<tr>
+				<td><kbd title="Shift">⇧</kbd><kbd title="Alt">⌥</kbd><kbd title="Up arrow">↑</kbd> / <kbd title="Shift">⇧</kbd><kbd title="Alt">⌥</kbd><kbd title="Down arrow">↓</kbd></td>
+				<td>Increment/decrement value by 10</td>
+			</tr>
+			<tr>
+				<td><kbd title="Ctrl">⌃</kbd><kbd title="Alt">⌥</kbd><kbd title="Up arrow">↑</kbd> / <kbd title="Ctrl">⌃</kbd><kbd title="Alt">⌥</kbd><kbd title="Down arrow">↓</kbd></td>
+				<td>Increment/decrement value by 0.1</td>
+			</tr>
+			<tr>
+				<td><kbd title="Esc">⎋</kbd><div class="note">in editing mode</div></td>
+				<td>The editing area loses focus, so after pressing <kbd title="Tab">⇥</kbd> you can use
+				the navigation bar through the keyboard</td>
+			</tr>
+		</tbody>
+	</table>
+	<p><strong>Note:</strong> Wherever <kbd title="Cmd">⌘</kbd> is used, it means either <kbd title="Cmd">⌘</kbd> or <kbd title="Ctrl">⌃</kbd>, in both platforms.
+	This wasn’t only done for cross-platform compatibility, but also because some browsers don’t allow overriding their default shortcuts.</p>
+	<p>In any case, if a keyboard shortcut doesn’t make sense, it’s deferred to the browser (for example <kbd title="Cmd">⌘</kbd><kbd>9</kbd> when you’re already on the last tab).
+</section>
+
+<section id="license">
+	<h1>License</h1>
+	<p>All posted code belongs to the poster and no license is enforced.</p>
+	<p>I am not responsible or liable for any loss or damage of any kind during the usage of dabblet or provided code.</p>
+	<p>dabblet itself is open source software and is distributed under a 
+	<a href="http://www.opensource.org/licenses/NPOSL-3.0">NPOSL-3.0 license</a>. 
+	<a href="http://github.com/LeaVerou/dabblet">Fork dabblet on github</a>, we’re waiting for your pull requests!</p>
+</section>
+
+<section id="press">
+	<h1>Press</h1>
+	<p>The letters for the dabblet logo and all the icons that dabblet uses can be found in <a href="../img/dabblet.ttf">this font</a>. For example usage, refer to the following dabblets:
+	<ul>
+		<li><a href="http://dabblet.com/gist/1484081">Dabblet logo</a></li>
+		<li><a href="http://dabblet.com/gist/1484125">Dabblet avatar</a></li>
+	</ul>
+</section>
+
+<footer>Handcoded by <a href="http://lea.verou.me">Lea Verou</a> with care &#x2665;</footer>
+
+</body>
+</html>

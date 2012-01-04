@@ -1,20 +1,15 @@
-function $(expr, con) { return (con || document).querySelector(expr); }
-function $$(expr, con) { return [].slice.call((con || document).querySelectorAll(expr)); }
-
-// Webkit does this anyway
-$$('[id]').forEach(function(element) {
-	window[element.id] = element;
-});
-
 var gist = {
+	clientId: 'da931d37076424f332ef',
+	clientId: '317b97e9fc304529d454',
+	
 	oauth: [
 		// Step 1: Ask permission
 		function(callback){
 			gist.oauth.callback = callback;
 			
-			var popup = open('https://github.com/login/oauth/authorize' + 
-				'?client_id=da931d37076424f332ef' +
-				'&scope=gist', 'popup', 'width=1015,height=500');
+			window.open('https://github.com/login/oauth/authorize' + 
+				'?client_id=' + gist.clientId +
+				'&scope=gist', 'clunkypopup', 'width=1015,height=500');
 		},
 		// Step 2: Get access token and store it
 		function(token){
@@ -49,7 +44,7 @@ var gist = {
 				(o.id? '/' + o.id : '') +
 				(o.gpath || '');
 		
-		xhr({
+		$u.xhr({
 			method: o.method,
 			url: 'https://api.github.com/' + path + (!o.anon && ACCESS_TOKEN? '?access_token=' + ACCESS_TOKEN : ''),
 			headers: o.headers,
@@ -137,7 +132,7 @@ var gist = {
 						"content": htmlMarkup
 					} : null,
 					"settings.json": {
-						"content": JSON.stringify(Dabblet.settings.current(null, 'file'))
+						"content": JSON.stringify(Dabblet.state.serialize())
 					}
 				}
 			}
@@ -173,7 +168,7 @@ var gist = {
 				
 				var cssFile = files['dabblet.css'],
 					htmlFile = files['dabblet.html'],
-					settings = files['settings.json'];
+					state = files['settings.json'];
 
 				if(!cssFile || !htmlFile) {
 					for(var filename in files) {
@@ -203,11 +198,13 @@ var gist = {
 					css.onkeyup();
 				}
 				
-				if(settings) {
-					try { settings = JSON.parse(settings.content); }
+				if(state) {
+					try { state = JSON.parse(state.content); }
 					catch(e) { return; }
 					
-					Dabblet.settings.apply(settings);
+					state = state.version? state : Dabblet.state.legacy(state);
+					
+					Dabblet.state.restore(state);
 				}
 			}
 		});
@@ -275,143 +272,15 @@ Object.defineProperty(gist, 'saved', {
 	}
 });
 
-var UndoManager = function(elm) {
-	this.element = elm;
-	
-	this.undoStack = [];
-	this.redoStack = [];
-};
-
-UndoManager.prototype = {
-	action: function(action) {
-		if(!action || !(action.length || action.action || action.add || action.del)) {
-			return;
-		}
-		
-		var lastAction = this.undoStack.pop() || null;
-
-		if(lastAction) {
-			var push = lastAction.action || action.action
-					|| lastAction.length || action.length
-					|| (action.del && lastAction.add) 
-					|| (action.add && !lastAction.add)
-					|| (lastAction.start + lastAction.add.length - lastAction.del.length != action.start);
-			
-			if(push) {
-			  	this.undoStack.push(lastAction);
-			  	this.undoStack.push(action);
-			}
-			else if(lastAction) {
-				var combined = this.chain(lastAction, action);
-				
-				this.undoStack.push(combined);
-			}
-		}
-		else {
-			this.undoStack.push(action);
-		}
-		
-		this.redoStack = [];
-		
-		//console.log(this.undoStack);
-	},
-	
-	undo: function() {
-		//console.log(this.undoStack);
-		
-		var action = this.undoStack.pop();
-		
-		if(!action) {
-			return;
-		}
-		
-		this.redoStack.push(action);
-		
-		this.applyInverse(action);
-		
-		this.element.onkeyup();
-	},
-	
-	redo: function() {
-		//console.log(this.redoStack);
-		
-		var action = this.redoStack.pop();
-		
-		if(!action) {
-			return;
-		}
-		
-		this.undoStack.push(action);
-		
-		this.apply(action);
-		
-		this.element.onkeyup();
-	},
-	
-	chain: function(action1, action2) {
-		return {
-			add: action1.add + action2.add,
-			del: action2.del + action1.del,
-			start: action1.start
-		}
-	},
-	
-	apply: function(action) {
-		if(action.length) {
-			for(var i=0; i<action.length; i++) {
-				this.apply(action[i]);
-			}
-			return;
-		}
-		
-		var element = this.element,
-			start = action.start;
-			
-		if(action.action) {
-			Dabblet.codeActions.call(element, action.action, {
-				inverse: action.inverse,
-				start: start,
-				end: action.end,
-				noHistory: true
-			});
-		}
-		else {		
-			// add added chars & remove deleted chars			
-			element.textContent = element.textContent.splice(start, action.del.length, action.add);
-			
-			element.setSelectionRange(start, start + action.add.length);
-		}
-	},
-	
-	applyInverse: function(action) {
-		if(action.length) {
-			for(var i=action.length-1; i>=0; i--) {
-				this.applyInverse(action[i]);
-			}
-			return;
-		}
-		
-		var element = this.element,
-			start = action.start;
-		
-		if(action.action) {
-			Dabblet.codeActions.call(element, action.action, {
-				inverse: !action.inverse,
-				start: start,
-				end: action.end,
-				noHistory: true
-			});
-		}
-		else {
-			// remove added chars & add deleted chars
-			element.textContent = element.textContent.splice(start, action.add.length, action.del);
-			
-			element.setSelectionRange(start, start + action.del.length);
-		}
-	}
-};
-
 var Dabblet = {
+	version: '1.1',
+	
+	pages: {
+		css: window['css-page'],
+		html: window['html-page'], 
+		result: result
+	},
+	
 	title: function(code) {
 		return (code && code.match(/^\/\*[\s\*\r\n]+(.+?)($|\*\/)/m) || [,'Untitled'])[1];
 	},
@@ -431,10 +300,25 @@ var Dabblet = {
 		return false;
 	},
 	
+	get popup() {
+		return popup.src;
+	},
+	
+	set popup(url) {
+		if(url) {
+			popup.src = url;
+			popup.parentNode.style.display = 'block';
+		}
+		else {
+			popup.src = '';
+			popup.parentNode.style.display = '';
+		}
+	},
+	
 	update: {
 		CSS: function(code) {
 			if(!result.contentWindow.style) {
-				result.onload();
+				return;
 			}
 			
 			var style = result.contentWindow.style;
@@ -464,221 +348,10 @@ var Dabblet = {
 		}
 	},
 	
-	codeActions: function(action, options) {
-		options = options || {};
-		
-		var text = this.textContent,
-			ss = options.start || this.selectionStart,
-			se = options.end || this.selectionEnd,
-			before = text.slice(0,ss),
-			after = text.slice(se),
-			selection = ss === se? '' : text.slice(ss,se),
-			textAction;
-		
-		switch (action) {
-		  case 'indent':
-		  	if(selection) {
-		  		var lf = before.lastIndexOf('\n') + 1;
-				
-				if(options.inverse) {
-					if(/\s/.test(before.charAt(lf))) {
-						before = before.splice(lf, 1);
-						
-						ss -= 1;
-						se -= 1;
-					}
-					
-					selection = selection.replace(/\r?\n\s/g, '\n');
-					var offset = selection.length - (se - ss);
-					
-					se += offset;
-				}
-				else {
-					before = before.splice(lf, 0, '\t');
-					selection = selection.replace(/\r?\n/g, '\n\t');
-					
-					var offset = selection.length - (se - ss);
-					
-					ss++;
-					se += offset + 1;
-				}
-				
-				textAction = {
-					action: action,
-					start: ss,
-					end: se,
-					inverse: options.inverse
-				};
-			}
-			else {
-				if(options.inverse) {
-					return false;
-				}
-				else {
-					textAction = {
-						add: '\t',
-						del: '',
-						start: ss
-					};
-					
-					before = before + '\t';
-					
-					ss++;
-					se++;
-				}
-			}
-			
-			break;
-			
-		  case 'newline':
-		  	var lf = before.lastIndexOf('\n') + 1,
-				indent = (before.slice(lf).match(/^\s+/) || [''])[0];
-			
-			textAction = {
-				add: '\n' + indent,
-				del: selection,
-				start: ss
-			};
-			
-			before += '\n' + indent;
-			selection = '';	
-			
-			ss += indent.length + 1;
-			se = ss;
-			
-			break;
-			
-		  case 'comment':
-			var css = this.id === 'css',
-				open = css? '/*' : '<!--',
-				close = css? '*/' : '-->';
-			
-			var start = before.lastIndexOf(open),
-				end = after.indexOf(close),
-				closeBefore = before.lastIndexOf(close),
-				openAfter = after.indexOf(start);
-				
-			if(start > -1 && end > -1
-			   	&& (start > closeBefore || closeBefore === -1)
-			   && (end < openAfter || openAfter === -1)
-			   ) {
-				// Uncomment
-				before = before.splice(start, open.length);
-				after = after.splice(end, close.length);
-				
-				textAction = [{
-					add: '',
-					del: open,
-					start: start
-				}, {
-					add: '',
-					del: close,
-					start: before.length + selection.length + end
-				}];
-				
-				ss -= open.length;
-				se -= open.length;
-			}
-			else {
-				// Comment
-				if(selection) {
-					// Comment selection
-					selection = open + selection + close;
-					
-					textAction = [{
-						add: open,
-						del: '',
-						start: ss
-					}, {
-						add: close,
-						del: '',
-						start: open.length + se
-					}];
-				}
-				else {
-					// Comment whole line
-					var start = before.lastIndexOf('\n') + 1,
-						end = after.indexOf('\n');
-					
-					if(end === -1) {
-						end = after.length;
-					}
-					
-					before = before.splice(start, 0, open);
-					
-					after = after.splice(end, 0, close);
-					
-					textAction = [{
-						add: open,
-						del: '',
-						start: start
-					}, {
-						add: close,
-						del: '',
-						start: before.length + end
-					}];
-				}
-				
-				ss += open.length;
-				se += open.length;
-			}
-			
-			break;
-		}
-				
-		this.textContent = before + selection + after;
-		
-		if(textAction && !options.noHistory) {
-			this.undoManager.action(textAction);
-		}
-		
-		this.setSelectionRange(ss, se);
-		
-		this.onkeyup();
-	},
-	
 	settings: {
 		cached: {},
 		
-		handlers: {
-			page: function(page) {
-				var currentid = document.body.getAttribute('data-page'),
-					current = window[currentid],
-					input = window['page-' + page],
-					pre = window[page];
-		
-				if(current == pre) {
-					return;
-				} 
-					
-				if(current) {
-					var ss = current.selectionStart,
-						se = current.selectionEnd;
-					
-					ss && current.setAttribute('data-ss', ss);
-					se && current.setAttribute('data-se', se);
-				}
-		
-				if(input.value != page || input.checked === false) {
-					input.click();
-				}
-				
-				document.body.setAttribute('data-page', page);
-				
-				self.Previewer && Previewer.hideAll();
-				
-				pre.focus && pre.focus();
-				
-				var ss = pre.getAttribute('data-ss'),
-					se = pre.getAttribute('data-se');
-					
-				if((ss || se) && pre.setSelectionRange) {
-					setTimeout(function(){
-						pre.setSelectionRange(ss, se);
-					}, 2);
-				}
-			},
-			
+		handlers: {			
 			prefixfree: function(enabled) {
 				Dabblet.settings.cached.prefixfree = enabled;
 				
@@ -739,7 +412,7 @@ var Dabblet = {
 				(input.onclick = function(evt){
 					switch(this.type) {
 						case 'radio':
-							if(this.checked) {
+							if(this.checked || evt) {
 								Dabblet.settings.applyOne(name, this.value);
 							}
 							return;
@@ -760,7 +433,7 @@ var Dabblet = {
 		applyOne: function(name, value) {			
 			var current = this.current(name),
 				controls = document.getElementsByName(name);
-				
+
 			for(var i=0; i<controls.length; i++) {
 				var control = controls[i];
 				
@@ -784,17 +457,518 @@ var Dabblet = {
 			
 			// Update localStorage if not in gist
 			if(!gist.id) {
-				var stored = localStorage.settings? JSON.parse(localStorage.settings) : {};
+				// Take care of legacy first
+				if(!localStorage.state && localStorage.settings) {
+					var state = Dabblet.state.legacy(JSON.parse(localStorage.settings));
+					
+					localStorage.state = JSON.stringify(state);
+					
+					localStorage.removeItem('settings');
+				}
+				
+				var state = localStorage.state? JSON.parse(localStorage.state) : {}
+					stored = state.settings || {};
 				
 				if(!(name in stored) || stored[name] != value) {
 					stored[name] = value;
-					localStorage.settings = JSON.stringify(stored);
+					state.settings = stored;
+					localStorage.state = JSON.stringify(state);
 				}
 			}
 			
 			// Update cached settings
 			this.cached[name] = value;
 		}
+	}
+};
+
+Dabblet.view = {
+	container: $('.tabs'),
+	
+	titles: {c: 'CSS', h: 'HTML', r: 'Result'},
+	
+	presets: {
+		"split": [{
+			template: 'r\nc'
+		}, {
+			template: 'r\nh'
+		}, {
+			template: 'r'
+		}],
+		"split-vertical": [{
+			template: 'cr'
+		}, {
+			template: 'hr'
+		}, {
+			template: 'r'
+		}],
+		"separate": [{
+			template: 'c'
+		}, {
+			template: 'h'
+		}, {
+			template: 'r'
+		}],
+		"behind": [{
+			template: 'c',
+			seethrough: true
+		}, {
+			template: 'h',
+			seethrough: true
+		}, {
+			template: 'r'
+		}]
+	},
+	
+	current: [],
+	
+	get editing() {
+		return !!this._editing;
+	},
+	
+	set editing(value) {
+		this._editing = !!value;
+		
+		document.body.classList[value? 'add' : 'remove']('tabediting');
+	},
+	
+	title: function(template) {
+		var title = "",
+		    titles = this.titles,
+		    panes = 0;
+		    
+		for (var letter in titles) {
+			if (template.indexOf(letter) > -1) {
+				title += (title? ' & ' : '') + titles[letter];
+				panes++;
+			}
+		}
+		
+		if(panes === 3) {
+			return 'All';
+		}
+		
+		return title;
+	},
+	
+	goto: function(index, force) {
+		var input;
+
+		if(index.nodeType == 1) {
+			var input = index;
+			index = this.tabIndex(input);
+		}
+		else {
+			var input = this.tabs[index - 1];
+		}
+
+		if(!input
+		   || index < 1 
+		   || index > this.tabs.length
+		   || (input === this.tab && !force)
+		  ) {
+			return false;
+		}
+		
+		input.checked = true;
+		
+		$$('label.checked', this.container).forEach(function(label) {
+			label.className = '';
+		});
+		
+		var label = input.parentNode;
+		label.className = 'checked';
+		
+		Dabblet.view.tab = input;
+
+		var info = Dabblet.view.applyTemplate(input.value);
+		
+		Dabblet.view.applySeethrough(input.hasAttribute('data-seethrough'));
+		
+		var cs = (info.template.match(/c/gi) || []).length,
+			hs = (info.template.match(/h/gi) || []).length;
+			
+		if(cs + hs > 0) {
+			(hs > cs? html : css).focus();
+		}
+		
+		// Store in localStorage
+		Dabblet.state.store();
+		
+		return true;
+	},
+	
+	next: function(wrap) {
+		var tab = this.tabIndex() + 1,
+			inRange = this.goto(tab);
+		
+		if(!inRange && wrap) {
+			this.goto(1);
+		}
+		
+		return inRange || wrap;
+	},
+	
+	previous: function(wrap) {
+		var tab = this.tabIndex() - 1,
+		    inRange = this.goto(tab);
+		    
+	    if(!inRange && wrap) {
+	    	this.goto(this.tabs.length);
+	    }
+	    
+	    return inRange || wrap;
+	},
+	
+	tabIndex: function(input) {
+		input = input || this.tab;
+		
+		return input? +input.getAttribute('data-index') : 1;
+	},
+	
+	deleteTab: function(index) {
+		index = index || this.tabIndex();
+		
+		var input = this.tabs[index - 1],
+		    label = input.parentNode,
+			title = $('.title', label);
+			
+		title.style.maxWidth = '0';
+		
+		setTimeout(function(){
+			Dabblet.view.container.removeChild(label);
+			
+			$u.event.fire(Dabblet.view.container, 'tabcountchange');
+			
+			window['layout-settings'].style.display = 'none';
+			
+			if(label.classList.contains('checked')) {
+				Dabblet.view.next(true);
+			}
+		}, 1000);
+	},
+	
+	addTab: function() {
+		var index = this.tabIndex(),
+			tab = this.tab || this.tabs[this.tabs.length - 1],
+			nextTab = this.tabs[index];
+		
+		var label = this.makeTab(this.serializeTab(tab)),
+			title = $('.title', label);
+		
+		
+		this.container.insertBefore(label, nextTab? nextTab.parentNode : null);
+		
+		title.style.maxWidth = '0';
+		setTimeout(function() { title.style.maxWidth = '20em' }, 5);
+		
+		$u.event.fire(this.container, 'tabcountchange');
+		
+		this.goto($('input', label), true);
+	},
+	
+	makeTab: function (obj, i) {
+		var template = obj.template,
+		    title = obj.title || this.title(template),
+		    active = !!obj.active,
+		    seethrough = !!obj.seethrough;
+
+		var label = $u.element.create({
+			tag: 'label',
+			properties: {
+				title: i < 8? '⌘' + i : '',
+				className: active? 'checked' : ''
+			}
+		});
+			
+		var input = $u.element.create({
+			tag: 'input',
+			properties: {
+				type: 'radio',
+				name: 'tab',
+				value: template,
+				checked: active
+			},
+			attributes: {
+				'data-index': i
+			},
+			inside: label
+		});
+				
+		if(seethrough) {
+			input.setAttribute('data-seethrough', '');
+		}
+		
+		var title = $u.element.create({
+			tag: 'span',
+			prop: {
+				className: 'title',
+				innerHTML: title.replace(/&/g, '<i class=amp>&amp;</i>')
+			},
+			inside: label
+		});
+		
+		title.style.maxWidth = '20em';
+		
+		$u.element.create({
+			tag: 'button',
+			prop: {
+				className: 'close',
+				title: 'Delete tab',
+				onclick: function(evt) {
+					var input = $('input', this.parentNode),
+						index = +input.getAttribute('data-index');
+					
+					Dabblet.view.deleteTab(index);
+					
+					evt.stopPropagation();
+				}
+			},
+			contents: '✖',
+			inside: label
+		});
+		
+		if(active) {
+			this.tab = input;
+		}
+		
+		return label;
+	},
+	
+	applySeethrough: function(seethrough) {
+		var wutAttribute = (seethrough? 'set' : 'remove') + 'Attribute';
+		
+		document.body[wutAttribute]('data-seethrough', '');
+		this.tab && this.tab[wutAttribute]('data-seethrough', '');
+	},
+	
+	applyTemplate: function(code) {
+		code = code.toLowerCase().trimRight();
+		
+		// Find title
+		var valid = !!code;
+		
+		// Find max cols
+		var rows = code.split(/\r?\n|\r/g),
+			maxCols = 0,
+			d = {};
+			
+		d.c = d.h = d.r = null;
+		
+		for(var i=0; i<rows.length; i++) {
+			maxCols = Math.max(rows[i].length, maxCols);
+		}
+		
+		var dimension = Math.max(rows.length, maxCols);
+		
+		// Adjust font-size
+		layout.style.fontSize = (dimension > 9? 10 : 90/dimension) + 'px';
+		layout.style.overflow = dimension > 9? 'auto' : '';
+		
+		// Pad shorter cols
+		for(var i=-1, cols; cols = rows[++i];) {
+			if(cols.length < maxCols) {
+				var last = cols[cols.length - 1],
+					difference = maxCols - cols.length;
+				
+				rows[i] = cols + Array(difference + 1).join(last);	
+			}
+		}
+		
+		layout.firstChild.nodeValue = rows.join('\r\n');
+		
+		// Convert to layout
+		for(letter in d) {
+			var dl = d[letter] = d[letter] || {};
+			dl.top = dl.left = dl.width = dl.height = null;
+		}
+		
+		outer: for(var i=-1, cols; cols = rows[++i];) {
+			for(var letter in d) {
+				var dl = d[letter],
+					index = cols.indexOf(letter);
+				
+				if(index > -1) {
+					var matches = cols.match(RegExp(letter + '+', 'gi'));
+					
+					if(matches.length > 1) {
+						valid = false;
+						break outer;
+					}
+					
+					var count = matches[0].length;
+					
+					if(!dl.width) {
+						dl.width = count;
+					}
+					
+					dl.top = dl.top || 0;
+					dl.height = (dl.height || 0) + 1;
+					
+					if(dl.top + dl.height < i+1) {
+						valid = false;
+						break outer;
+					}
+					
+					if(dl.left === null) {
+						dl.left = index;
+					}
+					else if(index != dl.left) {
+						valid = false;
+						break outer;
+					}
+				}
+				else if(!dl.height && !dl.width) {
+					dl.top++;
+				}
+			}
+		}
+		
+		// Check if valid
+		if(valid) {
+			var area = 0;
+			
+			for(letter in d) {
+				var dl = d[letter];
+				area += dl.width * dl.height;
+			}
+			
+			valid = area === rows.length * maxCols;
+		}
+		
+		template.className = valid? '' : 'invalid';
+		
+		if(valid) {
+			var incrementX = 100 / maxCols,
+			    incrementY = 100 / rows.length;
+			
+			for(letter in d) {
+				var dl = d[letter],
+					id = this.titles[letter].toLowerCase(),
+				    style = Dabblet.pages[id].style;
+					
+				style.top = dl.top * incrementY + '%';
+				style.height = dl.height * incrementY + '%';
+				style.left = dl.left * incrementX + '%';
+				style.width = dl.width * incrementX + '%';
+			
+				style.display = !dl.height || !dl.width? 'none' : '';
+			}
+		}
+		
+		return {
+			valid: valid,
+			dimensions: d,
+			code: code,
+			template: rows.join('\r\n')
+		};
+	},
+	
+	// Serialize the tab setup into an array of objects
+	serialize: function() {
+		var arr = [], tabs = Dabblet.view.tabs;
+		
+		for(var i=0; i<tabs.length; i++) {
+			arr.push(this.serializeTab(tabs[i]));
+		}
+		
+		return arr;
+	},
+	
+	serializeTab: function(tab) {
+		return {
+			//title: tab.nextSibling.textContent,
+			template: tab.value,
+			active: tab.checked,
+			seethrough: tab.hasAttribute('data-seethrough')
+		};
+	},
+	
+	// Restore the tabs from an array of objects
+	restore: function(arr) {
+		var container = Dabblet.view.container;
+		
+		var fragment = document.createDocumentFragment();
+		
+		if(!(arr instanceof Array)) {
+			arr = Dabblet.view.presets[arr];
+		}
+		
+		var prevIndex = this.tabIndex();
+		this.tab = null;
+		
+		arr.forEach(function(obj, i) {
+			fragment.appendChild(this.makeTab(obj, i+1))
+		}, this);
+		
+		container.innerHTML = '';
+		container.appendChild(fragment);
+
+		this.goto(this.tab || Math.min(prevIndex, this.tabs.length), true);
+	}
+};
+
+Dabblet.view.tabs = Dabblet.view.container.getElementsByTagName('input'); // auto-updating
+
+$$('button[name="view"]').forEach(function(button) {
+	button.onclick = function() {
+		Dabblet.view.restore(this.value);
+	};
+});
+
+Dabblet.state = {
+	serialize: function() {
+		var state = {
+			version: Dabblet.version,
+			settings: Dabblet.settings.current(),
+			view: Dabblet.view.serialize()
+		};
+					
+		return state;
+	},
+	
+	restore: function(state) {
+		if(state.view && state.view.length) {
+			Dabblet.view.restore(state.view);
+		}
+		else if(!state.version) {
+			// Handle legacy stored views
+			state = Dabblet.state.legacy(state);
+		}
+		
+		if(state.settings) {
+			Dabblet.settings.apply(state.settings);
+		}
+	},
+	
+	store: function() {
+		localStorage.state = JSON.stringify(this.serialize());
+	},
+	
+	// Construct a state obj via a legacy settings obj
+	legacy: function(settings) {
+		var view = Dabblet.view.presets[settings.view] || Dabblet.view.presets.split;
+		delete settings.view;
+		
+		if(settings.page) {
+			var indices = { 'css': 0, 'html': 1, 'result': 2 },
+				index = indices[settings.view] || 0;
+			
+			view[index].active = true;
+			delete settings.page;
+		}
+		
+		return {
+			version: Dabblet.version,
+			view: view,
+			settings: settings
+		};
+	},
+	
+	default: {
+		version: Dabblet.version,
+		view: Dabblet.view.presets.split,
+		settings: Dabblet.settings.current()
 	}
 };
 
@@ -814,7 +988,7 @@ window.onbeforeunload = function(){
 		css.onblur();
 		html.onblur();
 		
-		return 'You have unsaved changes.';
+		//return 'You have unsaved changes.';
 	}
 };
 
@@ -865,8 +1039,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		a.title = 'New dabblet';
 	}
 	
-	Dabblet.settings.apply();
-	
 	var path = location.pathname.slice(1);
 	
 	if(path) {
@@ -877,265 +1049,78 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	}
 	
+	var state = Dabblet.state.default;
+	
 	if(!gist.id) {	
-		if(localStorage['dabblet.css'] !== undefined) {
+		if(typeof localStorage['dabblet.css'] === 'string') {
 			css.textContent = localStorage['dabblet.css'];
 		}
 		
-		if(localStorage['dabblet.html'] !== undefined) {
+		if(typeof localStorage['dabblet.html'] === 'string') {
 			html.textContent = localStorage['dabblet.html'];
 		}
 		
-		if(localStorage.settings) {
-			Dabblet.settings.apply(JSON.parse(localStorage.settings));
+		if(localStorage.state) {
+			state = $u.merge(state, JSON.parse(localStorage.state));
 		}
-	}
-});
-
-$$('pre').forEach(function(pre){
-	pre.undoManager = new UndoManager(pre);
-	
-	pre.onkeydown = function(evt) {
-		var cmdOrCtrl = evt.metaKey || evt.ctrlKey;
+		else if (localStorage.settings) {
+			var legacyState = Dabblet.state.legacy(JSON.parse(localStorage.settings));
 			
-		switch(evt.keyCode) {
-			case 8: // Backspace
-				var ss = this.selectionStart,
-					se = this.selectionEnd,
-					length = ss === se? 1 : Math.abs(se - ss),
-					start = se - length;
-				
-				this.undoManager.action({
-					add: '',
-					del: this.textContent.slice(start, se),
-					start: start
-				});
-				
-				break;
-			case 9: // Tab
-				if(!cmdOrCtrl) {
-					Dabblet.codeActions.call(this, 'indent', {
-						inverse: evt.shiftKey
-					});
-					return false;
-				}
-			case 13:
-				Dabblet.codeActions.call(this, 'newline');
-				return false;
-			case 90:
-				if(cmdOrCtrl) {
-					this.undoManager[evt.shiftKey? 'redo' : 'undo']();
-					return false;
-				}
-				
-				break;
-			case 191:
-				if(cmdOrCtrl) {
-					Dabblet.codeActions.call(this, 'comment');
-					return false;
-				}
-				
-				break;
-		}
-	};
-	
-	pre.onkeypress = function(evt) {
-		var cmdOrCtrl = evt.metaKey || evt.ctrlKey,
-			code = evt.charCode,
-			ss = this.selectionStart,
-			se = this.selectionEnd;
-		
-		if(code && !cmdOrCtrl) {
-			var character = String.fromCharCode(code);
+			localStorage.state = JSON.stringify(legacyState);
 			
-			this.undoManager.action({
-				add: character,
-				del: ss === se? '' : this.textContent.slice(ss, se),
-				start: ss
-			});
-		}
-	};
-	
-	pre.oncut = function() {
-		ss = this.selectionStart,
-		se = this.selectionEnd,
-		selection = ss === se? '': this.textContent.slice(ss, se);
-		
-		if(selection) {
-			this.undoManager.action({
-				add: '',
-				del: selection,
-				start: ss
-			});
+			localStorage.removeItem('settings');
 			
-			gist.saved = false;
-		}
-	};
-	
-	pre.onpaste = function() {
-		var that = this,
-			ss = this.selectionStart,
-			se = this.selectionEnd,
-			selection = ss === se? '': this.textContent.slice(ss, se);
-			
-		gist.saved = false;
-			
-		setTimeout(function(){
-			var newse = that.selectionEnd,
-				pasted = that.textContent.slice(ss, newse);
-
-			that.undoManager.action({
-				add: pasted,
-				del: selection,
-				start: ss
-			});
-
-			that.innerHTML = that.innerHTML
-								.replace(/<br\b.*?>|(<div\b.*?>)+/gi, '\n')
-								.replace(/<\/div>/gi, '')
-								.replace(/&nbsp;/gi, ' ');
-			
-			ss += pasted.length;
-			
-			that.setSelectionRange(ss, ss);
-			
-			that.onkeyup();
-		}, 10);
-	};
-	
-	pre.onkeyup = function(evt) {
-		var keyCode = evt && evt.keyCode || 0,
-			code = this.textContent,
-			id = this.id;
-
-		if([
-			9, 91, 93, 16, 17, 18, // modifiers
-			20, // caps lock
-			13, // Enter (handled by keydown)
-			112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, // F[0-12]
-			27 // Esc
-		].indexOf(keyCode) > -1) {
-			return;
-		}
-		
-		if(keyCode !== 37 && keyCode !== 39) {
-			var ss = this.selectionStart,
-				se = this.selectionEnd;
-		
-			Highlight.init(this);
-			
-			// Dirty fix to #2
-			if(!/\n$/.test(code)) {
-				this.innerHTML = this.innerHTML + '\n';
-			}
-
-			if(ss !== null || se !== null) {
-				this.setSelectionRange(ss, se);
-			}
-			
-			if(id === 'css') {
-				document.title = Dabblet.title(code) + ' ✿ dabblet.com';
-			
-				Dabblet.update.CSS(code);
-			}
-			else {
-				Dabblet.update.HTML(code);
-			}
-			
-			if(keyCode) {
-				gist.saved = false;
-			}
-		}
-		
-		this.onclick();
-	};
-	
-	pre.onclick = function(evt) {
-		if(!self.Previewer) {
-			return;
-		}
-		
-		if(this.id !== 'css') { return; }
-		
-		var selection = getSelection();
-		
-		if(selection.rangeCount) {
-			var range = selection.getRangeAt(0),
-				element = range.startContainer;
-			
-			if(element.nodeType == 3) {
-				element = element.parentNode;
-			}
-			
-			var type = Previewer.get(element);
-			
-			if(type) {
-				Previewer.active = element;
-				Previewer.s[type].token = element;
-			}
-			else {
-				Previewer.hideAll();
-				Previewer.active = null;
-			}
+			state = $u.merge(state, legacyState)
 		}
 	}
 	
-	pre.onblur = function() {
-		if(!gist.saved) {
-			// Save draft
-			localStorage['dabblet.css'] = css.textContent;
-			localStorage['dabblet.html'] = html.textContent;
-		}
-		
-		self.Previewer && Previewer.hideAll();
-	};
-	
-	pre.onmouseover = function(evt) {
-		if(!self.Previewer) {
-			return;
-		}
-		
-		var target = evt.target,
-		    type = Previewer.get(target);
-		
-		if (type) {
-
-			var previewer = Previewer.s[type];
-			
-			if (previewer.token != target) {
-				previewer.token = target;
-				
-				target.onmouseout = function() {
-					previewer.token = this.onmouseout = null;
-					
-					// Show the previewer again on the active token
-					var active = Previewer.active;
-					
-					if (active) {
-						var type = Previewer.get(active);
-						Previewer.s[type].token = active;
-					}
-				}
-			}
-		}
-	};
+	Dabblet.state.restore(state);
 });
 
-css.onfocus = function() {
-	script('/code/incrementable.js', function() {
-		new Incrementable(css, function(evt) {
-			if(evt.altKey) {
-				if(evt.shiftKey) { return 10; }
-				
-				if(evt.ctrlKey) { return .1; }
-				
-				return 1;
-			}
+$$('.editor.page > pre').forEach(function(pre){
+	new Editor(pre);
+});
+
+$u.event.bind(template, {
+	keypress: function(evt) {
+		var char = String.fromCharCode(evt.charCode);
+	
+		return !(char && 'rhc'.indexOf(char.toLowerCase()) === -1) || evt.keyCode <= 13;
+	},
+	
+	input: function() {
+		var regex = /^([rhc]{1,10}(\r?\n|\r)){0,9}[rhc]{1,10}$/gi,
+			code = template.value;
+	
+		if(!regex.test(/^([rhc]{1,10}(\r?\n|\r)){0,9}[rhc]{1,10}$/gi)) {
+			var ss = template.selectionStart,
+			    se = template.selectionEnd;
 			
-			return 0;
-		});
-		css.onfocus = null;
-	});
+			code = code.replace(/[^rhc\r\n]/gi, '')
+			           .replace(/^([rhc]{10})[rhc]+$/gim, '$1')
+			           .replace(/^(([rhc]{1,10}(\r?\n|\r)){9}[rhc]{1,10})[rhc\r\n]+$/gi, '$1');
+			
+			template.value = code;
+			
+			template.selectionStart = ss,
+			template.selectionEnd = se;
+		}
+		
+		var info = Dabblet.view.applyTemplate(code);
+		
+		if(info.valid) {
+			var tab = Dabblet.view.tab,
+			    title = $('span', tab.parentNode);
+			    
+			title.innerHTML = Dabblet.view.title(code).replace(/&/g, '<i class=amp>&amp;</i>');
+		}
+	}
+}, true);
+
+seethrough.onclick = function() {
+	Dabblet.view.applySeethrough(this.checked);
+	
+	Dabblet.state.store();
 };
 
 // Note: Has to be keydown to be able to cancel the event
@@ -1154,40 +1139,22 @@ document.onkeydown = function(evt) {
 					location.pathname = '/';	
 				}
 				return false;
-			case '1':
-				var page = 'css';
-				break;
-			case '2':
-				var page = 'html';
-				break;
-			case '3':
-				var page = 'result';
-				break;
 		}
-		
-		var currentPage = Dabblet.settings.current('page');
 		
 		if(evt.shiftKey) {
 			if(code === 219) {
-				// Go to previous tab
-				var page = ({
-					'html': 'css',
-					'result': 'html'
-				})[currentPage];
+				return !Dabblet.view.previous();
 			}
 			else if (character === ']' || code === 221) {
 				// Go to next tab
-				var page = ({
-					'css': 'html',
-					'html': 'result'
-				})[currentPage];
+				return !Dabblet.view.next();
 			}
 		}
 		
-		if(page) {
-			if(currentPage !== page) {
-				Dabblet.settings.apply('page', page);
+		if (character > 0 && character < 10) {
+			var tab = character == 9?  Dabblet.view.tabs.length : +character;
 				
+			if(Dabblet.view.goto(tab)) {
 				evt.stopPropagation();
 				return false;
 			}
@@ -1212,24 +1179,87 @@ document.onkeydown = function(evt) {
 	}
 };
 
-// Pure CSS menus aren't accessible, we need to add some JS :(
-var header = $('header');
-$$('header a, header input, header button, header [tabindex="0"]').forEach(function(focusable){
-	focusable.onfocus = function(){
-		var ancestor = this;
+$u.event.bind(Dabblet.view.container, {
+	click: function(evt) {
+		var target = evt.target,
+		    tag = target.nodeName.toLowerCase();
 		
-		do {
-			ancestor = ancestor.parentNode;
-			ancestor.classList.add('focus')
-		} while(ancestor && ancestor != document.body);
-	};
+		if(tag === 'div') {
+			return;
+		}
+		
+		target = tag === 'i'? target.parentNode : target;
+		var label = tag === 'label'? target : target.parentNode;
+		var input = tag === 'input'? target : $('input', label);
+		
+		Dabblet.view.goto(input);
+		
+		if(Dabblet.view.editing) {
+			template.value = input.value;
+			template.oninput();
+			
+			seethrough.checked = input.hasAttribute('data-seethrough');
+			seethrough.onclick();
+			
+			var settings = window['layout-settings'],
+				offsets = $u.offset(label);
 	
-	focusable.onblur = function() {
-		var ancestor = this;
+			settings.style.left = offsets.left + label.offsetWidth/2 + 'px';
+			settings.style.display = 'block';
+			
+			setTimeout(function(){
+				template.focus();
+				
+				template.onblur = function() {
+					input.value = template.value;
+					
+					var wutAttribute = (seethrough.checked? 'set' : 'remove') + 'Attribute';
+					input[wutAttribute]('data-seethrough', '');
+					
+					settings.style.display = '';
+					
+					Dabblet.state.store();
+					
+					template.onblur = null;
+				}
+			}, 100);
+		}
+	},
+		
+	tabcountchange: function() {
+		// Reindex tabs
+		var tabs = Dabblet.view.tabs;
+		
+		for (var i=-1, tab; tab = tabs[++i];) {
+			tab.setAttribute('data-index', i+1);
+			tab.parentNode.title = '⌘' + (i+1);
+		}
+	}
+});
+
+// If only :focus and :checked bubbled...
+(function() {
+	function ancestorClass(action, className, element) {
+		var ancestor = element;
 		
 		do {
 			ancestor = ancestor.parentNode;
-			ancestor.classList.remove('focus')
+			ancestor.classList[action](className)
 		} while(ancestor && ancestor != document.body);
-	};
+	}
+	
+	$u.event.bind('header a, header input, header button, header [tabindex="0"], pre', {
+		focus: function(){
+			ancestorClass('add', 'focus', this);
+		},
+		
+		blur: function() {
+			ancestorClass('remove', 'focus', this);
+		}
+	});
+})();
+
+$u.event.bind('label > input[type="checkbox"]', 'click', function(){
+	var parent = this.parentNode;
+	parent && parent.classList[this.checked? 'add' : 'remove']('checked');
 });
