@@ -217,24 +217,24 @@ body[data-view="separate"]:not([data-page="result"]) #result {
 
 header {
 	position: absolute;
-	top: -2.85em;
+	bottom: 100%;
 	right: 0;
 	left: 0;
 	z-index: 10;
 	padding: .4em .5em 0;
 	border-bottom: 10px solid black;
-	margin-top: -10px;
 	background: url(img/noise.png), linear-gradient(hsl(200, 10%, 20%), hsla(200, 10%, 20%, .9));
 	color: white;
 	line-height: 1.1;
 	font-weight: bold;
-	transition: .5s 1s;
+	transition: .5s 1s transform;
 }
 
 header:hover,
 header:active,
-header.focus {
-	top: 0;
+header.focus,
+body.tabediting header {
+	transform: translateY(-10px) translateY(100%);
 	transition-delay: 0s;
 }
 
@@ -854,10 +854,6 @@ header.focus {
 }
 
 @media (max-width: 580px) {
-	header {
-		top: -5.4em;
-	}
-	
 	.controls-group {
 		margin-top: .2em;
 	}
