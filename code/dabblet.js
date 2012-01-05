@@ -358,6 +358,20 @@ var Dabblet = {
 				if(result.contentWindow.style) {
 					Dabblet.update.CSS();
 				}
+			},
+			autohide_topbar: function(enabled) {
+				Dabblet.settings.cached.autohide_topbar = enabled;
+
+				var header = $('header'),
+					cls = header.className.split(' '),
+					arr = [];
+
+				cls.forEach(function(item, index) {
+					if (item && item !== 'focus') { arr[index] = item; }
+				});
+
+				if (!enabled) { arr.push('focus'); }
+				header.className = (arr.length > 1) ? arr.join(' ') : (arr[0]) ? arr[0] : '';
 			}
 		},
 		

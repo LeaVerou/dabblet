@@ -617,6 +617,15 @@ body.tabediting header {
 		#view > button[name="view"][value="separate"]:before {
 			background-position: 0 -75px;
 		}
+
+		#options > label {
+			display: block;
+			margin-bottom: 4px;
+		}
+		
+		#options > label:last-child {
+			margin-bottom: 0;
+		}
 		
 		fieldset:not([id]) > label {
 			font-weight: normal;
