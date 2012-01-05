@@ -1,0 +1,178 @@
+/**
+ * Variables
+ */
+
+@font-face {
+	font-family: 'Dabblet';
+	src: url(../img/dabblet.ttf);
+}
+
+@font-face {
+	font-family: Primary;
+	src: local('Baskerville');
+}
+
+
+/**
+ * Styles
+ */
+* {
+	margin: 0;
+}
+
+html {
+	background: url(../img/noise.png) hsl(24, 20%, 95%);
+	max-width: 40em;
+	padding-left: 12em;
+	margin: auto;
+}
+
+body {
+	padding: 1em;
+	border-left: 1px solid hsla(200,10%,20%,.4);
+	margin: 2em auto;
+	font: 110%/1.5 Primary;
+	hyphens: auto;
+	text-shadow: 0 .1em white;
+}
+
+h1, h2 {
+	font: bold 200%/1 sans-serif;
+}
+
+body > hgroup {
+	padding: .5em 0;
+	color: black;
+	text-align: center;
+	font-size: 400%;
+	line-height: .4;
+}
+
+	body > hgroup > h1 {
+		font-family: Dabblet, sans-serif;
+		font-size: 100%;
+	}
+	
+	body > hgroup > h2 {
+		margin-top: -.7em;
+		font: italic 80%/1 Primary;
+		text-indent: 4em;
+		color: #a34;
+		
+	}
+
+p {
+	margin: 1em 0;
+}
+
+a {
+	color: hsl(200, 10%, 20%);
+}
+
+kbd {
+	display: inline-block;
+	min-width: 1em;
+	padding: .2em;
+	border: 1px solid #ddd;
+	border-radius: .3em;
+	background: white;
+	text-align: center;
+	line-height: 1;
+}
+
+kbd[title] {
+	cursor: help;
+}
+
+section:first-of-type,
+section#toc {
+	font-size: 120%;
+}
+
+section h1,
+section h2 {
+	margin: 1.5em 0 .5em;
+	line-height: 1;
+	letter-spacing: -.05em;
+}
+
+section h1 {
+	font-size: 350%;
+}
+
+section h2 {
+	font-size: 200%;
+	color: hsl(200, 10%, 20%);
+}
+
+nav {
+	position: fixed;
+	top: 13em;
+	width: 12em;
+	margin-left: -14em;
+	text-align: right;
+}
+
+nav:not(:hover) {
+	color: hsla(200,10%,20%,.4);
+}
+
+	nav a {
+		text-decoration: none;
+		color: inherit;
+	}
+	
+	nav a:hover {
+		color: #a34;
+	}
+
+table {
+	border-spacing: 0;
+}
+
+	thead {
+		background: rgba(0,0,0,.1);
+	}
+	
+		td {
+			border-bottom: 1px solid rgba(0,0,0,.3);	
+			padding: .3em .5em;
+			vertical-align: top;
+		}
+		
+		tbody td:first-child {
+			width: 10em;
+		}
+		
+		tbody td:first-child > kbd {
+			font-size: 120%;
+		}
+		
+		tbody td:first-child > .note {
+			font-size: 65%;
+		}
+
+footer {
+	border-top: 1px solid rgba(0,0,0,.2);
+	padding: .5em;
+	text-align: center;
+}
+
+#quick-links {
+	font-style: italic;
+}
+	
+	#quick-links > a {
+		padding: .4em .8em;
+		background: url('../img/noise.png') hsla(200, 10%, 20%,.6);
+		color: white;
+		font-weight: bold;
+		border-radius: 999px;
+		text-decoration: none;
+		text-shadow: 0 -1px 1px black;
+		box-shadow: 0 .1em white;
+	}
+	
+	#quick-links > a:hover {
+		background-color: hsl(200, 10%, 20%);
+	}

@@ -814,7 +814,7 @@ window.onbeforeunload = function(){
 		css.onblur();
 		html.onblur();
 		
-		return 'You have unsaved changes.';
+		//return 'You have unsaved changes.';
 	}
 };
 
@@ -865,8 +865,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		a.title = 'New dabblet';
 	}
 	
-	Dabblet.settings.apply();
-	
 	var path = location.pathname.slice(1);
 	
 	if(path) {
@@ -878,16 +876,19 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 	
 	if(!gist.id) {	
-		if(localStorage['dabblet.css'] !== undefined) {
+		if(typeof localStorage['dabblet.css'] === 'string') {
 			css.textContent = localStorage['dabblet.css'];
 		}
 		
-		if(localStorage['dabblet.html'] !== undefined) {
+		if(typeof localStorage['dabblet.html'] === 'string') {
 			html.textContent = localStorage['dabblet.html'];
 		}
 		
-		if(localStorage.settings) {
+		if(typeof localStorage.settings === 'string') {
 			Dabblet.settings.apply(JSON.parse(localStorage.settings));
+		}
+		else {
+			Dabblet.settings.apply();
 		}
 	}
 });
@@ -1212,24 +1213,24 @@ document.onkeydown = function(evt) {
 	}
 };
 
-// Pure CSS menus aren't accessible, we need to add some JS :(
-var header = $('header');
-$$('header a, header input, header button, header [tabindex="0"]').forEach(function(focusable){
-	focusable.onfocus = function(){
-		var ancestor = this;
+// If only :focus and :checked bubbled...
+(function() {
+	function ancestorClass(action, className, element) {
+		var ancestor = element;
 		
 		do {
 			ancestor = ancestor.parentNode;
-			ancestor.classList.add('focus')
+			ancestor.classList[action](className)
 		} while(ancestor && ancestor != document.body);
-	};
+	}
 	
-	focusable.onblur = function() {
-		var ancestor = this;
+	$u.event.bind('header a, header input, header button, header [tabindex="0"], pre', {
+		focus: function(){
+			ancestorClass('add', 'focus', this);
+		},
 		
-		do {
-			ancestor = ancestor.parentNode;
-			ancestor.classList.remove('focus')
-		} while(ancestor && ancestor != document.body);
-	};
-});
+		blur: function() {
+			ancestorClass('remove', 'focus', this);
+		}
+	});
+})();

@@ -22,7 +22,7 @@
 	
 	<a id="currentuser" target="_blank" class="user button">Log in</a>
 	
-	<div class="with-dropdown" title="Settings">
+	<div class="with-dropdown">
 		<button class="with-symbol" title="Settings">⚙</button>
 		<form id="settings" class="dropdown">
 			<fieldset id="view">
@@ -52,15 +52,15 @@
 	</div>
 	
 	<div class="with-dropdown">
-		<button id="save-button" class="with-symbol" title="Save">💾</button>
+		<button id="save-button" class="with-symbol" title="Save">☁</button>
 		<menu class="dropdown">
+			<a href="/" onclick="Dabblet.wipe()" class="command" data-keyboard="⌘N">New dabblet</a>
+						
+			<hr />
+			
 			<a id="save-cmd" tabindex="0" class="command" data-keyboard="⌘S" data-disabled>Save</a>
 			<a onclick="gist.save({forceNew: true})" id="save-new-cmd" class="command" tabindex="0" data-disabled>Save as new</a>
 			<a onclick="gist.save({anon: true})" class="command" tabindex="0">Save anonymously</a>
-			
-			<hr />
-			
-			<a href="/" onclick="Dabblet.wipe()" class="command" data-keyboard="⌘N">New dabblet</a>
 			
 			<hr />
 			
@@ -71,22 +71,28 @@
 	</div>
 	
 	<div class="controls-group">
-		<a href="#help" class="button" title="Help &amp; credits">?</a>
+		<a href="/help/" class="button" title="Help &amp; credits" target="_blank">?</a>
 		<div class="tabs">
-			<input type="radio" name="page" value="css" id="page-css" checked data-scope="file" />
-			<label for="page-css" title="⌘1">CSS</label>
-			
-			<input type="radio" name="page" value="html" id="page-html" data-scope="file"/>
-			<label for="page-html" title="⌘2">HTML</label>
-			
-			<input type="radio" name="page" value="result" id="page-result" data-scope="file" />
-			<label for="page-result" title="⌘3">Result</label>
+			<input type="radio" name="page" value="css" id="page-css" checked data-scope="file" 
+			/><label for="page-css" title="⌘1">
+				<span class="title">CSS 
+				<span class="if-not-separate"><i class="amp">&amp;</i> Result</span>
+				</span>
+			</label><input type="radio" name="page" value="html" id="page-html" data-scope="file"
+			/><label for="page-html" title="⌘2">
+				<span class="title">HTML 
+					<span class="if-not-separate"><i class="amp">&amp;</i> Result</span>
+				</span>
+			</label><input type="radio" name="page" value="result" id="page-result" data-scope="file" 
+			/><label for="page-result" title="⌘3">
+				<span class="title">Result</span>
+			</label>
 		</div>
 	</div>
 </header>
 
 <iframe class="page" id="result" name="result" src="/result.html"></iframe>
-<div id="css-container" class="editor page">
+<section id="css-container" class="editor page">
 	<pre id="css" lang="css" contenteditable spellcheck="false">/**
  * The first commented line is your dabblet’s title
  */
@@ -94,125 +100,10 @@
 background: #f06;
 background: linear-gradient(45deg, #f06, yellow);
 min-height:100%;</pre>
-</div>
-
-<div id="html-container" class="editor page">
-<pre id="html" lang="html" contenteditable spellcheck="false">&lt;!-- content to be placed inside &lt;body>…&lt;/body> --></pre>
-</div>
-
-<section id="help" class="popup">
-	<h1>Help &amp; About</h1>
-	<a href="#" class="close" title="Close">×</a>
-	<div class="content"><div>
-		<p>dabblet is an interactive playground for quickly testing snippets of CSS and HTML code.
-		It uses <a href="http://leaverou.github.com/prefixfree" target="_blank">-prefix-free</a>, 
-		so that you won't have to add any prefixes in your CSS code. You can save your work in 
-		<a href="http://gist.github.com">Github gists</a>, embed it in other websites and share it
-		with others. <a href="http://twitter.com/dabblet">Follow @dabblet on twitter</a></p>
-		
-		<p>It currently only supports modern versions of Chrome, Safari and Firefox but I'm hoping
-		to expand browser support soon.</p>
-		
-		<p>It’s handcoded by <a href="http://lea.verou.me">Lea Verou</a> with care 
-		but <a href="https://github.com/leaverou/dabblet/contributors" target="_blank">some other nice folks</a> helped too.</p>
-		
-		<h2>Keyboard shortcuts</h2>
-		<a href="#keyboard">View keyboard shortcuts</a>
-		
-		<h2>Where can I report bugs?</h2>
-		<p>Please report any bugs and suggest features in <a href="https://github.com/LeaVerou/dabblet/issues" target="_blank">dabblet’s bug tracker</a>. 
-		An extensive description and (for bugs) a reduced testcase are appreciated. Thanks for your effort towards making dabblet better!</p>
-		
-		<h2>What about JavaScript?</h2>
-		<p>You may use &lt;script> tags as usual in your HTML markup in order to execute JavaScript code in your dabblet.
-		However, keep in mind that dabblet is CSS-focused. If your demo needs a lot of JavaScript, you might
-		find something like <a href="http://jsfiddle.net/">jsFiddle</a> 
-		or <a href="http://jsbin.com/" target="_blank">JSBin</a> more helpful.
-		
-		<h2>License</h2>
-		<p>All posted code belongs to the poster and no license is enforced.</p>
-		<p>I am not responsible or liable for any loss or damage of any kind during the usage of dabblet or provided code.</p>
-		<p>dabblet itself is open source software and is distributed under a 
-		<a href="http://www.opensource.org/licenses/NPOSL-3.0">NPOSL-3.0 license</a>. 
-		<a href="http://github.com/LeaVerou/dabblet">Fork dabblet on github</a>.
-	</div></div>
 </section>
 
-<section id="keyboard" class="popup">
-	<h1>Keyboard shortcuts</h1>
-	<a href="#" class="close" title="Close">×</a>
-	<div class="content">
-		<p>I’m a heavy keyboard user myself, so lots of effort has been put into making dabblet 
-		a breeze to use with the keyboard:</p>
-		<table>
-			<thead>
-				<tr>
-					<td>Action</td>
-					<td>Result</td>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><kbd title="Cmd">⌘</kbd><kbd>S</kbd></td>
-					<td>Save if not saved, update if saved, fork if not own</td>
-				</tr>
-				<tr>
-					<td><kbd title="Cmd">⌘</kbd><kbd>1</kbd></td>
-					<td>Go to CSS editing</td>
-				</tr>
-				<tr>
-					<td><kbd title="Cmd">⌘</kbd><kbd>2</kbd></td>
-					<td>Go to HTML editing</td>
-				</tr>
-				<tr>
-					<td><kbd title="Cmd">⌘</kbd><kbd>3</kbd></td>
-					<td>Go to result</td>
-				</tr>
-				<tr>
-					<td><kbd title="Cmd">⌘</kbd><kbd title="Shift">⇧</kbd><kbd>[</kbd></td>
-					<td>Go to previous tab</td>
-				</tr>
-				<tr>
-					<td><kbd title="Cmd">⌘</kbd><kbd title="Shift">⇧</kbd><kbd>]</kbd></td>
-					<td>Go to next tab</td>
-				</tr>
-				<tr>
-					<td><kbd title="Tab">⇥</kbd><div class="note">in editing mode</div></td>
-					<td>Enters a Tab (<code>\t</code>) character</td>
-				</tr>
-				<tr>
-					<td><kbd title="Tab">⇥</kbd> <div class="note">after selecting text</div></td>
-					<td>Indents the selected lines (including partially selected lines)</td>
-				</tr>
-				<tr>
-					<td><kbd title="Shift">⇧</kbd><kbd title="Tab">⇥</kbd> <div class="note">after selecting text</div></td>
-					<td>Removes one indent (Tab or space) from the beginning of each (partially) selected line.</td>
-				</tr>
-				<tr>
-					<td><kbd title="Cmd">⌘</kbd><kbd>/</kbd><div class="note">in editing mode</div></td>
-					<td>Comments the current selection (or line if there is none) or uncomments if within a comment</td>
-				</tr>
-				<tr>
-					<td><kbd title="Alt">⌥</kbd><kbd title="Up arrow">↑</kbd> / <kbd title="Alt">⌥</kbd><kbd title="Down arrow">↓</kbd></td>
-					<td>Increment/decrement value by 1</td>
-				</tr>
-				<tr>
-					<td><kbd title="Shift">⇧</kbd><kbd title="Alt">⌥</kbd><kbd title="Up arrow">↑</kbd> / <kbd title="Shift">⇧</kbd><kbd title="Alt">⌥</kbd><kbd title="Down arrow">↓</kbd></td>
-					<td>Increment/decrement value by 10</td>
-				</tr>
-				<tr>
-					<td><kbd title="Ctrl">⌃</kbd><kbd title="Alt">⌥</kbd><kbd title="Up arrow">↑</kbd> / <kbd title="Ctrl">⌃</kbd><kbd title="Alt">⌥</kbd><kbd title="Down arrow">↓</kbd></td>
-					<td>Increment/decrement value by 0.1</td>
-				</tr>
-				<tr>
-					<td><kbd title="Esc">⎋</kbd><div class="note">in editing mode</div></td>
-					<td>The editing area loses focus, so after pressing <kbd title="Tab">⇥</kbd> you can use
-					the navigation bar through the keyboard</td>
-				</tr>
-			</tbody>
-		</table>
-		<p><strong>Note:</strong> Wherever <kbd title="Cmd">⌘</kbd> is used, it means either <kbd title="Cmd">⌘</kbd> or <kbd title="Ctrl">⌃</kbd>.</p>
-	</div>
+<section id="html-container" class="editor page">
+<pre id="html" lang="html" contenteditable spellcheck="false">&lt;!-- content to be placed inside &lt;body>…&lt;/body> --></pre>
 </section>
 
 <div id="color" class="previewer"></div>
@@ -230,7 +121,8 @@ min-height:100%;</pre>
 		<circle cx="32" cy="32" r="15.9" stroke-dasharray="0,500" />
 	</svg>
 </div>
-<div id="fontfamily" class="previewer">ABCabc123#$%</div>
+<div id="fontfamily" class="previewer">(ABCabc123&amp;@%)
+(ABCabc123&amp;@%)</div>
 <div id="gradient" class="previewer"><div></div></div>
 <div id="easing" class="previewer">
 	<svg width="100" height="100" viewBox="-20 -20 140 140">
@@ -244,10 +136,13 @@ min-height:100%;</pre>
 		<line x1="100" y1="0" x2="40" y2="30" />
 	</svg>
 </div>
+<div id="url" class="previewer"><img src="data:," alt="Loading…" /></div>
+<div id="entity" class="previewer">f</div>
 
 <div id="loader">Loading…</div>
 
-<script src="/code/util.js"></script>
+<script src="/code/util.js"></script><!-- to be removed -->
+<script src="/code/utopia.js"></script>
 <script src="/code/selection.js"></script>
 <script src="/code/code-highlight.js"></script>
 
