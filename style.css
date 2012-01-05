@@ -1088,7 +1088,7 @@ body.tabediting header {
 	height: 20px;
 }
 
-section.page:not(.focus)::-webkit-scrollbar {
+section.page:not(.focus):not(:hover)::-webkit-scrollbar {
 	display: none;
 }
 
