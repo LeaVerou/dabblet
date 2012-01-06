@@ -26,7 +26,7 @@ header,
 
 body:not([data-view="behind"]) > .editor.page,
 .popup > .content {
-	background: #f5f2f0 url(/img/noise.png);
+	background: hsl(24, 20%, 95%) url(img/noise.png);
 	color: black;
 	text-shadow: 0 1px white;
 	box-shadow: 0 .1em .5em rgba(0,0,0,.8) inset;
@@ -97,6 +97,34 @@ label.focus {
 	outline: 2px auto -webkit-focus-ring-color;
 }
 
+button, .button {
+	padding: .45em .6em;
+	border: 1px solid rgba(0,0,0,.4);
+	border-radius: .3em;
+	white-space: nowrap;
+	text-decoration: none;
+	background-image: url(img/noise.png);
+	background-color: inherit;
+	color: inherit;
+	font: inherit;
+	box-shadow: rgba(255, 255, 255, .4) 0 1px 0 inset, 
+				rgba(255, 255, 255, .3) 0 25px 30px -12px inset, 
+				rgba(0, 0, 0, .6) 0 1px 2px;
+	text-shadow: 0 -1px 1px black, 0 -1px 2px black;
+	cursor: pointer;
+}
+
+button.danger,
+.button.danger {
+	background-color: rgba(196, 0, 0, .8);
+	text-shadow: 0 -1px 1px rgba(0,0,0,.5), 0 -1px 2px rgba(0,0,0,.5);
+}
+
+button.danger:hover,
+.button.danger:hover {
+	background-color: red;
+}
+
 input[type="checkbox"] {
 	appearance: none;
 	display: inline-block;
@@ -125,7 +153,6 @@ input[type="checkbox"]:checked {
 	text-shadow: inherit;
 }
 
-input[type="checkbox"],
 input[type="checkbox"]::after {
 	content: '✓';
 }
@@ -135,7 +162,6 @@ input[type="checkbox"]::after {
 	vertical-align: -.1em;
 	opacity: .7;
 }
-
 
 @keyframes loader {
 	from {
@@ -210,6 +236,7 @@ body[data-view="behind"] .editor.page > pre > span.token {
 		overflow: auto;
 		tab-size: 4;
 		word-wrap: normal;
+		outline: none;
 	}
 
 #result {
@@ -303,6 +330,7 @@ body.tabediting header {
 	.controls-group {
 		float: right;
 		min-width: 15em;
+		white-space: nowrap;
 	}
 
 	header .button,
