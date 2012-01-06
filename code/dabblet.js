@@ -1019,7 +1019,9 @@ $$('pre').forEach(function(pre){
 			return;
 		}
 		
-		if(keyCode !== 37 && keyCode !== 39) {
+		if([
+			37, 39, 38, 40 // Left, Right, Up, Down
+		].indexOf(keyCode) === -1) {
 			var ss = this.selectionStart,
 				se = this.selectionEnd;
 		
