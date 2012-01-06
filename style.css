@@ -87,21 +87,6 @@ fieldset {
 	margin-top: .5em;
 }
 
-kbd {
-	display: inline-block;
-	min-width: 1em;
-	padding: .2em;
-	border: 1px solid #ddd;
-	border-radius: .3em;
-	background: white;
-	text-align: center;
-	line-height: 1;
-}
-
-kbd[title] {
-	cursor: help;
-}
-
 [aria-hidden="true"] {
 	display: none !important;
 }
@@ -172,7 +157,7 @@ input[type="checkbox"]::after {
 	padding-top: 100px;
 	margin-top: -50px;
 	margin-left: -50px;
-	background: url(/img/loader.png) no-repeat left top;
+	background: url(img/loader.png) no-repeat left top;
 	color: rgba(0,0,0,.5);
 	font-weight: bold;
 	text-align: center;
@@ -611,44 +596,6 @@ body.tabediting header {
 		background-clip: padding-box;
 		border-radius: 3px;
 	}
-	
-		.popup > .content h2 {
-			margin: 1em 0 .3em;
-		}
-		
-		.popup > .content p {
-			margin: 1em 0;
-		}
-		
-			.popup > .content a {
-				font-weight: bold;
-			}
-
-	.popup table {
-		border-spacing: 0;
-	}
-	
-		.popup thead {
-			background: rgba(0,0,0,.1);
-		}
-		
-			.popup td {
-				border-bottom: 1px solid rgba(0,0,0,.3);	
-				padding: .3em .5em;
-				vertical-align: top;
-			}
-			
-			.popup tbody td:first-child {
-				width: 10em;
-			}
-			
-			.popup tbody td:first-child > kbd {
-				font-size: 120%;
-			}
-			
-			.popup tbody td:first-child > .note {
-				font-size: 65%;
-			}
 		
 /**
  * Code hightlighting 
