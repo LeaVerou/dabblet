@@ -273,6 +273,35 @@ body[data-view="separate"]:not([data-page="result"]) #result {
 	top: -10px;
 }
 
+.line-highlight {
+	position: absolute;
+	left: 0;
+	right: 0;
+	padding-left: .6em;
+	margin-top: 1em;
+	background: url(img/noise.png), linear-gradient(left, hsla(24, 20%, 50%,.08) 70%, hsla(24, 20%, 50%,0));
+}
+
+/*section:not(.focus) >*/ .line-highlight {
+	display: none;
+}
+
+.line-highlight:before {
+	content: attr(data-line);
+	display: inline-block;
+	min-width: 1em;
+	padding: 0 .5em;
+	background: inherit;
+	background-color: hsla(24, 20%, 50%,.4);
+	color: hsl(24, 20%, 95%);
+	font: bold 65%/1.5 sans-serif;
+	text-align: center;
+	vertical-align: .3em;
+	border-radius: 999px;
+	text-shadow: none;
+	box-shadow: 0 1px white;
+}
+
 header {
 	position: absolute;
 	bottom: 100%;
