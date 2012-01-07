@@ -180,7 +180,7 @@ var _ = window.Editor = function(pre) {
 						return false;
 					}
 				case 13:
-					codeActions.call(this, 'newline');
+					that.action('newline');
 					return false;
 				case 90:
 					if(cmdOrCtrl) {
@@ -233,27 +233,27 @@ var _ = window.Editor = function(pre) {
 		},
 		
 		paste: function() {
-			var that = this,
-				ss = this.selectionStart,
-				se = this.selectionEnd,
-				selection = ss === se? '': this.textContent.slice(ss, se);
+			var pre = this,
+				ss = pre.selectionStart,
+				se = pre.selectionEnd,
+				selection = ss === se? '': pre.textContent.slice(ss, se);
 				
 			gist.saved = false;
 				
 			setTimeout(function(){
-				var newse = that.selectionEnd,
-					innerHTML = that.innerHTML;
+				var newse = pre.selectionEnd,
+					innerHTML = pre.innerHTML;
 				
-				innerHTML = that.innerHTML
+				innerHTML = pre.innerHTML
 									.replace(/(<\w+)(\s.+?>)/g, '$1>')
 									.replace(/<\/?pre>/g, '')
 									.replace(/(<div>)?<br>|(<div>)+/gi, '\n')
 									.replace(/<\/div>/gi, '')
 									.replace(/&nbsp;/gi, ' ');
 									
-				that.innerHTML = innerHTML;
+				pre.innerHTML = innerHTML;
 									
-				var pasted = that.textContent.slice(ss, newse);
+				var pasted = pre.textContent.slice(ss, newse);
 				
 				that.undoManager.action({
 					add: pasted,
@@ -263,9 +263,9 @@ var _ = window.Editor = function(pre) {
 				
 				ss += pasted.length;
 				
-				that.setSelectionRange(ss, ss);
+				pre.setSelectionRange(ss, ss);
 				
-				that.onkeyup();
+				pre.onkeyup();
 			}, 10);
 		},
 		
