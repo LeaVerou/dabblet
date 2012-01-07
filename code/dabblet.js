@@ -197,12 +197,21 @@ var gist = {
 					css.onkeyup();
 				}
 				
+				var defaultSettings = Dabblet.settings.current();
+				
+				if(typeof localStorage.settings === 'string') {
+					defaultSettings = $u.merge(defaultSettings, JSON.parse(localStorage.settings));
+				}
+				
 				if(settings) {
 					try { settings = JSON.parse(settings.content); }
-					catch(e) { return; }
-					
-					Dabblet.settings.apply(settings);
+					catch(e) { settings = {}; }
 				}
+				else {
+					settings = {};
+				}
+				
+				Dabblet.settings.apply($u.merge(defaultSettings, settings));
 			}
 		});
 	},
@@ -577,7 +586,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	if(path) {
 		// Viewing a gist?
-		if(gist.id = (path.match(/\bgist\/(\d+)/i) || [])[1]) {
+		if(gist.id = (path.match(/\bgist\/([\da-f]+)/i) || [])[1]) {
 			css.textContent = html.textContent = '';
 			gist.load();
 		}
