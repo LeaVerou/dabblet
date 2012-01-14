@@ -1,7 +1,7 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+# error_reporting(E_ALL);
+# ini_set('display_errors', 1);
 
 $gist_id = $_SERVER['REQUEST_URI'];
 
@@ -21,7 +21,9 @@ if(!$data || isset($data['message'])) {
 	die($data? $data['message'] : 'Not found, sorry! :(');
 }
 
-$settings = json_decode($data['files']['settings.json']['content'], true)
+$css = $data['files']['dabblet.css']['content'];
+$html = $data['files']['dabblet.html']['content'];
+$settings = json_decode($data['files']['settings.json']['content'], true);
 
 //print_r($data)
 ?><!DOCTYPE html>
@@ -31,11 +33,15 @@ $settings = json_decode($data['files']['settings.json']['content'], true)
 <meta charset="utf-8" />
 <title><?= $data['description'] ?></title>
 <style>
-<?= $data['files']['dabblet.css']['content'] ?>
+<?= strpos($css, '{') === FALSE? 'html{' . $css . '}' : $css ?>
 </style>
-<? if (!isset($settings['prefixfree']) || $settings['prefixfree']): ?>
+<? if (
+	(!isset($settings['version']) && !isset($settings['prefixfree']))
+	|| $settings['prefixfree']
+	|| $settings['settings']['prefixfree']
+	): ?>
 <script src="/code/prefixfree.min.js"></script>
 <? endif; ?>
 </head>
-<body><?= $data['files']['dabblet.html']['content'] ?></body>
+<body><?= $html ?></body>
 </html>
