@@ -212,7 +212,7 @@ body[data-loading] > #loader {
 .editor.page {
 	display: none;
 	overflow: hidden;
-	font: 150%/1.5 Monaco, Consolas, Inconsolata, 'Deja Vu Sans Mono', 'Droid Sans Mono', 'Andale Mono', 'Lucida Console', monospace;
+	font: 100%/1.5 Monaco, Consolas, Inconsolata, 'Deja Vu Sans Mono', 'Droid Sans Mono', 'Andale Mono', 'Lucida Console', monospace;
 }
 
 body:not([data-view="behind"]) > .editor.page {
@@ -250,7 +250,6 @@ body[data-page="html"] #html-container {
 
 body[data-view="split-vertical"]:not([data-page="result"]) > .page {
 	width: 50%;
-	font-size: 100%;
 }
 
 body[data-view="split-vertical"]:not([data-page="result"]) > #result {
@@ -260,7 +259,6 @@ body[data-view="split-vertical"]:not([data-page="result"]) > #result {
 body[data-view="split"]:not([data-page="result"]) > .page,
 body:not([data-view]):not([data-page="result"]) > .page {
 	height: 50%;
-	font-size: 120%;
 }
 
 body[data-view="split"]:not([data-page="result"]) > .editor.page,
@@ -1032,11 +1030,6 @@ section.page:not(.focus):not(:hover)::-webkit-scrollbar {
 	
 	.tabs {
 		height: 2.2em;
-	}
-	
-	body[data-view="behind"] .editor.page,
-	body[data-view="separate"] .editor.page {
-		font-size: 120%;
 	}
 	
 	.popup {
