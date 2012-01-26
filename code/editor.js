@@ -273,6 +273,10 @@ var _ = window.Editor = function(pre) {
 			var keyCode = evt && evt.keyCode || 0,
 				code = this.textContent,
 				id = this.id;
+				
+			if(keyCode < 8 || keyCode == 13 || keyCode > 32 && keyCode < 41) {
+				$u.event.fire(this, 'caretmove');
+			}
 	
 			if([
 				9, 91, 93, 16, 17, 18, // modifiers
@@ -312,15 +316,9 @@ var _ = window.Editor = function(pre) {
 					gist.saved = false;
 				}
 			}
-			
-			this.onclick();
 		},
 		
 		click: function(evt) {
-			if(!self.Previewer) {
-				return;
-			}
-			
 			$u.event.fire(this, 'caretmove');
 		},
 		
@@ -393,18 +391,6 @@ var _ = window.Editor = function(pre) {
 		}
 	}, true);
 	
-	$u.event.bind(pre, {
-		keydown: function(evt) {
-			var key = evt.keyCode;
-	
-			if(key < 8 || key == 13 || key > 32 && key < 41) {
-				setTimeout(function() {
-					$u.event.fire(this, 'caretmove');
-				}, 10);
-			}
-		}
-	});
-	
 	$u.event.bind(pre, 'caretmove', function() {
 		var content = this.textContent,
 			ss = this.selectionStart,
@@ -424,25 +410,27 @@ var _ = window.Editor = function(pre) {
 		highlighter.style.top = line * lineHeight + 'px';
 		
 		// Show a previewer, if needed
-		var selection = getSelection();
-		
-		if(selection.rangeCount) {
-			var range = selection.getRangeAt(0),
-				element = range.startContainer;
+		if(self.Previewer) {
+			var selection = getSelection();
 			
-			if(element.nodeType == 3) {
-				element = element.parentNode;
-			}
-			
-			var type = Previewer.get(element);
-			
-			if(type) {
-				Previewer.active = element;
-				Previewer.s[type].token = element;
-			}
-			else {
-				Previewer.hideAll();
-				Previewer.active = null;
+			if(selection.rangeCount) {
+				var range = selection.getRangeAt(0),
+					element = range.startContainer;
+				
+				if(element.nodeType == 3) {
+					element = element.parentNode;
+				}
+				
+				var type = Previewer.get(element);
+				
+				if(type) {
+					Previewer.active = element;
+					Previewer.s[type].token = element;
+				}
+				else {
+					Previewer.hideAll();
+					Previewer.active = null;
+				}
 			}
 		}
 	});

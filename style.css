@@ -208,10 +208,18 @@ body[data-loading] > #loader {
 	resize: none;
 	background: transparent;
 }
-
+	
 .editor.page {
 	display: none;
 	overflow: hidden;
+	box-sizing: border-box;
+	background: transparent;
+	height: 100%;
+	box-sizing: border-box;
+	overflow: auto;
+	background: url(img/noise.png), 
+				linear-gradient(left, hsl(24,20%,91%) 1px, transparent 1px) 2.8em 0 no-repeat;
+	background-color: hsl(24, 20%, 95%);
 	font: 100%/1.5 Monaco, Consolas, Inconsolata, 'Deja Vu Sans Mono', 'Droid Sans Mono', 'Andale Mono', 'Lucida Console', monospace;
 }
 
@@ -228,9 +236,10 @@ body[data-view="behind"] .editor.page > pre > span.token {
 }
 
 	.editor.page > pre {
-		padding: 1em 1.5em;
-		box-sizing: border-box;
-		background: transparent;
+		position: relative;
+		padding: 1em 1.5em 1em 3em;
+		overflow: visible;
+		word-wrap: normal;
 		font: inherit;
 		height: 100%;
 		overflow: auto;
