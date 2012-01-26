@@ -222,12 +222,11 @@ body[data-loading] > #loader {
 	transition-duration: .5s;
 	transition-property: top,left,width,height;
 }
-
+	
 .editor.page {
 	box-sizing: border-box;
 	background: transparent;
 	height: 100%;
-	padding: 1em 1.5em 1em 3em;
 	box-sizing: border-box;
 	overflow: auto;
 	background: url(img/noise.png), 
@@ -254,6 +253,7 @@ body[data-seethrough] .editor.page span.token {
 
 	.editor.page > pre {
 		position: relative;
+		padding: 1em 1.5em 1em 3em;
 		overflow: visible;
 		word-wrap: normal;
 		font: inherit;
