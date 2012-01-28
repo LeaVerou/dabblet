@@ -29,6 +29,7 @@ var gist = {
 	request: function(o) {
 		o.method = o.method || 'GET';
 		o.id = o.id || '';
+		o.rev = o.rev || '';
 		
 		var anon = o.anon || o.method === 'GET';
 		
@@ -41,6 +42,7 @@ var gist = {
 		
 		var path = o.path || 'gists' +
 				(o.id? '/' + o.id : '') +
+				(o.rev? '/' + o.rev : '') +
 				(o.gpath || '');
 		
 		$u.xhr({
@@ -157,9 +159,10 @@ var gist = {
 		});
 	},
 	
-	load: function(id){
+	load: function(id, rev){
 		gist.request({
 			id: id || gist.id,
+			rev: rev || gist.rev,
 			callback: function(data){
 				gist.update(data);
 				
@@ -217,11 +220,19 @@ var gist = {
 	},
 	
 	update: function(data) {
-		var id = data.id;
-
+		var id = data.id,
+			rev = data.history[0].version || '';
+		
 		if(gist.id != id) {
 			gist.id = id;
+			gist.rev = undefined;
+			
 			history.pushState(null, '', '/gist/' + id + location.search + location.hash);
+		}
+		else if(gist.rev && gist.rev !== rev) {
+			gist.rev = rev;
+
+			history.pushState(null, '', '/gist/' + id + '/' + rev + location.search + location.hash);
 		}
 		
 		if(data.user) {
@@ -239,7 +250,9 @@ var gist = {
 		}
 		
 		$$('a[data-href*="{gist-id}"]').forEach(function(a) {
-			a.href = a.getAttribute('data-href').replace(/\{gist-id\}/gi, id);
+			a.href = a.getAttribute('data-href')
+						.replace(/\{gist-id\}/gi, id)
+						.replace(/\{gist-rev\}/gi, rev);
 			a.removeAttribute('data-disabled');
 			a.removeAttribute('aria-hidden');
 		});
@@ -587,6 +600,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	if(path) {
 		// Viewing a gist?
 		if(gist.id = (path.match(/\bgist\/([\da-f]+)/i) || [])[1]) {
+			gist.rev = (path.match(/\bgist\/[\da-f]+\/([\da-f]+)/i) || [])[1];
 			css.textContent = html.textContent = '';
 			gist.load();
 		}

@@ -3,12 +3,24 @@
 # error_reporting(E_ALL);
 # ini_set('display_errors', 1);
 
-$gist_id = $_SERVER['REQUEST_URI'];
+//$gist_id = $_SERVER['REQUEST_URI'];
 
-$gist_id = substr($gist_id, strrpos($gist_id, '/') + 1);
+//$gist_id = substr($gist_id, strrpos($gist_id, '/') + 1);
 
-if(is_numeric($gist_id)) {
-	$raw = file_get_contents("https://api.github.com/gists/$gist_id");
+preg_match('#\bgist\/([\da-f]+)#i', $_SERVER['REQUEST_URI'], $gist_id);
+$gist_id = $gist_id[1];
+
+if($gist_id) {
+	preg_match('#\bgist\/[\da-f]+\/([\da-f]+)#i', $_SERVER['REQUEST_URI'], $gist_rev);
+	$gist_rev = $gist_rev[1];
+	
+	$uri = "https://api.github.com/gists/$gist_id";
+	
+	if($gist_rev) {
+		$uri .= "/$gist_rev";
+	}
+	
+	$raw = file_get_contents($uri);
 	
 	if($raw) {
 		if(function_exists('json_decode')) {
