@@ -33,7 +33,7 @@ body {
 	margin: 2em auto;
 	font: 110%/1.5 Primary;
 	hyphens: auto;
-	text-shadow: 0 .1em white;
+	text-shadow: 0 0.0847em white;
 }
 
 h1, h2 {
@@ -176,3 +176,7 @@ footer {
 	#quick-links > a:hover {
 		background-color: hsl(200, 10%, 20%);
 	}
+
+::selection {
+	text-shadow: none;	
+}
