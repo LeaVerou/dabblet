@@ -33,7 +33,7 @@ body {
 	margin: 2em auto;
 	font: 110%/1.5 Primary;
 	hyphens: auto;
-	text-shadow: 0 0.0847em white;
+	text-shadow: 0 0.0847em white; /* See issue #134 */
 }
 
 h1, h2 {
@@ -178,5 +178,5 @@ footer {
 	}
 
 ::selection {
-	text-shadow: none;	
+	text-shadow: none; /* See issue #135 */
 }
