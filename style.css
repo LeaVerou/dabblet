@@ -1055,6 +1055,6 @@ section.page:not(.focus):not(:hover)::-webkit-scrollbar {
 		}
 }
 
-body::selection {
+html::selection {
 	text-shadow: none;
 }
