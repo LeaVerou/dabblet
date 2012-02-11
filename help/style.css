@@ -177,6 +177,7 @@ footer {
 		background-color: hsl(200, 10%, 20%);
 	}
 
-html::selection {
+* ::selection {
+	background-color: initial;
 	text-shadow: none; /* See issue #135 */
 }
