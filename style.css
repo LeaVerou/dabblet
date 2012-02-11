@@ -1055,6 +1055,7 @@ section.page:not(.focus):not(:hover)::-webkit-scrollbar {
 		}
 }
 
-html::selection {
+* ::selection {
+	background-color: initial;
 	text-shadow: none;
 }
