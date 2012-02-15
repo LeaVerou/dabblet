@@ -1055,7 +1055,7 @@ section.page:not(.focus):not(:hover)::-webkit-scrollbar {
 		}
 }
 
-* ::selection {
+::selection {
 	background-color: initial; /* see issue #140 */
 	color: white;
 	text-shadow: none;
