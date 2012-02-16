@@ -1069,3 +1069,7 @@ section.page:not(.focus):not(:hover)::-webkit-scrollbar {
 			column-fill: balance;
 		}
 }
+
+::selection {
+	text-shadow: none;
+}
