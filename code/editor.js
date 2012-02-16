@@ -274,7 +274,7 @@ var _ = window.Editor = function(pre) {
 				code = this.textContent,
 				id = this.id;
 				
-			if(keyCode < 8 || keyCode == 13 || keyCode > 32 && keyCode < 41) {
+			if(keyCode <= 8 || keyCode == 13 || keyCode > 32 && keyCode < 41) {
 				$u.event.fire(this, 'caretmove');
 			}
 	
@@ -396,15 +396,15 @@ var _ = window.Editor = function(pre) {
 			ss = this.selectionStart,
 			se = this.selectionEnd;
 		
-		ss && this.setAttribute('data-ss', ss);
-		se && this.setAttribute('data-se', se);
+		ss !== null && this.setAttribute('data-ss', ss);
+		se !== null && this.setAttribute('data-se', se);
 		
 		// Update current line highlight
 		var highlighter = that.lineHighlight,
 			lines = (content.match(CRLF) || []).length,
 			line = (content.slice(0, ss).match(CRLF) || []).length,
-			lineHeight = this.offsetHeight/lines;
-		
+			lineHeight = parseFloat(getComputedStyle(this).height)/lines;
+
 		highlighter.setAttribute('data-line', line + 1);
 		highlighter.style.height = lineHeight + 'px';
 		highlighter.style.top = line * lineHeight + 'px';
