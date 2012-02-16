@@ -24,7 +24,6 @@ header,
 				.2em .2em .6em black;
 }
 
-body:not([data-view="behind"]) > .editor.page,
 .popup > .content {
 	background: hsl(24, 20%, 95%) url(img/noise.png);
 	color: black;
@@ -208,12 +207,10 @@ body[data-loading] > #loader {
 	resize: none;
 	background: transparent;
 }
-	
+
 .editor.page {
 	display: none;
-	overflow: hidden;
 	box-sizing: border-box;
-	background: transparent;
 	height: 100%;
 	box-sizing: border-box;
 	overflow: auto;
@@ -221,10 +218,22 @@ body[data-loading] > #loader {
 				linear-gradient(left, hsl(24,20%,91%) 1px, transparent 1px) 2.8em 0 no-repeat;
 	background-color: hsl(24, 20%, 95%);
 	font: 100%/1.5 Monaco, Consolas, Inconsolata, 'Deja Vu Sans Mono', 'Droid Sans Mono', 'Andale Mono', 'Lucida Console', monospace;
+	tab-size: 4;
+	word-wrap: normal;
+	text-shadow: 0 1px white;
+	box-shadow: 1px 1px 2px rgba(0,0,0,.3) inset;
+}
+
+.editor.page.focus {
+	box-shadow: .1em .1em .4em rgba(0,0,0,.5) inset;
 }
 
 body:not([data-view="behind"]) > .editor.page {
 	box-shadow: 0 .3em 1em -.4em black inset;
+}
+
+body[data-view="behind"] > .editor.page {
+	background: transparent;
 }
 
 body[data-view="behind"] .editor.page,
@@ -241,13 +250,9 @@ body[data-view="behind"] .editor.page > pre > span.token {
 		overflow: visible;
 		word-wrap: normal;
 		font: inherit;
-		height: 100%;
-		overflow: auto;
-		tab-size: 4;
-		word-wrap: normal;
 		outline: none;
 	}
-
+	
 #result {
 	z-index: 0;
 }
@@ -289,7 +294,8 @@ body[data-view="separate"]:not([data-page="result"]) #result {
 	background: url(img/noise.png), linear-gradient(left, hsla(24, 20%, 50%,.08) 70%, hsla(24, 20%, 50%,0));
 }
 
-/*section:not(.focus) >*/ .line-highlight {
+section:not(.focus) > .line-highlight,
+body[data-view="behind"] .line-highlight {
 	display: none;
 }
 
