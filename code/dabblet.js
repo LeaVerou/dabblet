@@ -307,7 +307,7 @@ var Dabblet = {
 	wipe: function() {
 		var question = 'Are you sure? You will lose ' +
 						(gist.saved? '' : 'unsaved changes and ') +
-						'your saved draft.';
+						'your local draft.';
 						
 		if(confirm(question)) {
 			localStorage.removeItem('dabblet.css');
