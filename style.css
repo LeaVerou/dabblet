@@ -1070,6 +1070,15 @@ section.page:not(.focus):not(:hover)::-webkit-scrollbar {
 		}
 }
 
-::selection {
-	text-shadow: none;
+@media (min-height: 799px) and (min-width: 1000px) {
+	body {
+		border-top-width: 3.4em;
+	}
+	
+	header,
+	header:hover,
+	header:active,
+	header.focus {
+		transform: none !important;
+	}
 }
