@@ -182,7 +182,7 @@ footer {
 	}
 
 ::selection {
-	background-color: initial; /* See issue #140 */
-	color: white;
+	background-color: Highlight; /* See issue #140 */
+	color: HighlightText;
 	text-shadow: none; /* See issue #135 */
 }
