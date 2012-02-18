@@ -1,0 +1,31 @@
+body[data-ctrlmode = "true"] {
+
+    /*background:green;*/
+
+}
+body[data-ctrlmode = "true"] #css-container{
+    user-select:none;
+}
+body[data-ctrlmode = "true"] .abslength{
+    cursor: url(img/scrob.png),ew-resize;
+}
+
+/*
+    trying to change the cusror as the user drags - impossible on chrome mac
+*/
+body[data-scrubbing] *{
+    cursor: url(img/scrob.png),ew-resize !important;
+}
+body[data-scrubbing = "0.1"]  *{
+    cursor: url(img/scrob_1.png),ew-resize !important;
+}
+body[data-scrubbing = "10"]  *{
+    cursor: url(img/scrob_10.png),ew-resize !important;
+}
+
+body[data-scrubbing = "50"]  *{
+    cursor: url(img/scrob_50.png),ew-resize !important;
+}
+body[data-scrubbing = "100"]  *{
+    cursor: url(img/scrob_100.png),ew-resize !important;
+}

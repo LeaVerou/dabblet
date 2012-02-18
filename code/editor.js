@@ -334,7 +334,7 @@ var _ = window.Editor = function(pre) {
 			}
 			
 			if(this.id == 'css' && !window.Incrementable) {
-				$u.script('/code/incrementable.js', function() {
+				$u.script('code/incrementable.js', function() {
 					new Incrementable(css, function(evt) {
 						if(evt.altKey) {
 							if(evt.shiftKey) { return 10; }
@@ -343,7 +343,6 @@ var _ = window.Editor = function(pre) {
 							
 							return 1;
 						}
-						
 						return 0;
 					});
 				});
@@ -364,6 +363,10 @@ var _ = window.Editor = function(pre) {
 			if(!self.Previewer) {
 				return;
 			}
+            /* prevent hovering other elements while resizing current one - alex */
+            if(scrubbingValues.ctrlMode){
+                return;
+            }
 			
 			var target = evt.target,
 			    type = Previewer.get(target);
