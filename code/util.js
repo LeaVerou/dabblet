@@ -70,3 +70,4 @@ function script(url, callback, doc) {
 	
 	script.onload = callback;
 }
+

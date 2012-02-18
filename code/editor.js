@@ -343,7 +343,6 @@ var _ = window.Editor = function(pre) {
 							
 							return 1;
 						}
-						
 						return 0;
 					});
 				});
@@ -364,6 +363,10 @@ var _ = window.Editor = function(pre) {
 			if(!self.Previewer) {
 				return;
 			}
+            /* prevent hovering other elements while resizing current one - alex */
+            if(scrubbingValues.ctrlMode){
+                return;
+            }
 			
 			var target = evt.target,
 			    type = Previewer.get(target);
