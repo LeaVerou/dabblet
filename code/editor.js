@@ -334,7 +334,7 @@ var _ = window.Editor = function(pre) {
 			}
 			
 			if(this.id == 'css' && !window.Incrementable) {
-				$u.script('/code/incrementable.js', function() {
+				$u.script('code/incrementable.js', function() {
 					new Incrementable(css, function(evt) {
 						if(evt.altKey) {
 							if(evt.shiftKey) { return 10; }
