@@ -94,17 +94,27 @@
 
 <iframe class="page" id="result" name="result" src="result.html"></iframe>
 <section id="css-container" class="editor page">
-	<pre id="css" lang="css" contenteditable spellcheck="false">/**
- * The first commented line is your dabblet’s title
- */
-
+	<pre id="css" lang="css" contenteditable spellcheck="false">/**  The first commented line is your dabblet’s title */
+body{
 background: #f06;
 background: linear-gradient(45deg, #f06, yellow);
-min-height:100%;</pre>
+min-height:100px;
+}
+div{
+	height:150px;
+	width:20px;
+	padding-top:15px;
+	padding-left:25px;
+	background:#f00;
+	border:5px solid #fff;
+	border-radius:15px;
+}
+</pre>
 </section>
 
 <section id="html-container" class="editor page">
-<pre id="html" lang="html" contenteditable spellcheck="false">&lt;!-- content to be placed inside &lt;body>…&lt;/body> --></pre>
+<pre id="html" lang="html" contenteditable spellcheck="false">&lt;div&gt; &lt;/div&gt;
+</pre>
 </section>
 
 <div id="color" class="previewer"></div>
