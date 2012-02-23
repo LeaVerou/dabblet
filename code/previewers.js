@@ -135,12 +135,12 @@ new Previewer('abslength', function(code) {
 		style.display = 'block';
 		
 		var width = this.offsetWidth;
-		
-		if(width > innerWidth) {
+		console.log(width);
+		if(width > innerWidth || width < 10) {
 			valid = false;
 		}
 		else {
-			var size = width < 20? (width < 10? 'tiny' : 'small') : 'normal';
+			var size = width < 20? 'small' : 'normal';
 			this.setAttribute('data-size', size);
 		}
 	}

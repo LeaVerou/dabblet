@@ -898,12 +898,6 @@ body.tabediting header {
 		margin-left: -3px;
 	}
 	
-	#abslength[data-size="tiny"]:before {
-		transform: none;
-		width: 0;
-		margin-left: 0;
-	}
-	
 	#abslength:after {
 		border: 0;
 		background: 
