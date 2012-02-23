@@ -179,6 +179,7 @@ var _ = window.Editor = function(pre) {
 						});
 						return false;
 					}
+					break;
 				case 13:
 					that.action('newline');
 					return false;
