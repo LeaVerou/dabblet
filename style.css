@@ -156,6 +156,49 @@ input[type="checkbox"]::after {
 	content: '✓';
 }
 
+.segmented-control {
+	display: table;
+}
+
+	.segmented-control > input[type="radio"] {
+		position: absolute;
+		z-index: 1;
+		opacity: 0;
+	}
+	
+	.segmented-control > input[type="radio"] + label {
+		float: none;
+		display: table-cell;
+		padding: .4em .9em;
+		margin: .15em;
+		overflow: hidden;
+		text-align: left;
+		line-height: 25px;
+		border-radius: 0;
+	}
+	
+	.segmented-control > input[type="radio"] + label:first-of-type,
+	.segmented-control > input[type="radio"] + label:last-of-type {
+		border-radius: .4em;
+	}
+	
+	.segmented-control > input[type="radio"] + label:first-of-type {
+		border-right: 0;
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+	
+	.segmented-control > input[type="radio"] + label:last-of-type {
+		border-left: 0;
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
+	
+	.segmented-control > input[type="radio"] + label:nth-of-type(n+2):nth-last-of-type(n+2) {
+		border-left: 0;
+		border-right: 0;
+	}
+
 .amp {
 	font: italic 160%/.5 Baskerville, 'Palatino Linotype', 'Goudy Old Style', Constantia, Palatino, serif;
 	vertical-align: -.1em;
@@ -206,6 +249,8 @@ body[data-loading] > #loader {
 	outline: none;
 	resize: none;
 	background: transparent;
+	transition-duration: .5s;
+	transition-property: top,left,width,height;
 }
 
 .editor.page {
@@ -224,17 +269,21 @@ body[data-loading] > #loader {
 	box-shadow: 1px 1px 2px rgba(0,0,0,.3) inset;
 }
 
+body[data-page="all"]:not([data-seethrough]) #html-container {
+	background-color: hsl(24, 20%, 92%);
+}
+
 .editor.page.focus {
 	box-shadow: .1em .1em .4em rgba(0,0,0,.5) inset;
 }
 
-body[data-view="behind"] > .editor.page {
+body[data-seethrough] > .editor.page {
 	background: transparent;
 }
 
-body[data-view="behind"] .editor.page,
-body[data-view="behind"] .editor.page > pre,
-body[data-view="behind"] .editor.page > pre > span.token {
+body[data-seethrough] .editor.page,
+body[data-seethrough] .editor.page > pre,
+body[data-seethrough] .editor.page > pre > span.token {
 	text-shadow: 0 .1em white, 0 -.1em white, .1em 0 white, -.1em 0 white,
 				 .1em .1em white, -.1em .1em white, .1em -.1em white, -.1em -.1em white;
 	text-shadow: 0 0 0 .1em white;
@@ -254,31 +303,61 @@ body[data-view="behind"] .editor.page > pre > span.token {
 }
 
 body[data-page="css"] #css-container,
-body[data-page="html"] #html-container {
+body[data-page="html"] #html-container,
+body[data-page="all"] .page {
 	display: block;
 }
 
-body[data-view="split-vertical"]:not([data-page="result"]) > .page {
+/*
+ * Define the different views
+ */
+
+body[data-view="split-vertical"] > .page,
+body[data-page="all"][data-view="separate"] .editor.page {
 	width: 50%;
 }
 
-body[data-view="split-vertical"]:not([data-page="result"]) > #result {
+body[data-view="split-vertical"] > #result,
+body[data-page="all"][data-view="separate"] #html-container {
 	left: 50%;
 }
 
-body[data-view="split"]:not([data-page="result"]) > .page,
-body:not([data-view]):not([data-page="result"]) > .page {
+body[data-view="split"] > .page,
+body[data-page="all"][data-view="separate"] > .page,
+body:not([data-view]) > .page {
 	height: 50%;
 }
 
-body[data-view="split"]:not([data-page="result"]) > .editor.page,
-body:not([data-view]):not([data-page="result"]) > .editor.page {
+body[data-view="split"] > .editor.page,
+body:not([data-view]) > .editor.page,
+body[data-page="all"][data-view="separate"] .editor.page {
 	top: 50%;
 }
 
-body[data-view="separate"]:not([data-page="result"]) #result {
-	height: 10px;
-	top: -10px;
+body[data-page="all"][data-view="split"] .page {
+	height: 40%;
+}
+
+body[data-page="all"][data-view="split"] #css-container {
+	top: 40%;
+}
+
+body[data-page="all"][data-view="split-vertical"] .page:not(#html-container) {
+	bottom: 20%;
+}
+
+body[data-page="all"][data-view^="split"] #html-container {
+	width: 100%;
+	height: 20%;
+	top: 80%;
+}
+
+body[data-seethrough] > #result,
+body[data-page="result"] > #result {
+	top: 0 !important; 
+	left: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
 }
 
 .line-highlight {
@@ -291,7 +370,7 @@ body[data-view="separate"]:not([data-page="result"]) #result {
 }
 
 section:not(.focus) > .line-highlight,
-body[data-view="behind"] .line-highlight {
+body[data-seethrough] .line-highlight {
 	display: none;
 }
 
@@ -347,7 +426,6 @@ body.tabediting header {
 		float: left;
 	}
 	
-	#view > input[type="radio"],
 	.tabs input {
 		position: absolute;
 		z-index: 1;
@@ -448,12 +526,7 @@ body.tabediting header {
 	a.button[href="/help/"] {
 		float: right;
 		background-color: transparent;
-	}
-	
-	#view > input,
-	.tabs > input {
-		position: absolute;
-		clip: rect(0,0,0,0);
+		margin-top: 2px; /* lame fix to make it align with the tabs */
 	}
 	
 	@keyframes flip {
@@ -463,15 +536,16 @@ body.tabediting header {
 	
 	.tabs > label {
 		position: relative;
+		top: 0;
 		display: inline-block;
 		padding: .5em .6em;
 		border: 0;
-		margin: 0 .15em -5px;
-		background: rgba(0,0,0,.4);
+		margin: 0 0 -5px;
+		background: rgba(0,0,0,.2);
 		cursor: pointer;
 		transform-origin: bottom;
 		border-radius: 5px;
-		box-shadow: .05em .1em .25em rgba(0,0,0,.7) inset;
+		box-shadow: .05em .1em .2em rgba(0,0,0,.7) inset;
 		text-shadow: inherit;
 		animation: .5s flip;
 	}
@@ -546,38 +620,22 @@ body.tabediting header {
 		display: block;
 	}
 	
-		#view > label {
-			width: 10em;
-			margin: .15em;
-			overflow: hidden;
-			text-align: left;
-			line-height: 25px;
+	header fieldset {
+		font-size: 90%;
+	}
+	
+		header fieldset > legend {
+			font-size: 110%;
 		}
 		
-		#view > label:before {
-			content: '';
-			float: left;
-			width: 25px;
-			height: 25px;
-			margin-right: 10px;
-			background: url(img/settings.png);
+		#view > .segmented-control {
+			margin: .1em 0 .8em;
 		}
-		
-		#view > label[for="view-split"]:before {
-			background-position: 0 -25px;
-		}
-		
-		#view > label[for="view-split-vertical"]:before {
-			background-position: 0 -50px;
-		}
-		
-		#view > label[for="view-separate"]:before {
-			background-position: 0 -75px;
-		}
-		
-		fieldset:not([id]) > label {
+				
+		fieldset > label.checkbox {
+			display: block;
+			margin: .2em 0;
 			font-weight: normal;
-			font-size: 90%;
 		}
 	
 		menu > .command {
@@ -1078,6 +1136,15 @@ section.page:not(.focus):not(:hover)::-webkit-scrollbar {
 	header:active,
 	header.focus {
 		transform: none !important;
+	}
+	
+	.tabs > input + label,
+	.tabs > input:checked + label {
+		animation: none;
+	}
+	
+	.tabs > input:checked + label {
+		top: 0;
 	}
 }
 

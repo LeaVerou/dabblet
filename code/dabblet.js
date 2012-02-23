@@ -375,7 +375,7 @@ var Dabblet = {
 				var currentid = document.body.getAttribute('data-page'),
 					current = window[currentid],
 					input = window['page-' + page],
-					pre = window[page];
+					pre = window[page] || css;
 		
 				if(current == pre) {
 					return;
@@ -389,10 +389,10 @@ var Dabblet = {
 					se && current.setAttribute('data-se', se);
 				}
 		
-				if(input.value != page || input.checked === false) {
+				if(input && input.value != page || input.checked === false) {
 					input.click();
 				}
-				
+				console.log(page);
 				document.body.setAttribute('data-page', page);
 				
 				self.Previewer && Previewer.hideAll();
@@ -501,7 +501,14 @@ var Dabblet = {
 				this.handlers[name](value);
 			}
 			else {
-				document.body.setAttribute('data-' + name, value);
+				var attribute = 'data-' + name;
+				
+				if(value === '') {
+					document.body.removeAttribute(attribute);
+				}
+				else {
+					document.body.setAttribute(attribute, value);
+				}
 			}
 			
 			// Super-dirty fix for Safari bug. See issue #7. Gonna wash hands now, kthxbai
@@ -626,6 +633,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 $$('.editor.page > pre').forEach(function(pre){
 	new Editor(pre);
+	
+	$u.event.bind(pre.parentNode, 'click', function(evt) {
+		$('pre', this).focus();
+		
+		evt.stopPropagation();
+	});
 });
 
 // Note: Has to be keydown to be able to cancel the event
