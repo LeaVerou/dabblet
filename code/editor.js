@@ -289,6 +289,31 @@ var _ = window.Editor = function(pre) {
 				return;
 			}
 			
+			// Show a previewer, if needed
+			if(self.Previewer) {
+				var selection = getSelection();
+				
+				if(selection.rangeCount) {
+					var range = selection.getRangeAt(0),
+						element = range.startContainer;
+					
+					if(element.nodeType == 3) {
+						element = element.parentNode;
+					}
+					
+					var type = Previewer.get(element);
+					
+					if(type) {
+						Previewer.active = element;
+						Previewer.s[type].token = element;
+					}
+					else {
+						Previewer.hideAll();
+						Previewer.active = null;
+					}
+				}
+			}
+			
 			if(keyCode !== 37 && keyCode !== 39) {
 				var ss = this.selectionStart,
 					se = this.selectionEnd;
@@ -409,31 +434,6 @@ var _ = window.Editor = function(pre) {
 		highlighter.setAttribute('data-line', line + 1);
 		highlighter.style.height = lineHeight + 'px';
 		highlighter.style.top = line * lineHeight + 'px';
-		
-		// Show a previewer, if needed
-		if(self.Previewer) {
-			var selection = getSelection();
-			
-			if(selection.rangeCount) {
-				var range = selection.getRangeAt(0),
-					element = range.startContainer;
-				
-				if(element.nodeType == 3) {
-					element = element.parentNode;
-				}
-				
-				var type = Previewer.get(element);
-				
-				if(type) {
-					Previewer.active = element;
-					Previewer.s[type].token = element;
-				}
-				else {
-					Previewer.hideAll();
-					Previewer.active = null;
-				}
-			}
-		}
 	});
 	
 	$u.event.fire(this.pre, 'caretmove');
