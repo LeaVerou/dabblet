@@ -191,7 +191,7 @@ var _ = window.Editor = function(pre) {
 					
 					break;
 				case 191:
-					if(cmdOrCtrl) {
+					if(cmdOrCtrl && !evt.altKey) {
 						that.action('comment', { lang: this.id });
 						return false;
 					}
