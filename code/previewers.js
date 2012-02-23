@@ -135,8 +135,8 @@ new Previewer('abslength', function(code) {
 		style.display = 'block';
 		
 		var width = this.offsetWidth;
-		console.log(width);
-		if(width > innerWidth || width < 10) {
+
+		if(width > innerWidth || width < 9) {
 			valid = false;
 		}
 		else {
