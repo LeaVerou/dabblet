@@ -1,5 +1,9 @@
 RewriteEngine On
 
+RewriteCond %{HTTP_HOST} !^dabblet\.com
+RewriteCond %{HTTP_HOST} !^labs\.dabblet\.com
+RewriteRule ^(.*)$ http://dabblet.com/$1 [R=301,L]
+
 RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

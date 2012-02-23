@@ -1070,6 +1070,7 @@ section.page:not(.focus):not(:hover)::-webkit-scrollbar {
 		}
 }
 
+
 @media (min-height: 799px) and (min-width: 1000px) {
 	body {
 		border-top-width: 3.4em;
@@ -1081,4 +1082,10 @@ section.page:not(.focus):not(:hover)::-webkit-scrollbar {
 	header.focus {
 		transform: none !important;
 	}
+}
+
+::selection {
+	background-color: initial; /* see issue #140 */
+	color: white;
+	text-shadow: none;
 }

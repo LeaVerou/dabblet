@@ -53,12 +53,16 @@ body > hgroup {
 		font-size: 100%;
 	}
 	
+	body > hgroup > h1 > a {
+		text-decoration: none;
+	}
+	
 	body > hgroup > h2 {
 		margin-top: -.7em;
 		font: italic 80%/1 Primary;
 		text-indent: 4em;
 		color: #a34;
-		
+		cursor: help;
 	}
 
 p {
@@ -178,5 +182,7 @@ footer {
 	}
 
 ::selection {
+	background-color: initial; /* See issue #140 */
+	color: white;
 	text-shadow: none; /* See issue #135 */
 }
