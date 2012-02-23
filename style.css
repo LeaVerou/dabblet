@@ -250,7 +250,7 @@ body[data-loading] > #loader {
 	resize: none;
 	background: transparent;
 	transition-duration: .5s;
-	transition-property: top,left,width,height;
+	transition-property: top, left, width, height;
 }
 
 .editor.page {
@@ -343,7 +343,7 @@ body[data-page="all"][data-view="split"] #css-container {
 }
 
 body[data-page="all"][data-view="split-vertical"] .page:not(#html-container) {
-	bottom: 20%;
+	height: 80%;
 }
 
 body[data-page="all"][data-view^="split"] #html-container {

@@ -377,7 +377,7 @@ var Dabblet = {
 					input = window['page-' + page],
 					pre = window[page] || css;
 		
-				if(current == pre) {
+				if(currentid == page) {
 					return;
 				} 
 					
@@ -392,7 +392,7 @@ var Dabblet = {
 				if(input && input.value != page || input.checked === false) {
 					input.click();
 				}
-				console.log(page);
+
 				document.body.setAttribute('data-page', page);
 				
 				self.Previewer && Previewer.hideAll();
@@ -664,6 +664,9 @@ document.onkeydown = function(evt) {
 				var page = 'html';
 				break;
 			case '3':
+				var page = 'all';
+				break;
+			case '4':
 				var page = 'result';
 				break;
 		}
@@ -675,14 +678,16 @@ document.onkeydown = function(evt) {
 				// Go to previous tab
 				var page = ({
 					'html': 'css',
-					'result': 'html'
+					'all': 'html',
+					'result': 'all'
 				})[currentPage];
 			}
 			else if (character === ']' || code === 221) {
 				// Go to next tab
 				var page = ({
 					'css': 'html',
-					'html': 'result'
+					'html': 'all',
+					'all': 'result'
 				})[currentPage];
 			}
 		}
