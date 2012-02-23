@@ -228,10 +228,6 @@ body[data-loading] > #loader {
 	box-shadow: .1em .1em .4em rgba(0,0,0,.5) inset;
 }
 
-body:not([data-view="behind"]) > .editor.page {
-	box-shadow: 0 .3em 1em -.4em black inset;
-}
-
 body[data-view="behind"] > .editor.page {
 	background: transparent;
 }
