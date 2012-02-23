@@ -93,7 +93,7 @@ fieldset {
 input:focus + label[for],
 label.focus {
 	outline: auto;
-	outline: 2px auto -webkit-focus-ring-color;
+	outline: 2px auto -webkit-focus-ring-color; /* Warning: nonstandard */
 }
 
 button, .button {
@@ -365,7 +365,7 @@ body.tabediting header {
 		white-space: nowrap;
 		font-size: 110%;
 		line-height: 1.4;
-		-webkit-font-smoothing: antialiased;
+		-webkit-font-smoothing: antialiased; /* fix for WebKit inconsistency */
 		-webkit-transform: translateZ(0); /* fix for unhoverable tabs */
 	}
 	
@@ -888,12 +888,12 @@ body.tabediting header {
 		border-radius: 32px;
 		background: inherit;
 		transform: rotate(-90deg);
-		-webkit-transform: translateZ(0) rotate(-90deg);
+		-webkit-transform: translateZ(0) rotate(-90deg); /* bugfix for WebKit */
 	}
 	
 	#angle[data-negative] > svg {
 		transform:  scaleX(-1) rotate(-90deg);
-		-webkit-transform:  translateZ(0) scaleX(-1) rotate(-90deg);
+		-webkit-transform:  translateZ(0) scaleX(-1) rotate(-90deg); /* bugfix for WebKit */
 	}
 	
 		#time circle,
@@ -978,6 +978,7 @@ body.tabediting header {
 
 /**
  * Style scrollbars in Webkit
+ * Warning: nonstandard CSS ahead
  */
 ::-webkit-scrollbar {
 	width: 20px;
