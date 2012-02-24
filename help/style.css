@@ -113,6 +113,7 @@ nav {
 	position: fixed;
 	top: 13em;
 	width: 12em;
+	padding-right: 1em;
 	margin-left: -14em;
 	text-align: right;
 }
@@ -126,6 +127,7 @@ nav:not(:hover) {
 	}
 	
 	nav a {
+		padding: .25em 0;
 		text-decoration: none;
 		color: inherit;
 	}
