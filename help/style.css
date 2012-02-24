@@ -121,6 +121,10 @@ nav:not(:hover) {
 	color: hsla(200,10%,20%,.4);
 }
 
+	nav > ol {
+		list-style-position: inside;
+	}
+	
 	nav a {
 		text-decoration: none;
 		color: inherit;
