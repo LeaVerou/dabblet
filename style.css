@@ -1075,7 +1075,16 @@ section.page:not(.focus):not(:hover)::-webkit-scrollbar {
 	
 	.dropdown {
 		max-width: 200px;
-		margin-left: -10em;
+		margin-left: -9em;
+	}
+	
+	.dropdown:before {
+		left: 10.5em;
+	}
+	
+	.segmented-control > input[type="radio"] + label {
+		padding: .1em .5em;
+		font-size: .8em;
 	}
 	
 	#currentuser {
