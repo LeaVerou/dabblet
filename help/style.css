@@ -34,6 +34,8 @@ body {
 	font: 110%/1.5 Primary;
 	hyphens: auto;
 	text-shadow: 0 0.0847em white; /* See issue #134 */
+	text-rendering: optimizelegibility;
+	-webkit-font-smoothing: subpixel-antialiased; /* fix any issues caused by translateZ fix */
 }
 
 h1, h2 {
@@ -46,6 +48,7 @@ body > hgroup {
 	text-align: center;
 	font-size: 400%;
 	line-height: .4;
+	-webkit-transform: translateZ(0); /* fix for chopped letters */
 }
 
 	body > hgroup > h1 {
@@ -113,6 +116,7 @@ nav {
 	position: fixed;
 	top: 13em;
 	width: 12em;
+	padding-right: 1em;
 	margin-left: -14em;
 	text-align: right;
 }
@@ -121,7 +125,12 @@ nav:not(:hover) {
 	color: hsla(200,10%,20%,.4);
 }
 
+	nav > ol {
+		list-style-position: inside;
+	}
+	
 	nav a {
+		padding: .25em 0;
 		text-decoration: none;
 		color: inherit;
 	}
