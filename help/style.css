@@ -46,6 +46,8 @@ body > hgroup {
 	text-align: center;
 	font-size: 400%;
 	line-height: .4;
+	-webkit-transform: translateZ(0); /* fix for chopped letters */
+	-webkit-font-smoothing: subpixel-antialiased; /* apply the proper antialiasing killed by previous fix */
 }
 
 	body > hgroup > h1 {
