@@ -221,7 +221,7 @@ var gist = {
 	
 	update: function(data) {
 		var id = data.id,
-			rev = data.history[0].version || '';
+			rev = data.history && data.history[0].version || '';
 		
 		if(gist.id != id) {
 			gist.id = id;
