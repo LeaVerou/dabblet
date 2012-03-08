@@ -417,7 +417,7 @@ body.tabediting header {
 		float: left;
 		height: 1.3em;
 		margin-right: .1em;
-		font: 900 190%/1.45 Dabblet, sans-serif;
+		font: 190%/1.45 Dabblet, sans-serif;
 		text-shadow: .05em .05em .1em black;
 		-webkit-transform: translateZ(0); /* fix for chopped letters */
 	}
@@ -480,6 +480,7 @@ body.tabediting header {
 	header button.with-symbol,
 	header .button.with-symbol {
 		font-family: Dabblet, sans-serif;
+		font-weight: normal;
 	}
 	
 	body[data-unsaved] button[title="Save"] {
