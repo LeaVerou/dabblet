@@ -118,10 +118,12 @@ new Previewer('color', function(code) {
 
 new Previewer('abslength', function(code) {
 	var style = this.style,
-	    abs = code.replace(/^-/, ''),
-	    valid = !!abs;
+	    abs = code.replace(/^-/, '');
 
+	style.width = ''
 	style.width = abs;
+	
+	var valid = !!style.width;
 
 	if(valid) {
 		var num = parseFloat(abs),
@@ -135,7 +137,7 @@ new Previewer('abslength', function(code) {
 			valid = false;
 		}
 		else {
-			var size = width < 20 ? 'small' : 'normal';
+			var size = width < 20? 'small' : 'normal';
 			this.setAttribute('data-size', size);
 		}
 	}
