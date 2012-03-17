@@ -120,7 +120,7 @@ new Previewer('abslength', function(code) {
 	var style = this.style,
 	    abs = code.replace(/^-/, '');
 
-	style.width = ''
+	style.width = '';
 	style.width = abs;
 	
 	var valid = !!style.width;
