@@ -9,10 +9,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <link rel="stylesheet" href="/style.css" />
+<script>
+	if (!("classList" in document.createElement("a"))) {
+		var clScript = document.createElement("script");
+		clScript.type = "text/javascript";
+		clScript.src = "/code/classList.min.js";
+		document.getElementsByTagName("head")[0].appendChild(clScript);
+	}
+</script>
 <script src="/code/prefixfree.min.js"></script>
 
 <script>window._gaq = [['_setAccount', 'UA-27750908-1'], ['_trackPageview']];</script>
-<ascript src="http://www.google-analytics.com/ga.js" async></ascript>
+<script src="http://www.google-analytics.com/ga.js" async></script>
 
 </head>
 <body>
