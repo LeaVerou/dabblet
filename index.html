@@ -9,6 +9,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <link rel="stylesheet" href="/style.css" />
+<script>
+	if (!("classList" in document.createElement("a"))) {
+		var clScript = document.createElement("script");
+		clScript.type = "text/javascript";
+		clScript.src = "https://github.com/eligrey/classList.js";
+		document.getElementsByTagName("head")[0].appendChild(clScript);
+	}
+</script>
 <script src="/code/prefixfree.min.js"></script>
 
 <script>window._gaq = [['_setAccount', 'UA-27750908-1'], ['_trackPageview']];</script>
@@ -154,14 +162,6 @@ min-height: 100%;</pre>
 
 <div id="loader">Loading…</div>
 
-<script>
-	if (!("classList" in document.createElement("a"))) {
-		var clScript = document.createElement("script");
-		clScript.type = "text/javascript";
-		clScript.src = "https://github.com/eligrey/classList.js";
-		document.getElementsByTagName("head")[0].appendChild(clScript);
-	}
-</script>
 <script src="/code/util.js"></script><!-- to be removed -->
 <script src="/code/utopia.js"></script>
 <script src="/code/selection.js"></script>
