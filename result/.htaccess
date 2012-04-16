@@ -1,6 +1,13 @@
 RewriteEngine On
 
 RewriteBase /
+RewriteCond %{HTTP_HOST} ^result\.dabblet\.com
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /result/index.php [L]
+RewriteRule . /index.php [L]
+
+
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ http://result.dabblet.com/$1 [R=301,L]

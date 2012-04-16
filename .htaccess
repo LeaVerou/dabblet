@@ -2,6 +2,7 @@ RewriteEngine On
 
 RewriteCond %{HTTP_HOST} !^dabblet\.com
 RewriteCond %{HTTP_HOST} !^labs\.dabblet\.com
+RewriteCond %{HTTP_HOST} !^result\.dabblet\.com
 RewriteCond %{HTTP_HOST} !^localhost
 RewriteRule ^(.*)$ http://dabblet.com/$1 [R=301,L]
 

@@ -3,12 +3,10 @@
 # error_reporting(E_ALL);
 # ini_set('display_errors', 1);
 
-//$gist_id = $_SERVER['REQUEST_URI'];
-
-//$gist_id = substr($gist_id, strrpos($gist_id, '/') + 1);
-
 preg_match('#\bgist\/([\da-f]+)#i', $_SERVER['REQUEST_URI'], $gist_id);
 $gist_id = $gist_id[1];
+
+//echo $gist_id; exit;
 
 if($gist_id) {
 	preg_match('#\bgist\/[\da-f]+\/([\da-f]+)#i', $_SERVER['REQUEST_URI'], $gist_rev);
@@ -52,7 +50,7 @@ $settings = json_decode($data['files']['settings.json']['content'], true);
 	|| $settings['prefixfree']
 	|| $settings['settings']['prefixfree']
 	): ?>
-<script src="/code/prefixfree.min.js"></script>
+<script src="http://dabblet.com/code/prefixfree.min.js"></script>
 <? endif; ?>
 </head>
 <body><?= $html ?></body>
