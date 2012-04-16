@@ -26,7 +26,7 @@
 		<button class="with-symbol" title="Settings">⚙</button>
 		<form id="settings" class="dropdown">
 			<fieldset id="view">
-				<legend>View mode</legend>
+				<legend>View settings</legend>
 				
 				<div class="segmented-control">
 					<input type="radio" name="view" value="split" id="view-split" checked data-scope="file" />
@@ -38,6 +38,12 @@
 					<input type="radio" name="view" value="separate" id="view-separate" data-scope="file" />
 					<label for="view-separate" class="button" title="Separate">Separate</label>
 				</div>
+				
+				<label class="font-size slider" title="Font size">
+					<span title="Smaller">A</span>
+					<input type="range" name="fontsize" min="50" max="200" value="100" step="10" data-scope="file" />
+					<span title="Larger">A</span>
+				</label>
 				
 				<label class="checkbox">
 					<input type="checkbox" name="seethrough" value="1" data-scope="file" />

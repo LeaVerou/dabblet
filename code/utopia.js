@@ -94,25 +94,37 @@ var _ = window.Utopia = {
 		
 		return ret;
 	},
-
-	/**
-	 * Creates a new DOM element
-	 * @param options {Object} A set of key/value pairs:
-	 *					options.tag: The type of the element to be created (required)
-	 *					options.properties: Property-value pairs to set on the element
-	 *					options.contents: String, node or document fragment to add as contents of the new element
-	 *					options.inside: Add it as a child of this node
-	 *
-	 * @return The new DOM element
-	 */
-	element: {
-		create: function(options) {
-			if(_.type(options) === 'string') {
-				options = {
-					tag: options
-				};
-			}
 	
+	element: {
+		/**
+		 * Creates a new DOM element
+		 * @param options {Object} A set of key/value pairs:
+		 *					options.tag: The type of the element to be created (required)
+		 *					options.properties: Property-value pairs to set on the element
+		 *					options.contents: String, node or document fragment to add as contents of the new element
+		 *					options.inside: Add it as a child of this node
+		 * @return The new DOM element
+		 */
+		create: function() {
+			var options;
+			
+			if(_.type(arguments[0]) === 'string') {
+				if(_.type(arguments[1]) === 'object') {
+					// Utopia.element.create('div', { ... });
+					options = arguments[1];
+					options.tag = arguments[0];
+				}
+				else {
+					// Utopia.element.create('div');
+					options = {
+						tag: options
+					};
+				}
+			}
+			else {
+				options = arguments[0];
+			}
+
 			var element = document.createElement(options.tag);
 			
 			_.element.prop(element, options.properties || options.prop);

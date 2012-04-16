@@ -409,6 +409,14 @@ var Dabblet = {
 				}
 			},
 			
+			fontsize: function(size) {
+				size = size || 100;
+				
+				$$('.editor.page').forEach(function(editor) {
+					editor.style.fontSize = size + '%';
+				});
+			},
+			
 			prefixfree: function(enabled) {
 				Dabblet.settings.cached.prefixfree = enabled;
 				
@@ -426,18 +434,24 @@ var Dabblet = {
 							(name? '[name="' + name + '"]' : '');
 			
 			$$(selector).forEach(function(input){
-				if(!(input.name in settings)) {
+				var name = input.name,
+				    isToggle = input.type === 'radio' || input.type === 'checkbox';
+				
+				if(!(name in settings)) {
 					// Assign default value
-					if('checked' in input) {
-						settings[input.name] = input.hasAttribute('checked')? input.value : '';
-					}
+					settings[name] = input.hasAttribute('checked') || !isToggle? input.value : '';
 				}
 				
-				if(!('checked' in input) || input.checked) {
-					settings[input.name] = input.value; 
+				if(isToggle) {
+					if(input.checked) {
+						settings[name] = input.value; 
+					}
+					else if(input.type === 'checkbox') {
+						settings[name] = ''; 
+					}
 				}
-				else if(input.type === 'checkbox') {
-					settings[input.name] = ''; 
+				else {
+					settings[name] = input.value;
 				}
 			});
 			
@@ -466,21 +480,23 @@ var Dabblet = {
 			$$('input[data-scope]').forEach(function(input){
 				var name = input.name;
 				
-				(input.onclick = function(evt){
-					switch(this.type) {
-						case 'radio':
-							if(this.checked) {
-								Dabblet.settings.applyOne(name, this.value);
-							}
-							return;
-						case 'checkbox':
-							Dabblet.settings.applyOne(name, this.checked? this.value : '');
-							return;
-						default:
+				if (input.type === 'radio') {
+					(input.onclick = function(evt){
+						if(this.checked) {
 							Dabblet.settings.applyOne(name, this.value);
-							return;
-					}
-				}).call(input);
+						}
+					}).call(input);
+				}
+				else if (input.type === 'checkbox') {
+					(input.onclick = function(evt){
+						Dabblet.settings.applyOne(name, this.checked? this.value : '');
+					}).call(input);
+				}
+				else {
+					(input['oninput' in input? 'oninput' : 'onclick'] = function(evt){
+						Dabblet.settings.applyOne(name, this.value);
+					}).call(input);
+				}
 			});
 			
 			// Update cached settings
@@ -494,7 +510,12 @@ var Dabblet = {
 			for(var i=0; i<controls.length; i++) {
 				var control = controls[i];
 				
-				control.checked = control.value == value;
+				if(control.type === 'checkbox' || control.type === 'radio') {
+					control.checked = control.value == value;
+				}
+				else {
+					control.value = value;
+				}
 			}
 			
 			if(name in this.handlers) {
@@ -694,11 +715,27 @@ document.onkeydown = function(evt) {
 		
 		if(page) {
 			if(currentPage !== page) {
-				Dabblet.settings.apply('page', page);
+				Dabblet.settings.applyOne('page', page);
 				
 				evt.stopPropagation();
 				return false;
 			}
+		}
+		
+		if([48, 187, 189].indexOf(code) > -1 // 0, +, -
+			&& /^pre$/i.test(document.activeElement.nodeName)) { 
+			var fontSize;
+
+			if(code === 48) {
+				fontSize = 100;
+			}
+			else {
+				fontSize = (code == 187? 10 : -10) + +Dabblet.settings.current('fontsize');
+			}
+			console.log(fontSize);
+			Dabblet.settings.applyOne('fontsize', fontSize);
+			
+			return false;
 		}
 	}
 	
@@ -740,4 +777,17 @@ document.onkeydown = function(evt) {
 			ancestorClass('remove', 'focus', this);
 		}
 	});
+})();
+
+// Supports sliders?
+(function(){
+	var slider = $u.element.create('input', {
+		prop: {
+			type: 'range'
+		}
+	});
+
+	if(slider.type === 'range') {
+		document.documentElement.classList.add('supports-range');
+	}
 })();
