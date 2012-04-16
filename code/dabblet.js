@@ -628,9 +628,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	if(path) {
 		// Viewing a gist?
 		if(gist.id = (path.match(/\bgist\/([\da-f]+)/i) || [])[1]) {
-			gist.rev = (path.match(/\bgist\/[\da-f]+\/([\da-f]+)/i) || [])[1];
-			css.textContent = html.textContent = '';
-			gist.load();
+			if('withCredentials' in new XMLHttpRequest) {
+				gist.rev = (path.match(/\bgist\/[\da-f]+\/([\da-f]+)/i) || [])[1];
+				css.textContent = html.textContent = '';
+				gist.load();
+			}
+			else {
+				// CORS not supported, redirect to full page result (see #162)
+				location.href = location.href.replace('://', '://result.');
+			}
 		}
 	}
 	
