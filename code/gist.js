@@ -33,7 +33,7 @@ var gist = {
 		
 		var anon = o.anon || o.method === 'GET';
 		
-		if(!anon && !ACCESS_TOKEN) {
+		if(!anon && !window.ACCESS_TOKEN) {
 			gist.oauth[0](function(){
 				gist.request(o);
 			});
@@ -47,7 +47,7 @@ var gist = {
 		
 		$u.xhr({
 			method: o.method,
-			url: 'https://api.github.com/' + path + (!o.anon && ACCESS_TOKEN? '?access_token=' + ACCESS_TOKEN : ''),
+			url: 'https://api.github.com/' + path + (!o.anon && window.ACCESS_TOKEN? '?access_token=' + ACCESS_TOKEN : ''),
 			headers: o.headers,
 			callback: function(xhr) {				
 				var data = JSON.parse(xhr.responseText);
