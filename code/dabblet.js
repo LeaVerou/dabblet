@@ -738,7 +738,7 @@ document.onkeydown = function(evt) {
 			else {
 				fontSize = (code == 187? 10 : -10) + +Dabblet.settings.current('fontsize');
 			}
-			console.log(fontSize);
+
 			Dabblet.settings.applyOne('fontsize', fontSize);
 			
 			return false;
