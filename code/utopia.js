@@ -4,8 +4,13 @@
  * @version 0.2
  */
  
-function $(expr, con) { return (con || document).querySelector(expr); }
-function $$(expr, con) { return Array.prototype.slice.call((con || document).querySelectorAll(expr)); }
+function $(expr, con) {
+	return typeof expr === 'string'? (con || document).querySelector(expr) : expr;
+}
+
+function $$(expr, con) {
+	return Array.prototype.slice.call((con || document).querySelectorAll(expr));
+}
 
 // Make each ID a global variable
 // Many browsers do this anyway (it’s in the HTML5 spec), so it ensures consistency
@@ -107,7 +112,7 @@ var _ = window.Utopia = {
 		 */
 		create: function() {
 			var options;
-			
+
 			if(_.type(arguments[0]) === 'string') {
 				if(_.type(arguments[1]) === 'object') {
 					// Utopia.element.create('div', { ... });
@@ -115,10 +120,19 @@ var _ = window.Utopia = {
 					options.tag = arguments[0];
 				}
 				else {
-					// Utopia.element.create('div');
+					// Utopia.element.create('div', ...);
 					options = {
-						tag: options
+						tag: arguments[0]
 					};
+					
+					// Utopia.element.create('div', [contents]);
+					if(_.type(arguments[1]) === 'array') {
+						options.contents = arguments[1];
+					}
+					// Utopia.element.create('div', 'Text contents');
+					else if(_.type(arguments[1]) === 'string' || _.type(arguments[1]) === 'number') {
+						options.contents = ['' + arguments[1]];
+					}
 				}
 			}
 			else {
@@ -127,13 +141,36 @@ var _ = window.Utopia = {
 
 			var element = document.createElement(options.tag);
 			
-			_.element.prop(element, options.properties || options.prop);
+			// Set properties, attributes and contents
+			_.element.set(element, options);
 			
+			// Place the element in the DOM (inside, before or after an existing element)
+			// This could be a selector
+			if(options.inside) {
+				$(options.inside).appendChild(element);
+			}
+			else if(options.before) {
+				var before = $(options.before);
+				
+				before.parentNode.insertBefore(element, before)
+			}
+			else if(options.after) {
+				var after = $(options.after);
+				
+				after.parentNode.insertBefore(element, after.nextSibling)
+			}
+			
+			return element;
+		},
+		
+		set: function(element, options) {
+			_.element.prop(element, options.properties || options.prop);
+					
 			_.element.attr(element, options.attributes || options.attr);
 			
 			_.element.contents(element, options.contents);
 	
-			return options.inside? options.inside.appendChild(element) : element;
+			return element;
 		},
 		
 		prop: function (element, properties) {
@@ -156,17 +193,42 @@ var _ = window.Utopia = {
 			return element;
 		},
 		
+		/**
+		 * Sets an element’s contents
+		 * Contents could be: One or multiple (as an array) of the following:
+		 *			- An object literal that will be passed through Utopia.element.create
+		 *			- A string or number, which will become a text node
+		 *			- An existing DOM element
+		 */
 		contents: function (element, contents) {
-			if(contents) {
+			if(contents || contents === 0) {
 				if (_.type(contents) !== 'array') {
 					contents = [contents];
 				}
 				
 				for (var i=0; i<contents.length; i++) {
-					var content = contents[i],
-						child = _.type(content) === 'string'? document.createTextNode(content) : content;
-									
-					element.appendChild(child);
+					var content = contents[i], child;
+					
+					switch(_.type(content)) {
+						case 'string':
+							if(content === '') {
+								continue;
+							}
+							// fall through
+						case 'number':
+							child = document.createTextNode(content);
+							break;
+						case 'object':
+							child = _.element.create(content);
+							break;
+						default:
+							child = content;
+
+					}
+					
+					if(child) {
+						element.appendChild(child);
+					}
 				}	
 			}
 			
@@ -174,7 +236,14 @@ var _ = window.Utopia = {
 		}
 	},
 	
+	elements: {
+		// set, attr, prop, contents functions from Utopia.element, but for multiple elements
+	},
+	
 	event: {
+		/**
+		 * Binds one or more events to one or more elements
+		 */
 		bind: function(target, event, callback, traditional) {
 			if(_.type(target) === 'string') {
 				$$(target).forEach(function(element) {
@@ -213,6 +282,9 @@ var _ = window.Utopia = {
 		}
 	},
 	
+	/**
+	 * Helper for XHR requests
+	 */
 	xhr: function(o) {
 		document.body.setAttribute('data-loading', '');
 		
@@ -247,6 +319,9 @@ var _ = window.Utopia = {
 		return xhr;
 	},
 	
+	/**
+	 * Lazy loads an external script
+	 */
 	script: function(url, callback, doc) {
 		doc = doc || document;
 		
@@ -261,6 +336,9 @@ var _ = window.Utopia = {
 		});
 	},
 	
+	/**
+	 * Returns the absolute X, Y offsets for an element
+	 */
 	offset: function(element) {
 	    var left = 0, top = 0, el = element;
 	    
@@ -286,6 +364,21 @@ var _ = window.Utopia = {
 	    };
 	}
 };
+
+['set', 'prop', 'attr', 'contents'].forEach(function(method) {
+	_.elements[method] = function(elements) {
+		elements = _.type(elements) === 'string'? $$(elements) : Array.prototype.slice.call(elements);
+		
+		var args = Array.prototype.slice.call(arguments);
+		args.shift(); // Remove the elements argument
+		
+		elements = elements.map(function(element) {
+			return _.element[method](element, args);
+		});
+		
+		return elements;
+	}
+});
 
 })();
 
