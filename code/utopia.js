@@ -103,11 +103,7 @@ var _ = window.Utopia = {
 	element: {
 		/**
 		 * Creates a new DOM element
-		 * @param options {Object} A set of key/value pairs:
-		 *					options.tag: The type of the element to be created (required)
-		 *					options.properties: Property-value pairs to set on the element
-		 *					options.contents: String, node or document fragment to add as contents of the new element
-		 *					options.inside: Add it as a child of this node
+		 * @param options {Object} A set of key/value pairs for attributes, properties, contents, placement in the DOM etc
 		 * @return The new DOM element
 		 */
 		create: function() {
@@ -115,7 +111,7 @@ var _ = window.Utopia = {
 
 			if(_.type(arguments[0]) === 'string') {
 				if(_.type(arguments[1]) === 'object') {
-					// Utopia.element.create({ ... });
+					// Utopia.element.create('div', { ... });
 					options = arguments[1];
 					options.tag = arguments[0];
 				}
