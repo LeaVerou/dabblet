@@ -115,7 +115,7 @@ var _ = window.Utopia = {
 
 			if(_.type(arguments[0]) === 'string') {
 				if(_.type(arguments[1]) === 'object') {
-					// Utopia.element.create('div', { ... });
+					// Utopia.element.create({ ... });
 					options = arguments[1];
 					options.tag = arguments[0];
 				}
