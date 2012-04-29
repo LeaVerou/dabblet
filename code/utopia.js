@@ -1,7 +1,8 @@
 /**
  * Utopia: A JavaScript util library that assumes modern standards support and doesn't fix any browser bugs
  * @author Lea Verou (http://lea.verou.me)
- * @version 0.2
+ * MIT license (http://www.opensource.org/licenses/mit-license.php)
+ * Last update: 2012-4-29
  */
  
 function $(expr, con) {
