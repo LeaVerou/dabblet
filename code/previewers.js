@@ -57,7 +57,6 @@ var _ = self.Previewer = function(id, updater, type) {
 			
 			if(!token || !valid && oldToken) {
 				previewer.classList.remove('active');
-				previewer.style.display = '';
 			}
 		}
 	});
@@ -119,20 +118,18 @@ new Previewer('color', function(code) {
 
 new Previewer('abslength', function(code) {
 	var style = this.style,
-		abs = code.replace(/^-/, '');
-						
+	    abs = code.replace(/^-/, '');
+
 	style.width = '';
 	style.width = abs;
 	
 	var valid = !!style.width;
-	
+
 	if(valid) {
 		var num = parseFloat(abs),
-			unit = (code.match(/[a-z]+$/i) || [])[0];
+		    unit = (code.match(/[a-z]+$/i) || [])[0];
 		
 		style.marginLeft = -num/2 + unit;
-		
-		style.display = 'block';
 		
 		var width = this.offsetWidth;
 
@@ -144,7 +141,7 @@ new Previewer('abslength', function(code) {
 			this.setAttribute('data-size', size);
 		}
 	}
-	
+
 	return valid;
 });
 
