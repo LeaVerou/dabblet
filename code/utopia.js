@@ -84,6 +84,7 @@ var _ = window.Utopia = {
 
 	/**
 	 * Copies the properties of one object onto another.
+	 * When there is a collision, the later one wins
 	 *
 	 * @return {Object} destination object
 	 */
@@ -99,6 +100,24 @@ var _ = window.Utopia = {
 		}
 		
 		return ret;
+	},
+	
+	/**
+	 * Copies the properties of one or more objects onto the first one
+	 * When there is a collision, the first object wins
+	 */
+	attach: function(object, objects) {
+		for(var i=0; i<arguments.length; i++) {
+			var o = arguments[i];
+			
+			for(var j in o) {
+				if(!(j in object)) {
+					object[j] = o[j];
+				}
+			}
+		}
+		
+		return object;
 	},
 	
 	element: {
@@ -135,8 +154,15 @@ var _ = window.Utopia = {
 			else {
 				options = arguments[0];
 			}
-
-			var element = document.createElement(options.tag);
+			
+			var namespace = options.namespace || '', element;
+			
+			if(namespace) {
+				element = document.createElementNS(namespace, options.tag);
+			}
+			else {
+				element = document.createElement(options.tag);
+			}
 			
 			// Set properties, attributes and contents
 			_.element.set(element, options);
@@ -197,11 +223,13 @@ var _ = window.Utopia = {
 		 *			- A string or number, which will become a text node
 		 *			- An existing DOM element
 		 */
-		contents: function (element, contents) {
+		contents: function (element, contents, where) {
 			if(contents || contents === 0) {
 				if (_.type(contents) !== 'array') {
 					contents = [contents];
 				}
+				
+				var firstChild = element.firstChild;
 				
 				for (var i=0; i<contents.length; i++) {
 					var content = contents[i], child;
@@ -224,7 +252,12 @@ var _ = window.Utopia = {
 					}
 					
 					if(child) {
-						element.appendChild(child);
+						if (!where || where === 'end') {
+							element.appendChild(child);
+						}
+						else if (where === 'start') {
+							element.insertBefore(child, firstChild);
+						}
 					}
 				}	
 			}
@@ -242,8 +275,10 @@ var _ = window.Utopia = {
 		 * Binds one or more events to one or more elements
 		 */
 		bind: function(target, event, callback, traditional) {
-			if(_.type(target) === 'string') {
-				$$(target).forEach(function(element) {
+			if(_.type(target) === 'string' || _.type(target) === 'array') {
+				var elements = _.type(target) === 'string'? $$(target) : target;
+				
+				elements.forEach(function(element) {
 					_.event.bind(element, event, callback, traditional);
 				});
 			}
@@ -266,16 +301,25 @@ var _ = window.Utopia = {
 		 * Fire a custom event
 		 */
 		fire: function(target, type, properties) {
-			var evt = document.createEvent("HTMLEvents");
-	
-			evt.initEvent(type, true, true );
-			evt.custom = true;
-	
-			if(properties) {
-				_.merge(evt, properties);
+			if(_.type(target) === 'string' || _.type(target) === 'array') {
+				var elements = _.type(target) === 'string'? $$(target) : target;
+				
+				elements.forEach(function(element) {
+					_.event.fire(element, type, properties);
+				});
 			}
-	
-			target.dispatchEvent(evt);
+			else {
+				var evt = document.createEvent("HTMLEvents");
+		
+				evt.initEvent(type, true, true );
+				evt.custom = true;
+		
+				if(properties) {
+					_.merge(evt, properties);
+				}
+		
+				target.dispatchEvent(evt);
+			}
 		}
 	},
 	

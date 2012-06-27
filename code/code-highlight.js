@@ -33,7 +33,7 @@ var _ = self.Highlight = {
 			'keyword': /\b(var|let|if|else|while|do|for|return|in|instanceof|function|new|with|typeof|try|catch|finally)\b/g,
 			'boolean': /\b(true|false)\b/g,
 			'number': /\b-?(0x)?\d*\.?\d+\b/g,
-			'regex': /\/.+?\/[gim]{0,3}/g
+			'regex': /\/([^/]|\/)+\/[gim]{0,3}/g
 		},
 		css: {
 			'comment': /\/\*[\w\W]*?\*\//g,
@@ -71,13 +71,13 @@ var _ = self.Highlight = {
 				'pattern': /(&lt;|<)\/?[\w\W]+?(>|&gt;)/gi,
 				'inside': {
 					'attr-value': {
-						'pattern': /[\w-]+=(('|").*?(\2)|[^\s>]+(?=>|&|\s))/gi,
+						'pattern': /[\w:-]+=(('|").*?(\2)|[^\s>]+(?=>|&|\s))/gi,
 						'inside': {
-							'attr-name': /^[\w-]+(?==)/gi,
+							'attr-name': /^[\w:-]+(?==)/gi,
 							'punctuation': /=/g
 						}
 					},
-					'attr-name': /\s[\w-]+(?=\s)/gi,
+					'attr-name': /\s[\w:-]+(?=\s)/gi,
 					'punctuation': /&lt;\/?|&gt;/g
 				}
 			},

@@ -8,11 +8,12 @@
 <meta name="description" content="An interactive CSS playground and code sharing tool. Dabblet saves to Github gists and offers many conveniences for CSS editing." />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<link rel="stylesheet" href="/style.css" />
+<link rel="stylesheet" href="/style/global.css" />
+<link rel="stylesheet" href="/style/style.css" />
 <script src="/code/prefixfree.min.js"></script>
 
 <script>window._gaq = [['_setAccount', 'UA-27750908-1'], ['_trackPageview']];</script>
-<ascript src="http://www.google-analytics.com/ga.js" async></ascript>
+<script src="http://www.google-analytics.com/ga.js" async></script>
 
 </head>
 <body>
@@ -20,7 +21,13 @@
 <header>
 	<h1><a href="/">dabblet</a></h1>
 	
-	<a id="currentuser" target="_blank" class="user button">Log in</a>
+	<div class="with-inactive-dropdown">
+		<a id="currentuser" target="_blank" class="user button">Log in</a>
+		<menu class="dropdown">
+			<a data-href="" target="_blank" class="command" data-disabled>My profile (coming soon)</a>
+			<a href="/" onclick="Dabblet.user.logout()" class="command">Log out</a>
+		</menu>
+	</div>
 	
 	<div class="with-dropdown">
 		<button class="with-symbol" title="Settings">⚙</button>
@@ -156,9 +163,7 @@ min-height: 100%;</pre>
 	</svg>
 </div>
 <div id="url" class="previewer"><img src="data:," alt="Loading…" /></div>
-<div id="entity" class="previewer">f</div>
-
-<div id="loader">Loading…</div>
+<div id="entity" class="previewer"></div>
 
 <script src="/code/util.js"></script><!-- to be removed -->
 <script src="/code/utopia.js"></script>
@@ -167,7 +172,7 @@ min-height: 100%;</pre>
 <script src="/code/code-highlight.js"></script>
 
 <script src="/code/editor.js"></script>
-<script src="/code/gist.js"></script>
+<script src="/code/global.js"></script>
 <script src="/code/dabblet.js"></script>
 
 <script src="/code/previewers.js" async defer></script>

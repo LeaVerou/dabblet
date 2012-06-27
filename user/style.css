@@ -1,0 +1,115 @@
+/**
+ * Styles specific to user profiles
+ */
+ 
+html {
+	background: url(../img/noise.png) hsl(24, 20%, 95%);
+}
+
+body {
+	padding: 0 1em;
+	hyphens: auto;
+	text-shadow: 0 0.0847em white; /* See issue #134 */
+	text-rendering: optimizelegibility;
+	-webkit-font-smoothing: subpixel-antialiased; /* fix any issues caused by translateZ fix */
+}
+
+body > header > h2 {
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	width: 6em;
+	height: 3em;
+	padding-top: 10px;
+	margin-left: -3em;
+	background: black;
+	color: white;
+	text-align: center;
+	border-radius: 0 0 999px 999px;
+}
+	
+	body > header > h2 > img {
+		display: block;
+		margin: 10px auto;
+		box-shadow: 0 0 0 10px black;
+		border-radius: 999px;
+	}
+	
+body > section > h1 {
+	font-size: 300%;
+}
+
+#dabblets {
+	float: left;
+	width: 70%;
+	padding-right: 1em;
+}
+
+	#dabblets > article {
+		margin-bottom: .5em;
+	}
+	
+		#dabblets > article > h1 {
+			font-size: 150%;
+			font-weight: normal;
+		}
+	
+			#dabblets > article h1 a + a {
+				font-size: 60%;
+				padding: .2em .5em;
+				background: black;
+				color: white;
+				font-weight: bold;
+				text-transform: uppercase;
+				border-radius: .3em;
+				text-shadow: none;
+			}
+		
+		#dabblets > article > p {
+			display: inline;
+			font: italic 100%/1.5 Primary;
+		}
+		
+		#dabblets > article > p:last-of-type(n+2)::after {
+			content: '/';
+		}
+
+#following {
+	
+}
+
+	#following > article {
+		position: relative;
+		display: inline-block;
+		max-width: 80px;
+		max-height: 80px;
+		margin: 0 .5em 1em;
+		font-size: 60%;
+		line-height: 1;
+		text-align: center;
+	}
+	
+		#following > article a {
+			font-weight: normal;
+		}
+	
+		#following > article h1 {
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			padding: .3em;
+			margin: 0;
+			background: rgba(0,0,0,.5);
+			color: white;
+			font-weight: normal;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			text-shadow: 0 -1px 2px black;
+		}
+		
+		#following > article img {
+			max-width: 100%;
+			max-height: 100%;
+		}

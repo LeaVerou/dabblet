@@ -15,7 +15,7 @@ var _ = window.Incrementable = function(textField, multiplier, units) {
 	var me = this;
 
 	this.textField = textField;
-	
+	console.log(textField);
 	this.step = +textField.getAttribute('step') || 
 				+textField.getAttribute('data-step') || 1;
 

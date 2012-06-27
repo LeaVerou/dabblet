@@ -1,0 +1,516 @@
+/**
+ * CSS rules that apply to both the dabblet app and subpages
+ */
+ 
+@font-face {
+	font-family: 'Dabblet';
+	src: url(/img/dabblet.ttf);
+}
+
+@font-face {
+	font-family: Primary;
+	src: local('Baskerville');
+}
+
+@keyframes bugfix { from { padding: 0; } to { padding: 0; } }
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	height: 100%;
+	font: 100%/1.5 "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+body {
+	position: relative;
+	height: 100%;
+	border-top: 10px solid transparent;
+	box-sizing: border-box;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+body > header {
+	position: absolute;
+	bottom: 100%;
+	right: 0;
+	left: 0;
+	z-index: 10;
+	padding: .4em .5em 0;
+	border-bottom: 10px solid black;
+	background: url(/img/noise.png), linear-gradient(hsl(200, 10%, 20%), hsla(200, 10%, 20%, .9));
+	color: white;
+	line-height: 1.1;
+	font-weight: bold;
+	text-shadow: 0 -1px 1px black, 0 -1px 2px black;
+	transition: .5s 1s transform;
+}
+
+body > header:hover,
+body > header:active,
+body > header.focus {
+	transform: translateY(-10px) translateY(100%);
+	transition-delay: 0s;
+}
+
+	body > header > h1 {
+		float: left;
+		height: 1.3em;
+		margin-right: .1em;
+		font: 190%/1.45 Dabblet, sans-serif;
+		text-shadow: .05em .05em .1em black;
+		-webkit-transform: translateZ(0); /* fix for chopped letters */
+	}
+	
+	body > header > .with-dropdown {
+		float: left;
+	}
+	
+		.tabs input {
+			position: absolute;
+			z-index: 1;
+			opacity: 0;
+		}
+	
+		.tabs {
+			display: inline-block;
+			height: .75em;
+			margin: 0 2px 0 -.5em;
+			white-space: nowrap;
+			font-size: 110%;
+			line-height: 1.4;
+			-webkit-font-smoothing: antialiased; /* fix for WebKit inconsistency */
+			-webkit-transform: translateZ(0); /* fix for unhoverable tabs */
+		}
+		
+		.controls-group {
+			float: right;
+			min-width: 15em;
+			white-space: nowrap;
+		}
+	
+		header .button,
+		header button,
+		.tabs > label {
+			padding: .45em .6em;
+			border: 0;
+			border-radius: .3em;
+			background: inherit;
+			color: inherit;
+			font: inherit;
+			text-align: center;
+			text-decoration: none;
+			cursor: pointer;
+			text-shadow: inherit;
+		}
+		
+		header .button,
+		header button {
+			float: left;
+			border: 1px solid rgba(0,0,0,.4);
+			margin: 0 .2em;
+			white-space: nowrap;
+			background-image: url(/img/noise.png);
+			box-shadow: rgba(255, 255, 255, .4) 0 1px 0 inset, 
+						rgba(255, 255, 255, .3) 0 25px 30px -12px inset, 
+						rgba(0, 0, 0, .6) 0 1px 2px;
+		}
+		
+		header button.with-symbol,
+		header .button.with-symbol {
+			font-family: Dabblet, sans-serif;
+			font-weight: normal;
+		}
+		
+		body[data-unsaved] button[title="Save"] {
+			text-shadow: 0 0 .2em #6cf, 0 0 .4em #6cf;
+		}
+		
+		header > .with-dropdown > button:after,
+		header > .with-dropdown > .button:after {
+			content: ' ▾';
+		}
+		
+		header .button:active,
+		header button:active,
+		input:checked + label.button {
+			box-shadow: 0 2px 6px black inset;
+		}
+		
+		input:checked + label.button {
+			background-color: rgba(0,0,0,.3);
+		}
+		
+		#currentuser {
+			max-width: 8em;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		
+		#currentuser:not(:hover) {
+			background-color: transparent;
+		}
+		
+			.user > img {
+				max-height: 1.4em;
+				margin: -.2em .3em -.2em -1.6em;
+				vertical-align:bottom;
+				border-radius: 1px;
+				box-shadow: 0 0 0 1px rgba(0,0,0,.2);
+			}
+			
+			#currentuser > img {
+				margin-left: -.3em;
+			}
+			
+		a.button[href="/help/"] {
+			float: right;
+			background-color: transparent;
+			margin-top: 2px; /* lame fix to make it align with the tabs */
+		}
+		
+		@keyframes flip {
+			from { transform: perspective(600px) rotate3d(1,0,0,180deg); }
+			  to { transform: perspective(600px) rotate3d(1,0,0,  0deg); }
+		}
+		
+		.tabs > label {
+			position: relative;
+			top: 0;
+			display: inline-block;
+			padding: .5em .6em;
+			border: 0;
+			margin: 0 0 -5px;
+			background: rgba(0,0,0,.2);
+			cursor: pointer;
+			transform-origin: bottom;
+			border-radius: 5px;
+			box-shadow: .05em .1em .2em rgba(0,0,0,.7) inset;
+			text-shadow: inherit;
+			animation: .5s flip;
+		}
+		
+		.tabs > input:checked + label {
+			background: black;
+			top: 2.5em;
+			animation: .6s flip;
+			transform-origin: top;
+		}
+		
+			body[data-view="separate"] .tabs > label .if-not-separate {
+				display: none;
+			}
+			
+			.tabs > label > .title {
+				overflow: hidden;
+				transition: 1s max-width;
+			}
+			
+		
+		header .button:hover,
+		header .button:active,
+		header button:hover,
+		header button:active,
+		.tabs > label:hover,
+		.tabs > label:active {
+			background-color: black;
+		}
+		
+		.dropdown {
+			display: none;
+			position: absolute;
+			z-index: 2;
+			min-width: 12em;
+			max-width: 400px;
+			padding: .3em;
+			margin: 2.2em 0 0 -1em;
+			font-family: sans-serif;
+			text-align: left;
+			-webkit-transform: translateZ(0); /* fix for unhoverable dropdowns */
+		}
+		
+		/* pointer */
+		.dropdown:before {
+			content: '';
+			position: absolute;
+			top: -6px;
+			left: 2.5em;
+			width: 12px;
+			height: 12px;
+			border: inherit;
+			border-bottom-width:0;
+			border-right-width:0;
+			margin-left: -9px;
+			background: url(/img/noise.png), linear-gradient(-45deg, hsl(200, 10%, 20%) 52%, hsla(200, 10%, 20%, 0) 55%);
+			background-origin: border-box;
+			transform: rotate(45deg);
+			box-shadow: 1px 0 rgba(255,255,255,.3) inset;
+		}
+		
+		.with-dropdown {
+			padding-bottom: 3px;	
+		}
+		
+		.with-dropdown:hover > .dropdown,
+		.with-dropdown.focus > .dropdown,
+		.with-dropdown:active > .dropdown,
+		.dropdown:hover,
+		.dropdown:active,
+		.dropdown.focus {
+			display: block;
+		}
+		
+		header fieldset {
+			font-size: 90%;
+		}
+		
+			header fieldset > legend {
+				font-size: 110%;
+			}
+			
+			#view > .segmented-control {
+				margin: .1em 0 .8em;
+			}
+			
+			#view label.font-size {
+				margin: .5em;
+			}
+			
+				#view label.font-size span {
+					display: inline-block;
+					vertical-align: middle;
+					font: 100% 'Baskerville', 'Palatino Linotype', Palatino, serif;
+				}
+				
+				#view label.font-size span:first-child {
+					font-size: 50%;
+				}
+				
+				#view label.font-size span:last-child {
+					font-size: 200%;
+				}
+				
+				#view label.font-size input {
+					width: 220px;
+					vertical-align: middle;
+				}
+					
+			fieldset > label.checkbox {
+				display: block;
+				margin: .2em 0;
+				font-weight: normal;
+			}
+		
+			menu > .command {
+				display: block;
+				padding: .4em;
+				border-radius: .3em;
+				cursor: pointer;
+			}
+			
+			menu > .command[data-disabled] {
+				opacity: .5;
+				cursor: not-allowed;
+			}
+				
+				menu > .command:before {
+					content: '';
+					display: inline-block;
+					width: 1.4em;
+				}
+				
+				menu > .command[data-keyboard]:after {
+					content: attr(data-keyboard);
+					float: right;
+					opacity: .6;
+				}
+				
+				menu > input:checked + label.command:before {
+					content: '✔';
+					color: hsla(0,0%,100%,.5);
+				}
+			
+			menu > hr {
+				height: 2px;
+				border: 0;
+				margin: .1em 0;
+				background: rgba(255,255,255,.5);
+				background: linear-gradient(left, transparent, black 50%, transparent) top,
+							linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,.6) 50%, rgba(255,255,255,0)) bottom;
+				background-repeat: repeat-x;
+				background-size: 100% 1px;
+			}
+ 
+#loader {
+	display: none;
+	position: absolute;
+	z-index: 100;
+	top: 50%;
+	left: 50%;
+	width: 100px;
+	padding-top: 100px;
+	margin-top: -50px;
+	margin-left: -50px;
+	background: url(/img/loader.png) no-repeat left top;
+	color: rgba(0,0,0,.5);
+	font-weight: bold;
+	text-align: center;
+	text-shadow: 0 1px white;
+	
+	animation: 1s loader infinite steps(7);
+}
+
+body[data-loading] > #loader {
+	display: block;
+}
+
+/**
+ * Responsive shit
+ */
+@media (max-width: 400px) {
+	html {
+		font-size: 90%;
+	}
+}
+
+@media (max-width: 620px) {
+	header > .with-dropdown button:after {
+		content: '';
+		content: none;
+	}
+	
+	.dropdown {
+		max-width: 200px;
+		margin-left: -9em;
+	}
+	
+	.dropdown:before {
+		left: 10.5em;
+	}
+	
+	.segmented-control > input[type="radio"] + label {
+		padding: .1em .5em;
+		font-size: .8em;
+	}
+	
+	#currentuser {
+		max-width: 3em;
+	}
+}
+
+@media (max-width: 800px) {
+	html {
+		font-size: 95%;
+	}
+	
+	.controls-group {
+		margin-top: .2em;
+	}
+	
+	.tabs {
+		height: 2.2em;
+	}
+	
+	.popup {
+		width: 290px;
+		padding: .5em .5em 5em;
+		margin-left: -145px;
+		top: 2%;
+		bottom: 2%;
+	}
+}
+
+@media (min-width: 1000px) {
+	.popup {
+		width: 800px;
+		margin-left: -400px;
+	}
+	
+		.popup > .content > div {
+			column-count: 2;
+			column-gap: 2em;
+			column-rule: 3px dotted slategray;
+			column-fill: balance;
+		}
+}
+
+
+@media (min-height: 799px) and (min-width: 1000px) {
+	body {
+		border-top-width: 3.4em;
+	}
+	
+	body > header,
+	body > header:hover,
+	body > header:active,
+	body > header.focus {
+		transform: none;
+	}
+	
+	.tabs > input + label,
+	.tabs > input:checked + label {
+		animation: none;
+	}
+	
+	.tabs > input:checked + label {
+		top: 0;
+	}
+}
+
+html.page > body {
+	border-top-width: 3.4em;
+}
+
+	html.page > body > header,
+	html.page > body > header:hover,
+	html.page > body > header:active,
+	html.page > body > header.focus {
+		position: fixed;
+		transform: translateY(100%);
+	}
+
+::selection {
+	background-color: hsla(24, 20%, 50%,.5);
+	color: white;
+	text-shadow: 0 -1px 1px hsl(24, 20%, 50%);
+}
+
+/**
+ * Style scrollbars in Webkit
+ * Warning: nonstandard CSS ahead
+ */
+::-webkit-scrollbar {
+	width: 20px;
+	height: 20px;
+}
+
+section.page:not(.focus):not(:hover)::-webkit-scrollbar {
+	display: none;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-thumb {
+	border-radius: 999px;
+	border: 5px solid transparent;
+}
+
+::-webkit-scrollbar-track {
+	box-shadow: 1px 1px 5px rgba(0,0,0,.2) inset;
+}
+
+::-webkit-scrollbar-thumb {
+	min-height: 20px;
+	background: url(/img/noise.png);
+	background-clip: content-box;
+	box-shadow: 0 0 0 5px hsla(24, 20%, 50%,.4) inset;
+}
+
+::-webkit-scrollbar-corner {
+	background: transparent;
+}

@@ -1,6 +1,4 @@
-var Dabblet = {
-	version: '1.0.6',
-	
+window.Dabblet = $u.attach({
 	pages: {
 		css: window['css-page'],
 		html: window['html-page'], 
@@ -104,7 +102,9 @@ var Dabblet = {
 				
 				self.Previewer && Previewer.hideAll();
 				
-				pre.focus && pre.focus();
+				if(!Dabblet.embedded) {
+					pre.focus && pre.focus();
+				}
 				
 				var ss = pre.getAttribute('data-ss'),
 					se = pre.getAttribute('data-se');
@@ -261,15 +261,7 @@ var Dabblet = {
 			this.cached[name] = value;
 		}
 	}
-};
-
-window.ACCESS_TOKEN = localStorage['access_token'];
-
-currentuser.onclick = function(){
-	if(!this.hasAttribute('href')) {
-		gist.oauth[0]();
-	}
-}
+}, window.Dabblet);
 
 window.onbeforeunload = function(){
 	if(!gist.saved) {
@@ -313,12 +305,15 @@ setTimeout(function(){
 
 document.addEventListener('DOMContentLoaded', function() {
 	if(ACCESS_TOKEN) {
-		gist.getUser();
+		gist.getUser(function(user){
+			Dabblet.user.afterLogin(user);
+		});
 	}
 	
 	var a = $('h1 > a');
 	
 	if(parent !== window) {
+		Dabblet.embedded = true;
 		document.body.setAttribute('data-embedded', '')
 		
 		a.href = '';
@@ -469,28 +464,6 @@ document.onkeydown = function(evt) {
 		return false;
 	}
 };
-
-// If only :focus and :checked bubbled...
-(function() {
-	function ancestorClass(action, className, element) {
-		var ancestor = element;
-		
-		do {
-			ancestor = ancestor.parentNode;
-			ancestor.classList[action](className)
-		} while(ancestor && ancestor != document.body);
-	}
-	
-	$u.event.bind('header a, header input, header button, header [tabindex="0"], pre', {
-		focus: function(){
-			ancestorClass('add', 'focus', this);
-		},
-		
-		blur: function() {
-			ancestorClass('remove', 'focus', this);
-		}
-	});
-})();
 
 // Supports sliders?
 (function(){
