@@ -274,8 +274,8 @@ var _ = window.Editor = function(pre) {
 			var keyCode = evt && evt.keyCode || 0,
 				code = this.textContent,
 				id = this.id;
-				
-			if(keyCode < 8 || keyCode == 13 || keyCode > 32 && keyCode < 41) {
+
+			if(keyCode < 9 || keyCode == 13 || keyCode > 32 && keyCode < 41) {
 				$u.event.fire(this, 'caretmove');
 			}
 	
