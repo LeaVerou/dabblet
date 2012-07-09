@@ -164,6 +164,11 @@ var _ = window.Utopia = {
 				element = document.createElement(options.tag);
 			}
 			
+			if(options.className) {
+				options.properties = options.properties || {};
+				options.properties.className = options.className;
+			}
+			
 			// Set properties, attributes and contents
 			_.element.set(element, options);
 			
@@ -290,6 +295,11 @@ var _ = window.Utopia = {
 					target.addEventListener(event, callback, false);
 				}
 			}
+			else if(_.type(event) === 'array') {
+				for (var i=0; i<event.length; i++) {
+					_.event.bind(target, event[i], callback, arguments[2]);
+				}
+			}
 			else {
 				for (var name in event) {
 					_.event.bind(target, name, event[name], arguments[2]);
@@ -335,23 +345,22 @@ var _ = window.Utopia = {
 		
 		xhr.open(method, o.url + (method === 'GET' && data? '?' + data : ''), true);
 		
-		if(method !== 'GET') {
+		o.headers = o.headers || {};
+		
+		if(method !== 'GET' && !o.headers['Content-type'] && !o.headers['Content-Type']) {
 			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		}
 		
-		if(o.headers) {
-			for(var header in o.headers) {
-				xhr.setRequestHeader(header, o.headers[header]);
-			}
+		for (var header in o.headers) {
+			xhr.setRequestHeader(header, o.headers[header]);
 		}
 		
 		xhr.onreadystatechange = function(){
+			
 			if(xhr.readyState === 4) {
 				document.body.removeAttribute('data-loading');
 				
-				if(xhr.responseText) {
-					o.callback(xhr);
-				}
+				o.callback(xhr);
 			}
 		};
 		
@@ -394,7 +403,7 @@ var _ = window.Utopia = {
 			do {
 				left -= el.scrollLeft;
 				top -= el.scrollTop;
-			} while ((el = el.parentNode) && el.nodeType < 9);
+			} while ((el = el.parentNode) && !/body/i.test(el.nodeName));
 		}
 	
 	    return {

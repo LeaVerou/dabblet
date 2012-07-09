@@ -13,103 +13,239 @@ body {
 	text-rendering: optimizelegibility;
 	-webkit-font-smoothing: subpixel-antialiased; /* fix any issues caused by translateZ fix */
 }
-
-body > header > h2 {
-	position: absolute;
-	top: 100%;
-	left: 50%;
-	width: 6em;
-	height: 3em;
-	padding-top: 10px;
-	margin-left: -3em;
-	background: black;
-	color: white;
-	text-align: center;
-	border-radius: 0 0 999px 999px;
-}
 	
-	body > header > h2 > img {
-		display: block;
-		margin: 10px auto;
-		box-shadow: 0 0 0 10px black;
-		border-radius: 999px;
+.count {
+	display: inline-block;
+	padding: 0 .5em;
+	border-radius: 999px;
+	margin-left: .3em;
+	background: hsla(0,0%,100%,.4);
+	box-shadow: 0 -1px 1px black, 0 -1px 2px black;
+	color: black;
+	text-shadow: 0 1px 1px hsla(0,0%,100%,.8);
+	font-size: 85%;
+}
+
+div[role=main] {
+	padding-top: 1em;
+}
+
+#profile {
+	margin: 1em 0;
+	overflow: hidden;
+}
+
+	#profile .photo {
+		float: left;
+		max-width: 80px;
+		border-radius: 5px;
 	}
 	
-body > section > h1 {
-	font-size: 300%;
+	#profile > p,
+	#profile > h2,
+	#profile > h3 {
+		margin-left: 90px;
+	}
+	
+	#profile > h2,
+	#profile > h3 {
+		margin-bottom: .3em;
+		line-height: 1;
+	}
+	
+		#profile .nickname {
+			opacity: .5;
+		}
+		
+	#profile .online {
+		font-size: 80%;
+	}
+	
+		#profile .online > a {
+			text-decoration: underline;
+			text-decoration-color: rgba(0,0,0,.3)
+		}
+		
+		#profile .online > .separator {
+			opacity: .3;
+		}
+
+	#profile .note {
+		max-width: 35%;
+		padding: .1em 0 .1em .6em;
+		border-left: .4em solid rgba(0,0,0,.2);
+		margin: -4.3em 0 0 27em;
+		font: italic 100% 'Baskerville', 'Palatino Linotype', Palatino, serif;	
+		hyphens: auto;
+	}
+	
+	#profile .note:empty,
+	#profile .online a:empty + .separator {
+		display: none;
+	}
+	
+	@media (max-width: 930px) {
+		#profile .note {
+			max-width: none;
+			margin: 1em 0 0 0;
+		}
+	}
+		
+	#profile .button,
+	#profile button {
+		float: right;
+		font-size: 70%;
+	}
+	
+	html.own .follow,
+	html:not(.logged-in) .follow,
+	html.own .unfollow,
+	html:not(.logged-in) .unfollow,
+	html.following .follow,
+	html:not(.following) .unfollow,
+	html:not(.own) .edit-profile {
+		display: none;
+	}
+	
+	.unfollow:hover {
+		background-color: #b00;
+	}
+
+.page {
+	position: relative;
+	display: none;
+	padding: 1em 0 3em;
+}
+
+.page:target,
+.page.active {
+	display: block;
+}
+
+.more {
+	position: absolute;
+	bottom: .5em;
+	left: 50%;
+	width: 40em;
+	margin-left: -20em;
 }
 
 #dabblets {
-	float: left;
-	width: 70%;
-	padding-right: 1em;
+	text-align: center;
 }
 
-	#dabblets > article {
-		margin-bottom: .5em;
-	}
-	
-		#dabblets > article > h1 {
-			font-size: 150%;
-			font-weight: normal;
-		}
-	
-			#dabblets > article h1 a + a {
-				font-size: 60%;
-				padding: .2em .5em;
-				background: black;
-				color: white;
-				font-weight: bold;
-				text-transform: uppercase;
-				border-radius: .3em;
-				text-shadow: none;
-			}
-		
-		#dabblets > article > p {
-			display: inline;
-			font: italic 100%/1.5 Primary;
-		}
-		
-		#dabblets > article > p:last-of-type(n+2)::after {
-			content: '/';
-		}
-
-#following {
-	
+.dabblet {
+	position: relative;
+	display: inline-block;
+	border: 10px solid white;
+	margin: 0 2em 1.5em 0;
+	overflow: hidden;
+	box-shadow: 1px 2px 8px rgba(0,0,0,.5);
 }
 
-	#following > article {
-		position: relative;
-		display: inline-block;
-		max-width: 80px;
-		max-height: 80px;
-		margin: 0 .5em 1em;
-		font-size: 60%;
-		line-height: 1;
-		text-align: center;
+	.dabblet > a {
+		display: block;
+		width: 400px;
+		height: 300px;
+	}
+
+	.dabblet iframe {
+		position: absolute;
+		top: 0;
+		width: 800px;
+		height: 600px;
+		border: 0;
+		transform: scale(.5);
+		transform-origin: top left;
+		pointer-events: none;
 	}
 	
-		#following > article a {
-			font-weight: normal;
-		}
+	.dabblet iframe[data-src],
+	.dabblet iframe.loading {
+		background: url(/img/loader-animated.gif) no-repeat center;
+	}
 	
-		#following > article h1 {
+	.dabblet > .info {
+		position: absolute;
+		bottom: 0; right: 0; left: 0;
+		padding: .5em 1em;
+		max-height: 1.4em;
+		background: rgba(0,0,0,.6);
+		color: white;
+		text-shadow: 0 -1px 1px black;
+		transition: .5s max-height;
+	}
+	
+	.dabblet:hover > .info {
+		max-height: 200px;
+	}
+	
+		.dabblet > .info h1 {
+			margin-bottom: .3em;
+			font-size: 100%;
+			line-height: 1.4;
+		}
+		
+		.dabblet > .info p {
+			font-size: 80%;
+		}
+		
+		.dabblet > .info .comments {
 			position: absolute;
-			right: 0;
-			bottom: 0;
-			left: 0;
-			padding: .3em;
-			margin: 0;
-			background: rgba(0,0,0,.5);
-			color: white;
-			font-weight: normal;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			text-shadow: 0 -1px 2px black;
+			right: 1em;
+			top: .7em;
+			min-width: 1em;
+			padding: 0 .4em;
+			margin: -1.4em -.4em 0 0;
+			border-radius: .3em;
+			background: black;
+			text-align: center;
+			font-weight: bold;
+			font-size: 90%;
 		}
 		
-		#following > article img {
-			max-width: 100%;
-			max-height: 100%;
+		.dabblet > .info .comments:after {
+			content: '';
+			position: absolute;
+			bottom: -5px;
+			left: 50%;
+			margin-left: -2px;
+			border: 5px solid transparent;
+			border-left-color: black;
 		}
+
+article.user {
+	position: relative;
+	display: inline-block;
+	max-width: 80px;
+	max-height: 80px;
+	margin: 0 .5em 1em;
+	font-size: 60%;
+	line-height: 1;
+	text-align: center;
+}
+
+	article.user a {
+		font-weight: normal;
+	}
+
+	article.user h1 {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		padding: .3em;
+		margin: 0;
+		background: rgba(0,0,0,.5);
+		color: white;
+		font-weight: normal;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		text-shadow: 0 -1px 2px black;
+	}
+	
+	article.user img {
+		max-width: 100%;
+		max-height: 100%;
+	}

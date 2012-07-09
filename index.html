@@ -24,7 +24,7 @@
 	<div class="with-inactive-dropdown">
 		<a id="currentuser" target="_blank" class="user button">Log in</a>
 		<menu class="dropdown">
-			<a data-href="" target="_blank" class="command" data-disabled>My profile (coming soon)</a>
+			<a href="/user/" target="_blank" class="command my-profile">My profile</a>
 			<a href="/" onclick="Dabblet.user.logout()" class="command">Log out</a>
 		</menu>
 	</div>
@@ -91,26 +91,26 @@
 		<a href="/help/" class="button" title="Help &amp; credits" target="_blank">?</a>
 		<div class="tabs">
 			<input type="radio" name="page" value="css" id="page-css" checked data-scope="file" />
-			<label for="page-css" title="⌘1">
+			<label for="page-css" title="⌘1" class="tab">
 				<span class="title">CSS 
 					<span class="if-not-separate"><i class="amp">&amp;</i> Result</span>
 				</span>
 			</label>
 			
 			<input type="radio" name="page" value="html" id="page-html" data-scope="file" />
-			<label for="page-html" title="⌘2">
+			<label for="page-html" title="⌘2" class="tab">
 				<span class="title">HTML 
 					<span class="if-not-separate"><i class="amp">&amp;</i> Result</span>
 				</span>
 			</label>
 			
 			<input type="radio" name="page" value="all" id="page-all" checked data-scope="file" />
-			<label for="page-all" title="⌘3">
+			<label for="page-all" title="⌘3" class="tab">
 				<span class="title">All</span>
 			</label>
 			
 			<input type="radio" name="page" value="result" id="page-result" data-scope="file" />
-			<label for="page-result" title="⌘4">
+			<label for="page-result" title="⌘4" class="tab">
 				<span class="title">Result</span>
 			</label>
 		</div>

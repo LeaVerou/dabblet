@@ -1,45 +1,6 @@
 /**
  * Variables
  */
-header,
-.popup,
-.dropdown {
-	background: hsla(200, 10%, 20%, .9) url(/img/noise.png);	
-	color: white;
-	text-shadow: 0 -1px 1px black, 0 -1px 2px black;
-}
-
-.popup,
-.dropdown {
-	border: 1px solid rgba(0,0,0,.4);
-	border-radius: .5em;
-	box-shadow: 0 1px rgba(255,255,255,.3) inset,
-				.2em .2em .6em black;
-}
-
-.popup > .content {
-	background: hsl(24, 20%, 95%) url(/img/noise.png);
-	color: black;
-	text-shadow: 0 1px white;
-	box-shadow: 0 .1em .5em rgba(0,0,0,.8) inset;
-}
-
-.popup > .close,
-menu > .command:not([data-disabled]) {
-	transition: .5s box-shadow;
-}
-
-.popup > .close:hover,
-menu > .command:not([data-disabled]):hover {
-	background: rgba(0,0,0,.3);
-	box-shadow: .05em .05em .25em black inset;
-}
-
-.popup > .close:active,
-menu > .command:not([data-disabled]):active {
-	background: rgba(0,0,0,.4);
-	box-shadow: .15em .15em .15em black inset;
-}
 
 #easing > svg,
 #fontfamily,
@@ -209,16 +170,6 @@ html.supports-range label.slider {
 	font: italic 160%/.5 Baskerville, 'Palatino Linotype', 'Goudy Old Style', Constantia, Palatino, serif;
 	vertical-align: -.1em;
 	opacity: .7;
-}
-
-@keyframes loader {
-	from {
-		background-position: 0 0;
-	}
-	
-	to {
-		background-position: -700px 0;
-	}
 }
 
 .page {

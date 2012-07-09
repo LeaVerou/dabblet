@@ -304,12 +304,6 @@ setTimeout(function(){
 }, 500);
 
 document.addEventListener('DOMContentLoaded', function() {
-	if(ACCESS_TOKEN) {
-		gist.getUser(function(user){
-			Dabblet.user.afterLogin(user);
-		});
-	}
-	
 	var a = $('h1 > a');
 	
 	if(parent !== window) {

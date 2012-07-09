@@ -1,4 +1,47 @@
 /**
+ * Variables
+ */
+header,
+.popup,
+.dropdown {
+	background: hsla(200, 10%, 20%, .9) url(/img/noise.png);	
+	color: white;
+	text-shadow: 0 -1px 1px black, 0 -1px 2px black;
+}
+
+.popup,
+.dropdown {
+	border: 1px solid rgba(0,0,0,.4);
+	border-radius: .5em;
+	box-shadow: 0 1px rgba(255,255,255,.3) inset,
+				.2em .2em .6em black;
+}
+
+.popup > .content {
+	background: hsl(24, 20%, 95%) url(/img/noise.png);
+	color: black;
+	text-shadow: 0 1px white;
+	box-shadow: 0 .1em .5em rgba(0,0,0,.8) inset;
+}
+
+.popup > .close,
+menu > .command:not([data-disabled]) {
+	transition: .5s box-shadow;
+}
+
+.popup > .close:hover,
+menu > .command:not([data-disabled]):hover {
+	background: rgba(0,0,0,.3);
+	box-shadow: .05em .05em .25em black inset;
+}
+
+.popup > .close:active,
+menu > .command:not([data-disabled]):active {
+	background: rgba(0,0,0,.4);
+	box-shadow: .15em .15em .15em black inset;
+}
+
+/**
  * CSS rules that apply to both the dabblet app and subpages
  */
  
@@ -34,6 +77,62 @@ body {
 a {
 	color: inherit;
 	text-decoration: none;
+}
+
+.button,
+button,
+.tab {
+	padding: .45em .6em;
+	border: 0;
+	border-radius: .3em;
+	background: inherit;
+	color: inherit;
+	font: inherit;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	text-shadow: inherit;
+}
+
+.button,
+button {
+	float: left;
+	border: 1px solid rgba(0,0,0,.4);
+	margin: 0 .2em;
+	white-space: nowrap;
+	background-image: url(/img/noise.png);
+	box-shadow: rgba(255, 255, 255, .4) 0 1px 0 inset, 
+				rgba(255, 255, 255, .3) 0 25px 30px -12px inset, 
+				rgba(0, 0, 0, .6) 0 1px 2px;
+}
+
+button.with-symbol,
+.button.with-symbol {
+	font-family: Dabblet, sans-serif;
+	font-weight: normal;
+}
+
+.button:hover,
+.button:active,
+button:hover,
+button:active,
+.tab:hover,
+.tab:active {
+	background-color: black;
+}
+
+header ~ * button,
+header ~ * .button {
+	color: black;
+	text-shadow: 0 1px 1px white;
+}
+
+header ~ * button:hover,
+header ~ * .button:hover,
+header ~ * button:active,
+header ~ * .button:active {
+	color: white;
+	text-shadow: 0 -1px 1px black, 0 -1px 2px black;
 }
 
 body > header {
@@ -95,39 +194,7 @@ body > header.focus {
 			white-space: nowrap;
 		}
 	
-		header .button,
-		header button,
-		.tabs > label {
-			padding: .45em .6em;
-			border: 0;
-			border-radius: .3em;
-			background: inherit;
-			color: inherit;
-			font: inherit;
-			text-align: center;
-			text-decoration: none;
-			cursor: pointer;
-			text-shadow: inherit;
-		}
-		
-		header .button,
-		header button {
-			float: left;
-			border: 1px solid rgba(0,0,0,.4);
-			margin: 0 .2em;
-			white-space: nowrap;
-			background-image: url(/img/noise.png);
-			box-shadow: rgba(255, 255, 255, .4) 0 1px 0 inset, 
-						rgba(255, 255, 255, .3) 0 25px 30px -12px inset, 
-						rgba(0, 0, 0, .6) 0 1px 2px;
-		}
-		
-		header button.with-symbol,
-		header .button.with-symbol {
-			font-family: Dabblet, sans-serif;
-			font-weight: normal;
-		}
-		
+				
 		body[data-unsaved] button[title="Save"] {
 			text-shadow: 0 0 .2em #6cf, 0 0 .4em #6cf;
 		}
@@ -137,8 +204,8 @@ body > header.focus {
 			content: ' ▾';
 		}
 		
-		header .button:active,
-		header button:active,
+		.button:active,
+		button:active,
 		input:checked + label.button {
 			box-shadow: 0 2px 6px black inset;
 		}
@@ -148,16 +215,34 @@ body > header.focus {
 		}
 		
 		#currentuser {
-			max-width: 8em;
+			max-width: 12em;
 			overflow: hidden;
 			text-overflow: ellipsis;
+		}
+		
+		@media (max-width: 1000px) {
+			#currentuser {
+				max-width: 8em;
+			}
+		}
+		
+		@media (max-width: 800px) {
+			#currentuser {
+				max-width: 3em;
+			}
+		}
+		
+		@media (max-width: 800px) and (min-width: 400px) {
+			#currentuser {
+				max-width: none;
+			}
 		}
 		
 		#currentuser:not(:hover) {
 			background-color: transparent;
 		}
 		
-			.user > img {
+			header .user > img {
 				max-height: 1.4em;
 				margin: -.2em .3em -.2em -1.6em;
 				vertical-align:bottom;
@@ -180,7 +265,7 @@ body > header.focus {
 			  to { transform: perspective(600px) rotate3d(1,0,0,  0deg); }
 		}
 		
-		.tabs > label {
+		.tab {
 			position: relative;
 			top: 0;
 			display: inline-block;
@@ -193,17 +278,18 @@ body > header.focus {
 			border-radius: 5px;
 			box-shadow: .05em .1em .2em rgba(0,0,0,.7) inset;
 			text-shadow: inherit;
-			animation: .5s flip;
+			animation: flip .5s;
 		}
 		
-		.tabs > input:checked + label {
+		.tabs > input:checked + .tab,
+		.tab.active {
 			background: black;
 			top: 2.5em;
-			animation: .6s flip;
+			animation: flip .6s;
 			transform-origin: top;
 		}
 		
-			body[data-view="separate"] .tabs > label .if-not-separate {
+			body[data-view="separate"] .tab .if-not-separate {
 				display: none;
 			}
 			
@@ -211,16 +297,6 @@ body > header.focus {
 				overflow: hidden;
 				transition: 1s max-width;
 			}
-			
-		
-		header .button:hover,
-		header .button:active,
-		header button:hover,
-		header button:active,
-		.tabs > label:hover,
-		.tabs > label:active {
-			background-color: black;
-		}
 		
 		.dropdown {
 			display: none;
@@ -346,10 +422,20 @@ body > header.focus {
 				background-repeat: repeat-x;
 				background-size: 100% 1px;
 			}
- 
+
+@keyframes loader {
+	from {
+		background-position: 0 0;
+	}
+	
+	to {
+		background-position: -700px 0;
+	}
+}
+
 #loader {
 	display: none;
-	position: absolute;
+	position: fixed;
 	z-index: 100;
 	top: 50%;
 	left: 50%;
@@ -363,7 +449,7 @@ body > header.focus {
 	text-align: center;
 	text-shadow: 0 1px white;
 	
-	animation: 1s loader infinite steps(7);
+	animation: loader 1s infinite steps(7);
 }
 
 body[data-loading] > #loader {
@@ -397,10 +483,6 @@ body[data-loading] > #loader {
 	.segmented-control > input[type="radio"] + label {
 		padding: .1em .5em;
 		font-size: .8em;
-	}
-	
-	#currentuser {
-		max-width: 3em;
 	}
 }
 
@@ -454,25 +536,38 @@ body[data-loading] > #loader {
 	}
 	
 	.tabs > input + label,
-	.tabs > input:checked + label {
+	.tabs > input:checked + .tab,
+	.tab.active {
 		animation: none;
 	}
 	
-	.tabs > input:checked + label {
+	.tabs > input:checked + .tab,
+	.tab.active {
 		top: 0;
 	}
 }
 
-html.page > body {
+html.document > body {
 	border-top-width: 3.4em;
 }
 
-	html.page > body > header,
-	html.page > body > header:hover,
-	html.page > body > header:active,
-	html.page > body > header.focus {
+	html.document > body > header,
+	html.document > body > header:hover,
+	html.document > body > header:active,
+	html.document > body > header.focus {
 		position: fixed;
 		transform: translateY(100%);
+	}
+	
+	html.document .tabs > input + label,
+	html.document .tabs > input:checked + .tab,
+	html.document .tab.active {
+		animation: none;
+	}
+	
+	html.document .tabs > input:checked + .tab,
+	html.document .tab.active {
+		top: 0;
 	}
 
 ::selection {

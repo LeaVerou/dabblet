@@ -34,6 +34,7 @@ var gist = {
 		o.method = o.method || 'GET';
 		o.id = o.id || '';
 		o.rev = o.rev || '';
+		o.accepted = o.accepted || [];
 		
 		var anon = o.anon || o.method === 'GET';
 		
@@ -54,9 +55,9 @@ var gist = {
 			url: 'https://api.github.com/' + path + (!o.anon && window.ACCESS_TOKEN? '?access_token=' + ACCESS_TOKEN : ''),
 			headers: o.headers,
 			callback: function(xhr) {				
-				var data = JSON.parse(xhr.responseText);
+				var data = xhr.responseText? JSON.parse(xhr.responseText) : null;
 				
-				if(data.message) {
+				if (data && data.message && o.accepted.indexOf(xhr.status) === -1) {
 					alert('Sorry, I got a ' + xhr.status + ' (' + data.message + ')');
 				}
 				else {
@@ -73,6 +74,10 @@ var gist = {
 			callback: function(data) {
 				window.user = data;
 				
+				document.documentElement.classList.add('logged-in');
+				
+				$u.event.fire(window, 'gotUserInfo');
+				
 				callback && callback(data);
 			}
 		});
@@ -83,7 +88,7 @@ var gist = {
 	},
 	
 	getUserURL: function(user) {
-		return 'https://gist.github.com/' + user.login;
+		return '/user/' + user.login;
 	},
 	
 	save: function(options){
@@ -110,7 +115,7 @@ var gist = {
 			id: anonymous || options.forceNew? null : id,
 			method: 'POST',
 			headers: {
-				'Content-Type': 'text/plain; charset=UTF-8'
+				'Content-Type': 'application/json; charset=UTF-8'
 			},
 			callback: function(data, xhr) {
 				if(data.id) {
@@ -303,6 +308,7 @@ var Dabblet = {
 				currentuser.innerHTML = gist.getUserHTML(user);
 				currentuser.href = gist.getUserURL(user);
 				currentuser.parentNode.className = currentuser.parentNode.className.replace('-inactive-', '-');
+				$('.my-profile').href = '/user/' + user.login;
 			}
 			
 			if(window['save-button']) {
@@ -335,6 +341,14 @@ if(!$('#loader')) {
 		inside: 'body'
 	});
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+	if(ACCESS_TOKEN) {
+		gist.getUser(function(user){
+			Dabblet.user.afterLogin(user);
+		});
+	}
+});
 
 // If only :focus and :checked bubbled...
 (function() {
