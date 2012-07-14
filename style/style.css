@@ -547,10 +547,10 @@ body[data-seethrough] .line-highlight {
 	#abslength:after {
 		border: 0;
 		background: 
-			repeating-linear-gradient(left, transparent, transparent 19px, rgba(255,255,255,.6) 19px, rgba(255,255,255,.6) 20px) left top no-repeat,
-			repeating-linear-gradient(left, transparent, transparent 4px, rgba(255,255,255,.4) 4px, rgba(255,255,255,.4) 5px) left top no-repeat,
+			linear-gradient(left, transparent 19px, rgba(255,255,255,.6) 19px) left top repeat-x,
+			linear-gradient(left, transparent 4px, rgba(255,255,255,.4) 4px) left top repeat-x,
 			url(/img/noise.png), linear-gradient(hsla(200, 10%, 20%, .8), hsl(200, 10%, 20%));
-		background-size: 100% 10px, 100% 5px, auto, auto;
+		background-size: 20px 10px, 5px 5px, auto, auto;
 		box-shadow: none;
 	}
 	
