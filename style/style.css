@@ -193,8 +193,7 @@ html.supports-range label.slider {
 	height: 100%;
 	box-sizing: border-box;
 	overflow: auto;
-	background: url(/img/noise.png), 
-				linear-gradient(left, hsl(24,20%,91%) 1px, transparent 1px) 2.8em 0 no-repeat;
+	background: url(/img/noise.png);
 	background-color: hsl(24, 20%, 95%);
 	font: 100%/1.5 Monaco, Consolas, Inconsolata, 'Deja Vu Sans Mono', 'Droid Sans Mono', 'Andale Mono', 'Lucida Console', monospace;
 	tab-size: 4;
@@ -226,10 +225,15 @@ body[data-seethrough] .editor.page > pre > span.token {
 	.editor.page > pre {
 		position: relative;
 		padding: 1em 1.5em 1em 3em;
+		background: linear-gradient(left, hsl(24,20%,91%) 1px, transparent 1px) -3px 0 repeat-y;
+		background-size: 2px auto;
+		background-origin: content-box;
 		overflow: visible;
 		word-wrap: normal;
 		font: inherit;
 		outline: none;
+		min-height: 100%;
+		box-sizing: border-box;
 	}
 	
 #result {
