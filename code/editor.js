@@ -429,11 +429,11 @@ var _ = window.Editor = function(pre) {
 		var highlighter = that.lineHighlight,
 			lines = (content.match(CRLF) || []).length,
 			line = (content.slice(0, ss).match(CRLF) || []).length,
-			lineHeight = parseFloat(getComputedStyle(this).height)/lines;
+			lineHeight = parseFloat(getComputedStyle(this).lineHeight),
+			lineHeightFigure = lineHeight.substring(0, lineHeight.length - 2);
 
 		highlighter.setAttribute('data-line', line + 1);
-		highlighter.style.height = lineHeight + 'px';
-		highlighter.style.top = line * lineHeight + 'px';
+		highlighter.style.top = line * lineHeightFigure + 'px';
 	});
 	
 	$u.event.fire(this.pre, 'caretmove');
