@@ -195,7 +195,7 @@ html.supports-range label.slider {
 	overflow: auto;
 	background: url(/img/noise.png);
 	background-color: hsl(24, 20%, 95%);
-	font: 100%/1.5 Monaco, Consolas, Inconsolata, 'Deja Vu Sans Mono', 'Droid Sans Mono', 'Andale Mono', 'Lucida Console', monospace;
+	font: 100%/1.5em Monaco, Consolas, Inconsolata, 'Deja Vu Sans Mono', 'Droid Sans Mono', 'Andale Mono', 'Lucida Console', monospace;
 	tab-size: 4;
 	word-wrap: normal;
 	text-shadow: 0 1px white;
