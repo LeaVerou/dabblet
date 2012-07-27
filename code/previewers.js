@@ -57,7 +57,6 @@ var _ = self.Previewer = function(id, updater, type) {
 			
 			if(!token || !valid && oldToken) {
 				previewer.classList.remove('active');
-				previewer.style.display = '';
 			}
 		}
 	});
@@ -133,9 +132,9 @@ new Previewer('abslength', function(code) {
 		style.marginLeft = -num/2 + unit;
 		
 		style.display = 'block';
-		
 		var width = this.offsetWidth;
-
+		style.display = '';
+		
 		if(width > innerWidth || width < 9) {
 			valid = false;
 		}
