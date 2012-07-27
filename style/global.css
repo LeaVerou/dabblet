@@ -315,6 +315,7 @@ body > header.focus {
 		.dropdown:before {
 			content: '';
 			position: absolute;
+			z-index: -1;
 			top: -6px;
 			left: 2.5em;
 			width: 12px;
