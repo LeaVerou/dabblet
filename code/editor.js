@@ -429,10 +429,11 @@ var _ = window.Editor = function(pre) {
 		var highlighter = that.lineHighlight,
 			lines = (content.match(CRLF) || []).length,
 			line = (content.slice(0, ss).match(CRLF) || []).length,
-			lineHeight = parseFloat(getComputedStyle(this).height)/lines;
+			lineHeightFigure = parseFloat(getComputedStyle(highlighter).lineHeight),
+			height = parseFloat(getComputedStyle(highlighter).height),
+			lineHeight = lineHeightFigure === height? height : Math.floor(lineHeightFigure);
 
 		highlighter.setAttribute('data-line', line + 1);
-		highlighter.style.height = lineHeight + 'px';
 		highlighter.style.top = line * lineHeight + 'px';
 	});
 	
