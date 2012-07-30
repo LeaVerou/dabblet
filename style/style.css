@@ -193,7 +193,7 @@ html.supports-range label.slider {
 	height: 100%;
 	box-sizing: border-box;
 	overflow: auto;
-	background: url(/img/noise.png);
+	background: url(/img/noise.png), linear-gradient(left, hsl(24,20%,91%) 1px, transparent 1px) 2.8em 0 no-repeat;
 	background-color: hsl(24, 20%, 95%);
 	font: 100%/1.5 Monaco, Consolas, Inconsolata, 'Deja Vu Sans Mono', 'Droid Sans Mono', 'Andale Mono', 'Lucida Console', monospace;
 	tab-size: 4;
@@ -225,15 +225,10 @@ body[data-seethrough] .editor.page > pre > span.token {
 	.editor.page > pre {
 		position: relative;
 		padding: 1em 1.5em 1em 3em;
-		background: linear-gradient(left, hsl(24,20%,91%) 1px, transparent 1px) -3px 0 repeat-y;
-		background-size: 2px auto;
-		background-origin: content-box;
 		overflow: visible;
 		word-wrap: normal;
 		font: inherit;
 		outline: none;
-		min-height: 100%;
-		box-sizing: border-box;
 	}
 	
 #result {
@@ -470,14 +465,14 @@ body[data-seethrough] .line-highlight {
 		border-left-width:0;
 		margin-left: -6px;
 		background: white;
-		background: linear-gradient(-45deg, transparent 48%, white 48%);
+		background: linear-gradient(135deg, transparent 48%, white 48%);
 		transform: rotate(45deg);
 		box-shadow: inherit;
 	}
 	
 	.previewer.flipped:before {
 		top: -6px;
-		background: linear-gradient(135deg, transparent 48%, white 48%);
+		background: linear-gradient(315deg, transparent 48%, white 48%);
 	}
 	
 	.previewer:after,
@@ -538,7 +533,7 @@ body[data-seethrough] .line-highlight {
 	#abslength:before {
 		bottom: -7px;
 		background: url(/img/noise.png),
-					linear-gradient(-45deg, hsla(200, 10%, 20%, 0) 47%, hsl(200, 10%, 20%) 48%);
+					linear-gradient(135deg, hsla(200, 10%, 20%, 0) 47%, hsl(200, 10%, 20%) 48%);
 	}
 	
 	#abslength[data-size="small"]:before {
