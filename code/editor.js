@@ -429,9 +429,10 @@ var _ = window.Editor = function(pre) {
 		var highlighter = that.lineHighlight,
 			lines = (content.match(CRLF) || []).length,
 			line = (content.slice(0, ss).match(CRLF) || []).length,
-			lineHeightFigure = parseFloat(getComputedStyle(highlighter).lineHeight),
 			height = parseFloat(getComputedStyle(highlighter).height),
-			lineHeight = lineHeightFigure === height? height : Math.floor(lineHeightFigure);
+			lineHeight = parseFloat(getComputedStyle(highlighter).lineHeight),
+			// To choose the rendered height, WebKit floors the lineHeight. Copy this behaviour
+			lineHeight = lineHeight === height? height : Math.floor(lineHeight);
 
 		highlighter.setAttribute('data-line', line + 1);
 		highlighter.style.top = line * lineHeight + 'px';
