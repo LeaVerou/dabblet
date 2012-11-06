@@ -465,6 +465,7 @@ body[data-seethrough] .line-highlight {
 		border-top-width:0;
 		border-left-width:0;
 		margin-left: -6px;
+		border-radius: 12px 0 0;
 		background: white;
 		background: linear-gradient(135deg, transparent 48%, white 48%);
 		transform: rotate(45deg);
@@ -474,6 +475,7 @@ body[data-seethrough] .line-highlight {
 	.previewer.flipped:before {
 		top: -6px;
 		background: linear-gradient(315deg, transparent 48%, white 48%);
+		border-radius: 0 0 12px;
 	}
 	
 	.previewer:after,
@@ -537,13 +539,25 @@ body[data-seethrough] .line-highlight {
 					linear-gradient(135deg, hsla(200, 10%, 20%, 0) 47%, hsl(200, 10%, 20%) 48%);
 	}
 	
+	#abslength.flipped:before {
+		border: inherit;
+		border-right-width: 0;
+		border-bottom-width: 0;
+		background: url(/img/noise.png),
+					linear-gradient(135deg, hsla(200, 10%, 20%, 0.6), hsla(200, 10%, 20%, 0.8) 46%, transparent 46%);
+	}
+
 	#abslength[data-size="small"]:before {
 		width: 6px;
 		height: 6px;
 		bottom: -3px;
 		margin-left: -3px;
 	}
-	
+
+	#abslength.flipped[data-size="small"]:before {
+		top: -3px;
+	}
+
 	#abslength:after {
 		border: 0;
 		background: 
