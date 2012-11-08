@@ -68,7 +68,7 @@
 		</form>
 	</div>
 	
-	<div class="with-dropdown">
+	<div class="with-dropdown" id="cloud">
 		<button id="save-button" class="with-symbol" title="Save">☁</button>
 		<menu class="dropdown">
 			<a href="/" onclick="Dabblet.wipe()" class="command" data-keyboard="⌘N">New dabblet</a>
@@ -167,11 +167,11 @@ min-height: 100%;</pre>
 
 <script src="/code/util.js"></script><!-- to be removed -->
 <script src="/code/utopia.js"></script>
-<script>!!document.createElement("a").classList || $u.script("/code/classList.min.js");</script>
 <script src="/code/selection.js"></script>
 <script src="/code/code-highlight.js"></script>
 
 <script src="/code/editor.js"></script>
+<!--[if lte IE 9]><script src="/code/classList.min.js"></script><![endif]-->
 <script src="/code/global.js"></script>
 <script src="/code/dabblet.js"></script>
 

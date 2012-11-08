@@ -459,8 +459,8 @@ document.onkeydown = function(evt) {
 	}
 };
 
-// Supports sliders?
-(function(){
+(function() {
+	// Supports sliders?
 	var slider = $u.element.create('input', {
 		prop: {
 			type: 'range'
@@ -470,4 +470,5 @@ document.onkeydown = function(evt) {
 	if(slider.type === 'range') {
 		document.documentElement.classList.add('supports-range');
 	}
+		
 })();

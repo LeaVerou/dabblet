@@ -85,7 +85,6 @@ button,
 	padding: .45em .6em;
 	border: 0;
 	border-radius: .3em;
-	background: inherit;
 	color: inherit;
 	font: inherit;
 	text-align: center;
@@ -99,8 +98,8 @@ button {
 	float: left;
 	border: 1px solid rgba(0,0,0,.4);
 	margin: 0 .2em;
+	background: url(/img/noise.png);
 	white-space: nowrap;
-	background-image: url(/img/noise.png);
 	box-shadow: rgba(255, 255, 255, .4) 0 1px 0 inset, 
 				rgba(255, 255, 255, .3) 0 25px 30px -12px inset, 
 				rgba(0, 0, 0, .6) 0 1px 2px;
@@ -218,6 +217,10 @@ body > header.focus {
 			max-width: 12em;
 			overflow: hidden;
 			text-overflow: ellipsis;
+		}
+		
+		.no-cors #currentuser {
+			display: none;
 		}
 		
 		@media (max-width: 1000px) {

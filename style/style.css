@@ -165,6 +165,10 @@ html.supports-range label.slider {
 		border-left: 0;
 		border-right: 0;
 	}
+	
+.no-cors #cloud {
+	display: none;
+}
 
 .amp {
 	font: italic 160%/.5 Baskerville, 'Palatino Linotype', 'Goudy Old Style', Constantia, Palatino, serif;
@@ -300,6 +304,7 @@ body[data-page="result"] > #result {
 	right: 0;
 	padding-left: .6em;
 	margin-top: 1em;
+	background: url(/img/noise.png) hsla(24, 20%, 50%,.05);
 	background: url(/img/noise.png), linear-gradient(left, hsla(24, 20%, 50%,.08) 70%, hsla(24, 20%, 50%,0));
 }
 

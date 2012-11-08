@@ -10,6 +10,7 @@ $gist_id = $gist_id[1];
 
 if($gist_id) {
 	preg_match('#\bgist\/[\da-f]+\/([\da-f]+)#i', $_SERVER['REQUEST_URI'], $gist_rev);
+
 	$gist_rev = $gist_rev[1];
 	
 	$uri = "https://api.github.com/gists/$gist_id";

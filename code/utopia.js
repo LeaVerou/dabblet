@@ -204,7 +204,10 @@ var _ = window.Utopia = {
 		prop: function (element, properties) {
 			if (properties) {
 				for (var prop in properties) {
-					element[prop] = properties[prop];
+					try { // Bloody IE <= 9
+						element[prop] = properties[prop];
+					}
+					catch(e) {}
 				}
 			}
 			
@@ -343,11 +346,11 @@ var _ = window.Utopia = {
 			method = o.method || 'GET',
 			data = o.data || '';
 		
-		xhr.open(method, o.url + (method === 'GET' && data? '?' + data : ''), true);
-		
 		o.headers = o.headers || {};
 		
-		if(method !== 'GET' && !o.headers['Content-type'] && !o.headers['Content-Type']) {
+		xhr.open(method, o.url + (method === 'GET' && data? '?' + data : ''), !o.sync);
+		
+		if (method !== 'GET' && !o.headers['Content-type'] && !o.headers['Content-Type']) {
 			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		}
 		
@@ -355,35 +358,58 @@ var _ = window.Utopia = {
 			xhr.setRequestHeader(header, o.headers[header]);
 		}
 		
-		xhr.onreadystatechange = function(){
+		var callback = function() {
+			document.body.removeAttribute('data-loading');
 			
-			if(xhr.readyState === 4) {
-				document.body.removeAttribute('data-loading');
-				
-				o.callback(xhr);
+			o.callback(xhr);
+		};
+		
+		xhr.onreadystatechange = function(){
+			if (xhr.readyState === 4) {
+				callback();
 			}
 		};
 		
 		xhr.send(method === 'GET'? null : data);
-	
+		
 		return xhr;
 	},
 	
 	/**
 	 * Lazy loads an external script
 	 */
-	script: function(url, callback, doc) {
+	script: function(url, callback, doc, sync) {
 		doc = doc || document;
 		
-		return _.element.create({
-			tag: 'script',
-			properties: {
-				src: url,
-				async: true,
-				onload: callback
-			},
-			inside: doc.documentElement
-		});
+		var code;
+		
+		if (sync) {
+			_.xhr({
+				url: url,
+				callback: function (xhr) { code = xhr.responseText; },
+				sync: true
+			});
+		}
+		
+		var script = document.createElement('script');
+		
+		if (sync) {
+			script.innerHTML = code;
+			script.onload = callback;
+		}
+		else {
+			script.src = url;
+			script.async = true;
+		}
+		
+		doc.documentElement.appendChild(script);
+		
+		if (sync) {
+			// console.log(url, document.body.classList);
+			callback && callback.call(script);
+		}
+		
+		return script;
 	},
 	
 	/**

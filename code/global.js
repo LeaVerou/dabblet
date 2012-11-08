@@ -350,8 +350,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 });
 
-// If only :focus and :checked bubbled...
 (function() {
+
+	// If only :focus and :checked bubbled...
 	function ancestorClass(action, className, element) {
 		var ancestor = element;
 		
@@ -370,4 +371,10 @@ document.addEventListener('DOMContentLoaded', function() {
 			ancestorClass('remove', 'focus', this);
 		}
 	});
+	
+	// Supports CORS?
+	if (!('withCredentials' in new XMLHttpRequest)) {
+		document.documentElement.classList.add('no-cors');
+	}
+	
 })();
