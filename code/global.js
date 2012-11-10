@@ -362,7 +362,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		} while(ancestor && ancestor != document.body);
 	}
 	
-	$u.event.bind('header a, header input, header button, header [tabindex="0"], pre', {
+	$u.event.bind('header a, header input, header button, header [tabindex="0"], code', {
 		focus: function(){
 			ancestorClass('add', 'focus', this);
 		},

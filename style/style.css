@@ -217,14 +217,15 @@ body[data-seethrough] > .editor.page {
 }
 
 body[data-seethrough] .editor.page,
-body[data-seethrough] .editor.page > pre,
-body[data-seethrough] .editor.page > pre > span.token {
+body[data-seethrough] .editor.page > code,
+body[data-seethrough] .editor.page > code > span.token {
 	text-shadow: 0 .1em white, 0 -.1em white, .1em 0 white, -.1em 0 white,
 				 .1em .1em white, -.1em .1em white, .1em -.1em white, -.1em -.1em white;
 	text-shadow: 0 0 0 .1em white;
 }
 
-	.editor.page > pre {
+	.editor.page > code {
+		display: block;
 		position: relative;
 		padding: 1em 1.5em 1em 3em;
 		overflow: visible;
@@ -308,7 +309,7 @@ body[data-page="result"] > #result {
 	background: url(/img/noise.png), linear-gradient(left, hsla(24, 20%, 50%,.08) 70%, hsla(24, 20%, 50%,0));
 }
 
-section:not(.focus) > .line-highlight,
+.editor.page:not(.focus) > .line-highlight,
 body[data-seethrough] .line-highlight {
 	display: none;
 }

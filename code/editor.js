@@ -318,7 +318,7 @@ var _ = window.Editor = function(pre) {
 				var ss = this.selectionStart,
 					se = this.selectionEnd;
 			
-				Highlight.init(this);
+				Prism.highlightElement(this);
 				
 				// Dirty fix to #2
 				if(!/\n$/.test(code)) {

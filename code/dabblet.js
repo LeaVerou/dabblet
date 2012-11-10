@@ -354,11 +354,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 });
 
-$$('.editor.page > pre').forEach(function(pre){
-	new Editor(pre);
+$$('.editor.page > code').forEach(function(code){
+	new Editor(code);
 	
-	$u.event.bind(pre.parentNode, 'click', function(evt) {
-		$('pre', this).focus();
+	$u.event.bind(code.parentNode, 'click', function(evt) {
+		$('code', this).focus();
 		
 		evt.stopPropagation();
 	});

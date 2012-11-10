@@ -118,19 +118,15 @@
 </header>
 
 <iframe class="page" id="result" name="result" src="/result.html"></iframe>
-<section id="css-container" class="editor page">
-	<pre id="css" lang="css" contenteditable spellcheck="false">/**
+<pre id="css-container" class="editor page"><code id="css" spellcheck="false" class="language-css" contenteditable>/**
  * The first commented line is your dabblet’s title
  */
 
 background: #f06;
 background: linear-gradient(45deg, #f06, yellow);
-min-height: 100%;</pre>
-</section>
+min-height: 100%;</code></pre>
 
-<section id="html-container" class="editor page">
-<pre id="html" lang="html" contenteditable spellcheck="false">&lt;!-- content to be placed inside &lt;body>…&lt;/body> --></pre>
-</section>
+<pre id="html-container" class="editor page"><code id="html" spellcheck="false" class="language-html" contenteditable>&lt;!-- content to be placed inside &lt;body>…&lt;/body> --></code></pre>
 
 <div id="color" class="previewer"></div>
 <div id="abslength" class="previewer"></div>
@@ -168,6 +164,7 @@ min-height: 100%;</pre>
 <script src="/code/util.js"></script><!-- to be removed -->
 <script src="/code/utopia.js"></script>
 <script src="/code/selection.js"></script>
+<script src="/code/prism.js"></script>
 <script src="/code/code-highlight.js"></script>
 
 <script src="/code/editor.js"></script>
