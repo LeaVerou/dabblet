@@ -16,7 +16,7 @@ var _ = self.Prism = {
 		},
 		
 		// Deep clone a language definition (e.g. to extend it)
-		clone: function (o, redef) {
+		clone: function (o) {
 			var type = _.util.type(o);
 
 			switch (type) {
@@ -27,10 +27,6 @@ var _ = self.Prism = {
 						if (o.hasOwnProperty(key)) {
 							clone[key] = _.util.clone(o[key]);
 						}
-					}
-					
-					for (var key in redef) {
-						clone[key] = redef[key];
 					}
 					
 					return clone;
@@ -44,6 +40,16 @@ var _ = self.Prism = {
 	},
 	
 	languages: {
+		extend: function (id, redef) {
+			var lang = _.util.clone(_.languages[id]);
+			
+			for (var key in redef) {
+				lang[key] = redef[key];
+			}
+			
+			return lang;
+		},
+		
 		// Insert a token before another token in a language literal
 		insertBefore: function (inside, before, insert, root) {
 			root = root || _.languages;
@@ -347,7 +353,7 @@ Prism.languages.markup = {
 	'doctype': /&lt;!DOCTYPE.+?&gt;/,
 	'cdata': /&lt;!\[CDATA\[[\w\W]+?]]&gt;/i,
 	'tag': {
-		pattern: /&lt;\/?[\w:-]+\s*[\w\W]*?&gt;/gi,
+		pattern: /&lt;\/?[\w:-]+\s*(?:\s+[\w:-]+(?:=(?:("|')(\\?[\w\W])*?\1|\w+))?\s*)*&gt;/gi,
 		inside: {
 			'tag': {
 				pattern: /^&lt;\/?[\w:-]+/i,
@@ -357,9 +363,9 @@ Prism.languages.markup = {
 				}
 			},
 			'attr-value': {
-				pattern: /=(('|")[\w\W]*?(\2)|[^\s>]+)/gi,
+				pattern: /=(?:('|")[\w\W]*?(\1)|[^\s>]+)/gi,
 				inside: {
-					'punctuation': /=/g
+					'punctuation': /=|&gt;|"/g
 				}
 			},
 			'punctuation': /\/?&gt;/g,
@@ -421,7 +427,7 @@ Prism.languages.clike = {
 	'ignore': /&(lt|gt|amp);/gi,
 	'punctuation': /[{}[\];(),.:]/g
 };;
-Prism.languages.javascript = Prism.util.clone(Prism.languages.clike, {
+Prism.languages.javascript = Prism.languages.extend('clike', {
 	'keyword': /\b(var|let|if|else|while|do|for|return|in|instanceof|function|new|with|typeof|try|catch|finally|null|break|continue)\b/g
 });
 
@@ -446,3 +452,97 @@ if (Prism.languages.markup) {
 		}
 	});
 };
+(function(){
+
+if(!window.Prism) {
+	return;
+}
+
+function $$(expr, con) {
+	return Array.prototype.slice.call((con || document).querySelectorAll(expr));
+}
+
+var CRLF = crlf = /\r?\n|\r/g;
+    
+function highlightLines(pre, lines, classes) {
+	var ranges = lines.replace(/\s+/g, '').split(','),
+	    offset = +pre.getAttribute('data-line-offset') || 0;
+	
+	var lineHeight = parseFloat(getComputedStyle(pre).lineHeight);
+
+	for (var i=0, range; range = ranges[i++];) {
+		range = range.split('-');
+					
+		var start = +range[0],
+		    end = +range[1] || start;
+		
+		var line = document.createElement('div');
+		
+		line.textContent = Array(end - start + 2).join(' \r\n');
+		line.className = (classes || '') + ' line-highlight';
+		line.setAttribute('data-start', start);
+		
+		if(end > start) {
+			line.setAttribute('data-end', end);
+		}
+	
+		line.style.top = (start - offset - 1) * lineHeight + 'px';
+		
+		(pre.querySelector('code') || pre).appendChild(line);
+	}
+}
+
+function applyHash() {
+	var hash = location.hash.slice(1);
+	
+	// Remove pre-existing temporary lines
+	$$('.temporary.line-highlight').forEach(function (line) {
+		line.parentNode.removeChild(line);
+	});
+	
+	var range = (hash.match(/\.([\d,-]+)$/) || [,''])[1];
+	
+	if (!range || document.getElementById(hash)) {
+		return;
+	}
+	
+	var id = hash.slice(0, hash.lastIndexOf('.')),
+	    pre = document.getElementById(id);
+	    
+	if (!pre) {
+		return;
+	}
+	
+	if (!pre.hasAttribute('data-line')) {
+		pre.setAttribute('data-line', '');
+	}
+
+	highlightLines(pre, range, 'temporary ');
+
+	document.querySelector('.temporary.line-highlight').scrollIntoView();
+}
+
+var fakeTimer = 0; // Hack to limit the number of times applyHash() runs
+
+Prism.hooks.add('after-highlight', function(env) {
+	var pre = env.element.parentNode;
+	var lines = pre && pre.getAttribute('data-line');
+	
+	if (!pre || !lines || !/pre/i.test(pre.nodeName)) {
+		return;
+	}
+	
+	clearTimeout(fakeTimer);
+	
+	$$('.line-highlight', pre).forEach(function (line) {
+		line.parentNode.removeChild(line);
+	});
+	
+	highlightLines(pre, lines);
+	
+	fakeTimer = setTimeout(applyHash, 1);
+});
+
+addEventListener('hashchange', applyHash);
+
+})();;
