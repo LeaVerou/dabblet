@@ -1,6 +1,6 @@
 (function(){
 
-Object.defineProperty(HTMLElement.prototype, 'selectionStart', {
+Object.defineProperty(HTMLPreElement.prototype, 'selectionStart', {
 	get: function() {
 		var selection = getSelection();
 		
@@ -35,7 +35,7 @@ Object.defineProperty(HTMLElement.prototype, 'selectionStart', {
 	configurable: true
 });
 
-Object.defineProperty(HTMLElement.prototype, 'selectionEnd', {
+Object.defineProperty(HTMLPreElement.prototype, 'selectionEnd', {
 	get: function() {
 		var selection = getSelection();
 		
@@ -51,7 +51,7 @@ Object.defineProperty(HTMLElement.prototype, 'selectionEnd', {
 	configurable: true
 });
 
-HTMLElement.prototype.setSelectionRange = function(ss, se) {
+HTMLPreElement.prototype.setSelectionRange = function(ss, se) {
 	var range = document.createRange(),
 	    offset = findOffset(this, ss);
 

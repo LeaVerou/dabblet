@@ -15,7 +15,7 @@ var _ = window.Incrementable = function(textField, multiplier, units) {
 	var me = this;
 
 	this.textField = textField;
-
+	
 	this.step = +textField.getAttribute('step') || 
 				+textField.getAttribute('data-step') || 1;
 
@@ -25,7 +25,7 @@ var _ = window.Incrementable = function(textField, multiplier, units) {
 		if(evt.ctrlKey) { return .1; }
 		
 		return 1;
-	};
+	}
 
 	if(units) {
 		this.units = units;
@@ -40,7 +40,7 @@ var _ = window.Incrementable = function(textField, multiplier, units) {
 			me.changed = false;
 			
 			// Up or down arrow pressed, check if there's something
-			// increment/decrement-able under the caret
+			// increment/decrement-able where the caret is
 			var caret = this.selectionStart, text = this.value,
 				regex = new RegExp('^([\\s\\S]{0,' + caret + '}[^-0-9\\.])(-?[0-9]*(?:\\.?[0-9]+)(?:' + me.units + '))\\b', 'i'),
 				property = 'value' in this? 'value' : 'textContent';
@@ -48,7 +48,9 @@ var _ = window.Incrementable = function(textField, multiplier, units) {
 			this[property] = this[property].replace(regex, function($0, $1, $2) {
 				if($1.length <= caret && $1.length + $2.length >= caret) {
 					me.changed = true;
-					return $1 + me.stepValue($2, evt.keyCode == 40, multiplier);
+					var stepValue = me.stepValue($2, evt.keyCode == 40, multiplier);
+					caret = caret + (stepValue.length - $2.length);
+					return $1 + stepValue;
 				}
 				else {
 					return $1 + $2;
@@ -60,13 +62,19 @@ var _ = window.Incrementable = function(textField, multiplier, units) {
 				
 				evt.preventDefault();
 				evt.stopPropagation();
+				
+				// Fire input event
+				var evt = document.createEvent("HTMLEvents");
+				
+				evt.initEvent('input', true, true );
+		
+				this.dispatchEvent(evt);
 			}
 		}
 	}, false);
 
 	this.textField.addEventListener('keypress', function(evt) {
-		if(me.changed && me.checkModifiers(evt) 
-			&& (evt.keyCode == 38 || evt.keyCode == 40))
+		if(me.changed && (evt.keyCode == 38 || evt.keyCode == 40))
 			evt.preventDefault();
 			evt.stopPropagation();
 			me.changed = false;
@@ -95,9 +103,6 @@ _.prototype = {
 	units: '|%|deg|px|r?em|ex|ch|in|cm|mm|pt|pc|vmin|vw|vh|gd|m?s'
 };
 
-
-})();
-
 function precision(number) {
 	number = (number + '').replace(/^0+/, '');
 	
@@ -115,3 +120,5 @@ function precision(number) {
 		decimals: number.length - 1 - dot
 	};
 }
+
+})();

@@ -108,6 +108,7 @@ var gist = {
 		var id = gist.id || '',
 			cssCode = css.textContent,
 			htmlMarkup = html.textContent,
+			jsCode = javascript.textContent,
 			title = Dabblet.title(cssCode);
 			
 		gist.request({
@@ -131,6 +132,9 @@ var gist = {
 					},
 					"dabblet.html": htmlMarkup? {
 						"content": htmlMarkup
+					} : null,
+					"dabblet.js": jsCode? {
+						"content": jsCode
 					} : null,
 					"settings.json": {
 						"content": JSON.stringify(Dabblet.settings.current(null, 'file'))
@@ -170,34 +174,48 @@ var gist = {
 				
 				var cssFile = files['dabblet.css'],
 					htmlFile = files['dabblet.html'],
+					jsFile = files['dabblet.js'],
 					settings = files['settings.json'];
 
-				if(!cssFile || !htmlFile) {
+				if(!cssFile || !htmlFile || !jsFile) {
 					for(var filename in files) {
 						var ext = filename.slice(filename.lastIndexOf('.'));
 						
-						if(!cssFile && ext == '.css') {
+						if (!cssFile && ext == '.css') {
 							cssFile = files[filename];
 						}
 
-						if(!htmlFile && ext == '.html') {
+						if (!htmlFile && ext == '.html') {
 							htmlFile = files[filename];
 						}
 						
-						if(cssFile && htmlFile) {
+						if (!jsFile && ext == '.js') {
+							jsFile = files[filename];
+						}
+						
+						if (cssFile && htmlFile && jsFile) {
 							break;
 						}
 					}
 				}
 				
-				if(htmlFile) {
+				if (htmlFile) {
 					html.textContent = htmlFile.content;
 					html.onkeyup();
 				}
 				
-				if(cssFile) {
+				if (cssFile) {
 					css.textContent = cssFile.content;
 					css.onkeyup();
+				}
+				
+				if (jsFile) {
+					javascript.textContent = jsFile.content;
+					javascript.onkeyup();
+					
+					if (!Dabblet.embedded) {
+						Dabblet.update.JavaScript();
+					}
 				}
 				
 				var defaultSettings = Dabblet.settings.current();
@@ -362,7 +380,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		} while(ancestor && ancestor != document.body);
 	}
 	
-	$u.event.bind('header a, header input, header button, header [tabindex="0"], code', {
+	$u.event.bind('header a, header input, header button, header [tabindex="0"], pre', {
 		focus: function(){
 			ancestorClass('add', 'focus', this);
 		},

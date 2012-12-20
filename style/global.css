@@ -121,15 +121,21 @@ button:active,
 }
 
 header ~ * button,
-header ~ * .button {
+header ~ * .button,
+header ~ button,
+header ~ .button {
 	color: black;
 	text-shadow: 0 1px 1px white;
 }
 
 header ~ * button:hover,
 header ~ * .button:hover,
+header ~ button:hover,
+header ~ .button:hover,
 header ~ * button:active,
-header ~ * .button:active {
+header ~ * .button:active,
+header ~ button:active,
+header ~ .button:active {
 	color: white;
 	text-shadow: 0 -1px 1px black, 0 -1px 2px black;
 }
@@ -161,7 +167,7 @@ body > header.focus {
 		float: left;
 		height: 1.3em;
 		margin-right: .1em;
-		font: 190%/1.45 Dabblet, sans-serif;
+		font: 190%/1.6 Dabblet, sans-serif;
 		text-shadow: .05em .05em .1em black;
 		-webkit-transform: translateZ(0); /* fix for chopped letters */
 	}
@@ -179,7 +185,7 @@ body > header.focus {
 		.tabs {
 			display: inline-block;
 			height: .75em;
-			margin: 0 2px 0 -.5em;
+			margin: 0 33px 0 -.5em;
 			white-space: nowrap;
 			font-size: 110%;
 			line-height: 1.4;
@@ -258,9 +264,10 @@ body > header.focus {
 			}
 			
 		a.button[href="/help/"] {
-			float: right;
+			position: absolute;
+			right: 3px;
+			bottom: 5px;
 			background-color: transparent;
-			margin-top: 2px; /* lame fix to make it align with the tabs */
 		}
 		
 		@keyframes flip {

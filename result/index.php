@@ -19,7 +19,11 @@ if($gist_id) {
 		$uri .= "/$gist_rev";
 	}
 	
-	$raw = file_get_contents($uri);
+	try {
+		$raw = file_get_contents($uri);
+	} catch(Exception $e) {
+		echo $e;
+	}
 	
 	if($raw) {
 		if(function_exists('json_decode')) {
@@ -34,6 +38,7 @@ if(!$data || isset($data['message'])) {
 
 $css = $data['files']['dabblet.css']['content'];
 $html = $data['files']['dabblet.html']['content'];
+$js = $data['files']['dabblet.js']['content'];
 $settings = json_decode($data['files']['settings.json']['content'], true);
 
 //print_r($data)
@@ -52,6 +57,15 @@ $settings = json_decode($data['files']['settings.json']['content'], true);
 	|| $settings['settings']['prefixfree']
 	): ?>
 <script src="http://dabblet.com/code/prefixfree.min.js"></script>
+<? endif; ?>
+<? if ($js): ?>
+<script>
+if (parent === window) {
+	document.addEventListener('DOMContentLoaded', function() {
+		<?= $js ?>
+	});
+}
+</script>
 <? endif; ?>
 </head>
 <body><?= $html ?></body>

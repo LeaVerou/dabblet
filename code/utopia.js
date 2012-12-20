@@ -328,9 +328,9 @@ var _ = window.Utopia = {
 				evt.custom = true;
 		
 				if(properties) {
-					_.merge(evt, properties);
+					_.attach(evt, properties);
 				}
-		
+
 				target.dispatchEvent(evt);
 			}
 		}
@@ -378,38 +378,17 @@ var _ = window.Utopia = {
 	/**
 	 * Lazy loads an external script
 	 */
-	script: function(url, callback, doc, sync) {
+	script: function(url, callback, doc) {
 		doc = doc || document;
 		
-		var code;
-		
-		if (sync) {
-			_.xhr({
-				url: url,
-				callback: function (xhr) { code = xhr.responseText; },
-				sync: true
-			});
-		}
-		
-		var script = document.createElement('script');
-		
-		if (sync) {
-			script.innerHTML = code;
-			script.onload = callback;
-		}
-		else {
-			script.src = url;
-			script.async = true;
-		}
-		
-		doc.documentElement.appendChild(script);
-		
-		if (sync) {
-			// console.log(url, document.body.classList);
-			callback && callback.call(script);
-		}
-		
-		return script;
+		return _.element.create('script', {
+			properties: {
+				src: url,
+				async: true,
+				onload: callback
+			},
+			inside: doc.documentElement
+		});
 	},
 	
 	/**

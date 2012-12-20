@@ -233,14 +233,14 @@ var _ = window.Editor = function(pre) {
 			}
 		},
 		
-		paste: function() {
+		paste: function(evt) {
 			var pre = this,
 				ss = pre.selectionStart,
 				se = pre.selectionEnd,
 				selection = ss === se? '': pre.textContent.slice(ss, se);
 				
 			gist.saved = false;
-				
+
 			setTimeout(function(){
 				var newse = pre.selectionEnd,
 					innerHTML = pre.innerHTML;
@@ -272,8 +272,7 @@ var _ = window.Editor = function(pre) {
 		
 		keyup: function(evt) {
 			var keyCode = evt && evt.keyCode || 0,
-				code = this.textContent,
-				id = this.id;
+				code = this.textContent;
 
 			if(keyCode < 9 || keyCode == 13 || keyCode > 32 && keyCode < 41) {
 				$u.event.fire(this, 'caretmove');
@@ -314,7 +313,11 @@ var _ = window.Editor = function(pre) {
 				}
 			}
 			
-			if(keyCode !== 37 && keyCode !== 39) {
+			if (keyCode !== 37 && keyCode !== 39) {
+				$u.event.fire(this, 'contentchange', {
+					keyCode: keyCode
+				});
+				
 				var ss = this.selectionStart,
 					se = this.selectionEnd;
 			
@@ -328,19 +331,6 @@ var _ = window.Editor = function(pre) {
 				if(ss !== null || se !== null) {
 					this.setSelectionRange(ss, se);
 				}
-				
-				if(id === 'css') {
-					document.title = Dabblet.title(code) + ' ✿ dabblet.com';
-				
-					Dabblet.update.CSS(code);
-				}
-				else {
-					Dabblet.update.HTML(code);
-				}
-				
-				if(keyCode) {
-					gist.saved = false;
-				}
 			}
 		},
 		
@@ -351,38 +341,37 @@ var _ = window.Editor = function(pre) {
 		focus: function() {
 			var ss = this.getAttribute('data-ss'),
 				se = this.getAttribute('data-se');
-	
+			var pre = this;
+			
 			if(ss || se) {
-				var pre = this;
 				setTimeout(function(){
 					pre.setSelectionRange(ss, se);
 				}, 2);
 			}
 			
-			if(this.id == 'css' && !window.Incrementable) {
+			function modifiers(evt) {
+				if(evt.altKey) {
+					if(evt.shiftKey) { return 10; }
+					
+					if(evt.ctrlKey) { return .1; }
+					
+					return 1;
+				}
+				
+				return 0;
+			}
+			
+			if(!window.Incrementable) {
 				$u.script('/code/incrementable.js', function() {
-					new Incrementable(css, function(evt) {
-						if(evt.altKey) {
-							if(evt.shiftKey) { return 10; }
-							
-							if(evt.ctrlKey) { return .1; }
-							
-							return 1;
-						}
-						
-						return 0;
-					});
+					that.incrementable = new Incrementable(pre, modifiers);
 				});
+			}
+			else if (!that.incrementable) {
+				that.incrementable = new Incrementable(pre, modifiers);
 			}
 		},
 			
 		blur: function() {
-			if(!gist.saved) {
-				// Save draft
-				localStorage['dabblet.css'] = css.textContent;
-				localStorage['dabblet.html'] = html.textContent;
-			}
-			
 			self.Previewer && Previewer.hideAll();
 		},
 		

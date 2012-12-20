@@ -1,0 +1,13 @@
+RewriteEngine On
+
+RewriteBase /
+RewriteCond %{HTTP_HOST} ^preview\.dabblet\.com
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]
+
+
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ http://preview.dabblet.com/$1 [R=301,L]

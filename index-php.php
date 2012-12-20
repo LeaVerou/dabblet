@@ -16,8 +16,7 @@
 <script src="http://www.google-analytics.com/ga.js" async></script>
 
 </head>
-<body>
-
+<body class="post">
 <header>
 	<h1><a href="/">dabblet</a></h1>
 	
@@ -122,19 +121,13 @@
 	</div>
 </header>
 
-<iframe class="page" id="result" name="result" src="result.html"></iframe>
-<section id="css-container" class="editor page"><pre id="css" spellcheck="false" class="language-css" contenteditable>/**
- * The first commented line is your dabblet’s title
- */
+<iframe class="page" id="result" name="result" src="/result.html"></iframe>
+<section id="css-container" class="editor page"><pre id="css" spellcheck="false" class="language-css" contenteditable><?php echo stripslashes(str_replace('<', '&lt;', $_POST['css'])); ?></pre></section>
 
-background: #f06;
-background: linear-gradient(45deg, #f06, yellow);
-min-height: 100%;</pre></section>
+<section id="html-container" class="editor page"><pre id="html" spellcheck="false" class="language-html" contenteditable><?php echo stripslashes(str_replace('<', '&lt;', $_POST['html'])); ?></pre></section>
 
-<section id="html-container" class="editor page"><pre id="html" spellcheck="false" class="language-html" contenteditable>&lt;!-- content to be placed inside &lt;body>…&lt;/body> --></pre></section>
-
-<section id="javascript-container" class="editor page"><pre id="javascript" spellcheck="false" class="language-javascript" contenteditable>// alert('Hello world!');</pre></section>
-<button id="runjs" title="⌘↩" onclick="Dabblet.update.JavaScript()">Run</button>
+<section id="javascript-container" class="editor page"><pre id="javascript" spellcheck="false" class="language-javascript" contenteditable><?php echo stripslashes(str_replace('<', '&lt;', $_POST['javascript'])); ?></pre></section>
+<button id="runjs" title="⌘↩" onclick="Dabblet.update.JavaScript()">Run JS</button>
 
 <div id="color" class="previewer"></div>
 <div id="abslength" class="previewer"></div>

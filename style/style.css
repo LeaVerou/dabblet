@@ -217,15 +217,14 @@ body[data-seethrough] > .editor.page {
 }
 
 body[data-seethrough] .editor.page,
-body[data-seethrough] .editor.page > code,
-body[data-seethrough] .editor.page > code > span.token {
+body[data-seethrough] .editor.page > pre,
+body[data-seethrough] .editor.page > pre > span.token {
 	text-shadow: 0 .1em white, 0 -.1em white, .1em 0 white, -.1em 0 white,
 				 .1em .1em white, -.1em .1em white, .1em -.1em white, -.1em -.1em white;
 	text-shadow: 0 0 0 .1em white;
 }
 
-	.editor.page > code {
-		display: block;
+	.editor.page > pre {
 		position: relative;
 		padding: 1em 1.5em 1em 3em;
 		overflow: visible;
@@ -243,7 +242,8 @@ body[data-seethrough] .editor.page > code > span.token {
 
 body[data-page="css"] #css-container,
 body[data-page="html"] #html-container,
-body[data-page="all"] .page {
+body[data-page="javascript"] #javascript-container,
+body[data-page="all"] .page:not(#javascript-container) {
 	display: block;
 }
 
@@ -299,6 +299,29 @@ body[data-page="result"] > #result {
 	height: 100% !important;
 }
 
+#runjs {
+	display: none;
+	position: absolute;
+	right: 0;
+	top: 0;
+	margin: 10px 10px 0 0;
+	font-weight: bold;
+	transition-duration: .5s;
+	transition-property: top, right;
+}
+
+body[data-page="javascript"] #runjs {
+	display: block;
+}
+
+body[data-view="split-vertical"] #runjs {
+	right: 50%;
+}
+
+body[data-view="split"] #runjs {
+	top: 50%;
+}
+
 .line-highlight {
 	position: absolute;
 	left: 0;
@@ -314,20 +337,72 @@ body[data-seethrough] .line-highlight {
 	display: none;
 }
 
-	.line-highlight:before {
-		content: attr(data-line);
+	.line-highlight:before,
+	#jserror .line-number {
 		display: inline-block;
 		min-width: 1em;
 		padding: 0 .5em;
 		background: inherit;
-		background-color: hsla(24, 20%, 50%,.4);
-		color: hsl(24, 20%, 95%);
 		font: bold 65%/1.5 sans-serif;
 		text-align: center;
 		vertical-align: .3em;
 		border-radius: 999px;
 		text-shadow: none;
 		box-shadow: 0 1px white;
+	}
+	
+	.line-highlight:before {
+		content: attr(data-line);
+		background-color: hsla(24, 20%, 50%,.4);
+		color: hsl(24, 20%, 95%);
+	}
+
+@keyframes jserror {
+	50% {
+		padding-top: 1em;
+	}
+}
+
+#jserror {
+	display: none;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding: .2em .5em;
+	border-top: 1px solid #ebb;
+	background: #edd;
+	color: #800;
+	text-shadow: 0 1px 1px white;
+	line-height: 1.5;
+}
+
+body[data-page="javascript"] #jserror.active {
+	display: block;
+	animation: jserror .2s;
+}
+
+	#jserror .line-number {
+		margin-right: .5em;
+		background: #e99;
+		color: #fee;
+		font-size: 80%;
+		vertical-align: .15em;
+	}
+	
+	#jserror:before {
+		content: '✖';
+		float: right;
+		width: 1em;
+		padding: .2em;
+		border: 4px solid hsla(0,0%,100%,.6);
+		border-radius: 50%;
+		margin-top: -1em;
+		text-align: center;
+		background: #e00;
+		color: white;
+		text-shadow: 0 -1px 2px rgba(0,0,0,.5);
+		font: bold 200%/1 Arial, sans-serif;
 	}
 			
 .popup {
@@ -387,20 +462,29 @@ body[data-seethrough] .line-highlight {
 
 .property,
 .tag,
+.boolean,
+.number
 .popup > .content a {
 	color: #905;
 }
 
 .selector,
 .attr-name,
+.string,
 .popup > .content a:hover {
 	color: #690;
 }
 
+.keyword,
 .atrule,
 .attr-value,
 .popup > .content a:active {
 	color: #07a;
+}
+
+.operator {
+	color: #a67f59;
+	background: hsla(0,0%,100%,.5);
 }
 
 .important {

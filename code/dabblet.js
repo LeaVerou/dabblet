@@ -2,6 +2,7 @@ window.Dabblet = $u.attach({
 	pages: {
 		css: window['css-page'],
 		html: window['html-page'], 
+		javascript: window['javascript-page'],
 		result: result
 	},
 	
@@ -17,6 +18,7 @@ window.Dabblet = $u.attach({
 		if(confirm(question)) {
 			localStorage.removeItem('dabblet.css');
 			localStorage.removeItem('dabblet.html');
+			localStorage.removeItem('dabblet.js');
 			window.onbeforeunload = null;
 			return true;
 		}
@@ -41,34 +43,44 @@ window.Dabblet = $u.attach({
 	
 	update: {
 		CSS: function(code) {
-			if(!result.contentWindow.style) {
-				return;
+			code = code || css.textContent;
+			
+			var title = Dabblet.title(code),
+				raw = code.indexOf('{') > -1;
+			
+			result.contentWindow.postMessage(JSON.stringify({
+				action: 'title',
+				data: title + ' ✿ Dabblet result'
+			}), '*');
+			
+			if(!raw) {
+				code = 'html{' + code + '}';
 			}
 			
-			var style = result.contentWindow.style;
+			var prefixfree = !!Dabblet.settings.cached.prefixfree;
 			
-			if(style) {
-				code = code || css.textContent;
-				
-				var title = Dabblet.title(code),
-					raw = code.indexOf('{') > -1;
-			
-				result.contentWindow.document.title = title + ' ✿ Dabblet result';
-				
-				if(!raw) {
-					code = 'html{' + code + '}';
-				}
-				
-				var prefixfree = !!Dabblet.settings.cached.prefixfree;
-				
-				style.textContent = prefixfree? StyleFix.fix(code, raw) : code;
-			}
+			result.contentWindow.postMessage(JSON.stringify({
+				action: 'css',
+				data: prefixfree? StyleFix.fix(code, raw) : code
+			}), '*');
 		},
 		
 		HTML: function(code) {
-			if(result.contentDocument.body) {
-				result.contentDocument.body.innerHTML = code;
-			}
+			code = code || html.textContent;
+			
+			result.contentWindow.postMessage(JSON.stringify({
+				action: 'html',
+				data: code
+			}), '*');
+		},
+		
+		JavaScript: function(code) {
+			code = code || javascript.textContent;
+			
+			result.contentWindow.postMessage(JSON.stringify({
+				action: 'javascript',
+				data: code
+			}), '*');
 		}
 	},
 	
@@ -127,9 +139,7 @@ window.Dabblet = $u.attach({
 			prefixfree: function(enabled) {
 				Dabblet.settings.cached.prefixfree = enabled;
 				
-				if(result.contentWindow.style) {
-					Dabblet.update.CSS();
-				}
+				Dabblet.update.CSS();
 			}
 		},
 		
@@ -267,33 +277,21 @@ window.onbeforeunload = function(){
 	if(!gist.saved) {
 		html.onkeyup();
 		css.onkeyup();
+		javascript.onkeyup();
 		
 		css.onblur();
 		html.onblur();
-		
+		javascript.onblur();
 		//return 'You have unsaved changes.';
 	}
 };
 
 result.onload = function(){
-	if(!result.loaded 
-		&& !result.contentWindow.document.body) {
-		setTimeout(arguments.callee, 100);
-		return;
-	}
-	
 	result.loaded = true;
-	
-	if(!result.contentDocument) {
-		result.contentDocument = result.contentWindow.document;
-	}
-	
-	result.contentWindow.style = $('style', result.contentDocument);
-	
-	result.contentDocument.onkeydown = document.onkeydown;
 	
 	html.onkeyup();
 	css.onkeyup();
+	javascript.onkeyup();
 };
 
 // Fix Chrome bug
@@ -326,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		if(gist.id = (path.match(/\bgist\/([\da-f]+)/i) || [])[1]) {
 			if('withCredentials' in new XMLHttpRequest) {
 				gist.rev = (path.match(/\bgist\/[\da-f]+\/([\da-f]+)/i) || [])[1];
-				css.textContent = html.textContent = '';
+				css.textContent = html.textContent = javascript.textContent = '';
 				gist.load();
 			}
 			else {
@@ -337,13 +335,22 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 	
 	if(!gist.id) {	
-		if(typeof localStorage['dabblet.css'] === 'string') {
-			css.textContent = localStorage['dabblet.css'];
+		if (!/\bpost\b/.test(document.body.className)) {
+			if(typeof localStorage['dabblet.css'] === 'string') {
+				css.textContent = localStorage['dabblet.css'];
+			}
+			
+			if(typeof localStorage['dabblet.html'] === 'string') {
+				html.textContent = localStorage['dabblet.html'];
+			}
+			
+			if(typeof localStorage['dabblet.js'] === 'string') {
+				javascript.textContent = localStorage['dabblet.js'];
+				
+			}
 		}
 		
-		if(typeof localStorage['dabblet.html'] === 'string') {
-			html.textContent = localStorage['dabblet.html'];
-		}
+		Dabblet.update.JavaScript();
 		
 		if(typeof localStorage.settings === 'string') {
 			Dabblet.settings.apply(JSON.parse(localStorage.settings));
@@ -354,31 +361,67 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 });
 
-$$('.editor.page > code').forEach(function(code){
-	new Editor(code);
+$$('.editor.page > pre').forEach(function(editor){
+	new Editor(editor);
 	
-	$u.event.bind(code.parentNode, 'click', function(evt) {
-		$('code', this).focus();
+	$u.event.bind(editor, 'contentchange', function(evt) {
+		var keyCode = evt.keyCode,
+		    id = this.id,
+		    code = this.textContent;
+		
+		if(id === 'css') {
+			document.title = Dabblet.title(code) + ' ✿ dabblet.com';
+		
+			Dabblet.update.CSS(code);
+		}
+		else if (id === 'html') {
+			Dabblet.update.HTML(code);
+		}
+
+		if(keyCode) {
+			gist.saved = false;
+			
+			if (id === 'javascript') {
+				if (Dabblet.jserror) {
+					Dabblet.jserror.className = '';
+				}
+			}
+		}
+	});
+	
+	$u.event.bind(editor.parentNode, 'click', function(evt) {
+		$('pre', this).focus();
 		
 		evt.stopPropagation();
+	});
+	
+	$u.event.bind(editor, 'blur', function (evt) {
+		if(!gist.saved) {
+			// Save draft
+			localStorage['dabblet.css'] = css.textContent;
+			localStorage['dabblet.html'] = html.textContent;
+			localStorage['dabblet.js'] = javascript.textContent;
+		}
 	});
 });
 
 // Note: Has to be keydown to be able to cancel the event
-document.onkeydown = function(evt) {
+document.addEventListener('keydown', function(evt) {
 	var code = evt.keyCode,
 		character = String.fromCharCode(code),
 		cmdOrCtrl = evt.metaKey || evt.ctrlKey;
 	
 	if(cmdOrCtrl && !evt.altKey) {
-		switch(character) {
+		switch (character) {
 			case 'S':
 				gist.save();
+				evt.preventDefault();
 				return false;
 			case 'N':
 				if(Dabblet.wipe()) {
 					location.pathname = '/';	
 				}
+				evt.preventDefault();
 				return false;
 			case '1':
 				var page = 'css';
@@ -390,13 +433,23 @@ document.onkeydown = function(evt) {
 				var page = 'all';
 				break;
 			case '4':
+				var page = 'javascript';
+				break;
+			case '5':
 				var page = 'result';
 				break;
 		}
 		
+		if (code == 13) {
+			Dabblet.update.JavaScript();
+			evt.stopPropagation();
+			evt.preventDefault();
+			return false;
+		}
+		
 		var currentPage = Dabblet.settings.current('page');
 		
-		if(evt.shiftKey) {
+		if (evt.shiftKey) {
 			if(code === 219) {
 				// Go to previous tab
 				var page = ({
@@ -415,11 +468,12 @@ document.onkeydown = function(evt) {
 			}
 		}
 		
-		if(page) {
+		if (page) {
 			if(currentPage !== page) {
 				Dabblet.settings.applyOne('page', page);
 				
 				evt.stopPropagation();
+				evt.preventDefault();
 				return false;
 			}
 		}
@@ -456,6 +510,28 @@ document.onkeydown = function(evt) {
 	if(code == 112) { // F1 
 		location.hash = '#help';
 		return false;
+	}
+}, true);
+
+onmessage = function(evt) {
+	if (true || evt.origin === 'http://localhost' || evt.origin === 'http://dabblet.com') {
+		var info = JSON.parse(evt.data),
+		    data = info.data;
+		
+		switch (info.action) {
+			case 'jserror':
+				Dabblet.jserror = Dabblet.jserror || $u.element.create('div', {
+					properties: {
+						id: 'jserror'
+					},
+					inside: document.body
+				});
+				
+				Dabblet.jserror.className = 'active';
+				Dabblet.jserror.innerHTML = (data.lineNumber? '<span class="line-number">' + data.lineNumber + '</span>' : '') +
+						                    (data.name? '<strong>' + data.name + '</strong>: ' : '') +
+						                    (data.message || 'JavaScript Error');
+		}
 	}
 };
 
