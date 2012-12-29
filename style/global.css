@@ -263,7 +263,7 @@ body > header.focus {
 				margin-left: -.3em;
 			}
 			
-		a.button[href="/help/"] {
+		a.button[href^="/help/"] {
 			position: absolute;
 			right: 3px;
 			bottom: 5px;
