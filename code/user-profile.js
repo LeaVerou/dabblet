@@ -5,7 +5,7 @@
  
 (function (html) {
 
-var username = (location.pathname.match(/\/user\/(\w+)/i) || [,''])[1].trim();
+var username = (location.pathname.match(/\/user\/([^\/]+)/i) || [,''])[1].trim();
 
 if(username) {
 	document.title = username + '’s profile';
