@@ -319,11 +319,13 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	var path = location.pathname.slice(1);
 	
-	if(path) {
+	if (path) {
 		// Viewing a gist?
-		if(gist.id = (path.match(/\bgist\/([\da-f]+)/i) || [])[1]) {
+		var parts = path.match(/\bgist\/([\da-f]+)(?:\/([\da-f]+)?/i);
+		if(parts) {
 			if('withCredentials' in new XMLHttpRequest) {
-				gist.rev = (path.match(/\bgist\/[\da-f]+\/([\da-f]+)/i) || [])[1];
+				gist.id = parts[1];
+				gist.rev = parts[2];
 				css.textContent = html.textContent = javascript.textContent = '';
 				gist.load();
 			}
