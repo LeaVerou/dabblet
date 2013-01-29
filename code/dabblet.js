@@ -321,7 +321,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	if (path) {
 		// Viewing a gist?
-		var parts = path.match(/\bgist\/([\da-f]+)(?:\/([\da-f]+)?/i);
+		var parts = path.match(/\bgist\/([\da-f]+)(?:\/([\da-f]+))?/i);
 		if(parts) {
 			if('withCredentials' in new XMLHttpRequest) {
 				gist.id = parts[1];
