@@ -12,6 +12,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^.*$ /index-php.php [L]
 
 RewriteBase /
+RewriteCond %{REQUEST_URI} !^/(.+)/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^.*$ /index.html [L]
 
