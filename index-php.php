@@ -162,7 +162,6 @@
 <div id="url" class="previewer"><img src="data:," alt="Loading…" /></div>
 <div id="entity" class="previewer"></div>
 
-<script src="/code/util.js"></script><!-- to be removed -->
 <script src="/code/utopia.js"></script>
 <script src="/code/selection.js"></script>
 <script src="/code/prism.js"></script>
