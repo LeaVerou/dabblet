@@ -288,6 +288,26 @@ var _ = window.Editor = function(pre) {
 				return;
 			}
 			
+			if (keyCode !== 37 && keyCode !== 39) {
+				$u.event.fire(this, 'contentchange', {
+					keyCode: keyCode
+				});
+				
+				var ss = this.selectionStart,
+					se = this.selectionEnd;
+			
+				Prism.highlightElement(this);
+				
+				// Dirty fix to #2
+				if(!/\n$/.test(code)) {
+					this.innerHTML = this.innerHTML + '\n';
+				}
+	
+				if(ss !== null || se !== null) {
+					this.setSelectionRange(ss, se);
+				}
+			}
+			
 			// Show a previewer, if needed
 			if(self.Previewer) {
 				var selection = getSelection();
@@ -310,26 +330,6 @@ var _ = window.Editor = function(pre) {
 						Previewer.hideAll();
 						Previewer.active = null;
 					}
-				}
-			}
-			
-			if (keyCode !== 37 && keyCode !== 39) {
-				$u.event.fire(this, 'contentchange', {
-					keyCode: keyCode
-				});
-				
-				var ss = this.selectionStart,
-					se = this.selectionEnd;
-			
-				Prism.highlightElement(this);
-				
-				// Dirty fix to #2
-				if(!/\n$/.test(code)) {
-					this.innerHTML = this.innerHTML + '\n';
-				}
-	
-				if(ss !== null || se !== null) {
-					this.setSelectionRange(ss, se);
 				}
 			}
 		},
