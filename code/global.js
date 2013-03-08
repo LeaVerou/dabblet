@@ -94,7 +94,8 @@ var gist = {
 	save: function(options){
 		options = options || {};
 		
-		var anonymous = options.anon || !window.user;
+		var anonymous = options.anon || !window.user,
+		    creatingNew = anonymous || options.forceNew;
 		
 		if(gist.id 
 		&& (!gist.user || !window.user || gist.user.id != user.id)
@@ -106,14 +107,31 @@ var gist = {
 		}
 		
 		var id = gist.id || '',
-			cssCode = css.textContent,
-			htmlMarkup = html.textContent,
-			jsCode = javascript.textContent,
-			title = Dabblet.title(cssCode);
-			
+			cssCode = css.textContent.trim(),
+			htmlMarkup = html.textContent.trim(),
+			jsCode = javascript.textContent.trim(),
+			title = Dabblet.title(cssCode).trim();
+		
+		
+		var files = {};
+
+		if (cssCode || !creatingNew) {
+			files['dabblet.css'] = cssCode? { content: cssCode } : null;
+		}
+		
+		if (htmlMarkup || !creatingNew) {
+			files['dabblet.html'] = htmlMarkup? { content: htmlMarkup } : null;
+		}
+		
+		if (jsCode || !creatingNew) {
+			files['dabblet.js'] = jsCode? { content: jsCode } : null;
+		}
+		
+		files['settings.json'] = { "content": JSON.stringify(Dabblet.settings.current(null, 'file')) };
+
 		gist.request({
 			anon: options.anon,
-			id: anonymous || options.forceNew? null : id,
+			id: creatingNew? null : id,
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json; charset=UTF-8'
@@ -126,20 +144,7 @@ var gist = {
 			data: {
 				"description": title,
 				"public": true,
-				"files": {
-					"dabblet.css": {
-						"content": cssCode
-					},
-					"dabblet.html": htmlMarkup? {
-						"content": htmlMarkup
-					} : null,
-					"dabblet.js": jsCode? {
-						"content": jsCode
-					} : null,
-					"settings.json": {
-						"content": JSON.stringify(Dabblet.settings.current(null, 'file'))
-					}
-				}
+				"files": files
 			}
 		});
 	},
@@ -239,7 +244,7 @@ var gist = {
 	
 	update: function(data) {
 		var id = data.id,
-			rev = data.history && data.history[0].version || '';
+			rev = data.history && data.history[0] && data.history[0].version || '';
 		
 		if(gist.id != id) {
 			gist.id = id;
