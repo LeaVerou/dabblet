@@ -163,6 +163,7 @@
 <div id="entity" class="previewer"></div>
 
 <script src="/code/utopia.js"></script>
+<script src="/code/utils.js"></script>
 <script src="/code/selection.js"></script>
 <script src="/code/prism.js"></script>
 <script src="/code/code-highlight.js"></script>
