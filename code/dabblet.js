@@ -7,7 +7,7 @@ window.Dabblet = $u.attach({
 	},
 	
 	title: function(code) {
-		return (code && code.match(/^\/\*[\s\*\r\n]+(.+?)($|\*\/)/m) || [,'Untitled'])[1];
+		return utils.parseComment(code).title || 'Untitled';
 	},
 	
 	wipe: function() {
