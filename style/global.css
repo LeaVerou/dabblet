@@ -428,8 +428,8 @@ body > header.focus {
 				border: 0;
 				margin: .1em 0;
 				background: rgba(255,255,255,.5);
-				background: linear-gradient(left, transparent, black 50%, transparent) top,
-							linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,.6) 50%, rgba(255,255,255,0)) bottom;
+				background: linear-gradient(90deg, transparent, black 50%, transparent) top,
+							linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.5) 50%, rgba(255,255,255,0)) bottom;
 				background-repeat: repeat-x;
 				background-size: 100% 1px;
 			}

@@ -218,9 +218,9 @@ var gist = {
 					javascript.textContent = jsFile.content;
 					javascript.onkeyup();
 					
-					if (!Dabblet.embedded) {
+					//if (!Dabblet.embedded) {
 						Dabblet.update.JavaScript();
-					}
+					//}
 				}
 				
 				var defaultSettings = Dabblet.settings.current();

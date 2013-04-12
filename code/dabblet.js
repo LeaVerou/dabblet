@@ -72,6 +72,8 @@ window.Dabblet = $u.attach({
 				action: 'html',
 				data: code
 			}), '*');
+			
+			Dabblet.update.JavaScript();
 		},
 		
 		JavaScript: function(code) {
