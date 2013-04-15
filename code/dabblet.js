@@ -41,6 +41,60 @@ window.Dabblet = $u.attach({
 		}
 	},
 	
+	validate: {
+		HTML: function () {
+			var code = '<!DOCTYPE html>\n<html>\n<head>\n' + 
+			           '<meta charset="utf-8">\n' +
+			           '<title>' + Dabblet.title(css.textContent) + '</title>\n</head>\n<body>\n' +
+			           html.textContent + '\n</body>\n</html>';
+
+			var form = $u.element.create('form', {
+				properties: {
+					action: 'http://validator.w3.org/check',
+					method: 'POST',
+					target: '_blank'
+				},
+				contents: {
+					tag: 'textarea',
+					properties: {
+						name: 'fragment',
+						value: code
+					}
+				}
+			});
+			
+			document.body.appendChild(form);
+			form.submit();
+			document.body.removeChild(form);
+			
+			form = null;
+		},
+		
+		CSS: function () {
+			var form = $u.element.create('form', {
+				properties: {
+					action: 'http://jigsaw.w3.org/css-validator/validator',
+					method: 'POST',
+					target: '_blank',
+					enctype: 'multipart/form-data'
+				},
+				contents: {
+					tag: 'textarea',
+					properties: {
+						name: 'text',
+						value: css.textContent
+					}
+				}
+			});
+			
+			document.body.appendChild(form);
+			form.submit();
+			document.body.removeChild(form);
+			
+			form = null;
+		}
+	},
+	
 	update: {
 		CSS: function(code) {
 			code = code || css.textContent;

@@ -299,7 +299,7 @@ body[data-page="result"] > #result {
 	height: 100% !important;
 }
 
-#runjs {
+.for-code {
 	display: none;
 	position: absolute;
 	right: 0;
@@ -310,15 +310,17 @@ body[data-page="result"] > #result {
 	transition-property: top, right;
 }
 
-body[data-page="javascript"] #runjs {
+body[data-page="css"] .for-code.css,
+body[data-page="javascript"] .for-code.javascript,
+body[data-page="html"] .for-code.html {
 	display: block;
 }
 
-body[data-view="split-vertical"] #runjs {
+body[data-view="split-vertical"] .for-code {
 	right: 50%;
 }
 
-body[data-view="split"] #runjs {
+body[data-view="split"] .for-code {
 	top: 50%;
 }
 
