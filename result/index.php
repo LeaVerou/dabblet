@@ -6,8 +6,6 @@
 preg_match('#\bgist\/([\da-f]+)#i', $_SERVER['REQUEST_URI'], $gist_id);
 $gist_id = $gist_id[1];
 
-//echo $gist_id; exit;
-
 if($gist_id) {
 	preg_match('#\bgist\/[\da-f]+\/([\da-f]+)#i', $_SERVER['REQUEST_URI'], $gist_rev);
 
@@ -32,7 +30,7 @@ if($gist_id) {
 	}
 }
 
-if(!$data || isset($data['message'])) {
+if(!$data || !$data['files'] || isset($data['message'])) {
 	die($data? $data['message'] : 'Not found, sorry! :(');
 }
 
@@ -41,7 +39,34 @@ $html = $data['files']['dabblet.html']['content'];
 $js = $data['files']['dabblet.js']['content'];
 $settings = json_decode($data['files']['settings.json']['content'], true);
 
-//print_r($data)
+if (!$css) {
+	foreach ($data['files'] as $filename => $content) {
+		if (strpos($filename, '.css') > 0) {
+			$css = $content['content'];
+			break;
+		}
+	}
+}
+
+
+if (!$html) {
+	foreach ($data['files'] as $filename => $content) {
+		if (strpos($filename, '.html') > 0) {
+			$html = $content['content'];
+			break;
+		}
+	}
+}
+
+if (!$js) {
+	foreach ($data['files'] as $filename => $content) {
+		if (strpos($filename, '.js') > 0) {
+			$js = $content['content'];
+			break;
+		}
+	}
+}
+
 ?><!DOCTYPE html>
 <html>
 <head>
