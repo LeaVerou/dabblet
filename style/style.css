@@ -465,7 +465,7 @@ body[data-page="javascript"] #jserror.active {
 .property,
 .tag,
 .boolean,
-.number
+.number,
 .popup > .content a {
 	color: #905;
 }
