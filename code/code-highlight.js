@@ -178,7 +178,7 @@ var colors = [
 ];
 
 Prism.languages.insertBefore('css', 'important', {
-	'gradient': /\b(repeating-)?(linear|radial)-gradient\(((rgb|hsl)a?\(.+?\)|[^\)])+\)/gi,
+	'gradient': /(\b|\B-[a-z]{1,10}-)(repeating-)?(linear|radial)-gradient\(((rgb|hsl)a?\(.+?\)|[^\)])+\)/gi,
 	'color': RegExp.create('\\b{{keyword}}\\b|\\b{{func}}\\B|\\B{{hex}}\\b', {
 		keyword: RegExp('^' + colors.join('|') + '$'),
 		func: RegExp.create('^(?:rgb|hsl)a?\\((?:\\s*{{number}}%?\\s*,?\\s*){3,4}\\)$', {
