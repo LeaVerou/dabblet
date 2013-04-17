@@ -29,7 +29,7 @@ var _ = self.Previewer = function(id, updater, type) {
 			
 			this._token = token;
 			
-			if(token) {
+			if(token && token.parentNode) {
 				var valid = this.updater.call(previewer, token.textContent);
 
 				if(valid) {
