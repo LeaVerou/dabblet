@@ -102,7 +102,7 @@ window.Dabblet = $u.attach({
 			var title = Dabblet.title(code),
 				raw = code.indexOf('{') > -1;
 			
-			result.contentWindow.postMessage(JSON.stringify({
+			(result.postMessage || result.contentWindow.postMessage)(JSON.stringify({
 				action: 'title',
 				data: title + ' ✿ Dabblet result'
 			}), '*');
@@ -113,7 +113,7 @@ window.Dabblet = $u.attach({
 			
 			var prefixfree = !!Dabblet.settings.cached.prefixfree;
 			
-			result.contentWindow.postMessage(JSON.stringify({
+			(result.postMessage || result.contentWindow.postMessage)(JSON.stringify({
 				action: 'css',
 				data: prefixfree? StyleFix.fix(code, raw) : code
 			}), '*');
@@ -122,7 +122,7 @@ window.Dabblet = $u.attach({
 		HTML: function(code) {
 			code = code || html.textContent;
 			
-			result.contentWindow.postMessage(JSON.stringify({
+			(result.postMessage || result.contentWindow.postMessage)(JSON.stringify({
 				action: 'html',
 				data: code
 			}), '*');
@@ -133,7 +133,7 @@ window.Dabblet = $u.attach({
 		JavaScript: function(code) {
 			code = code || javascript.textContent;
 			
-			result.contentWindow.postMessage(JSON.stringify({
+			(result.postMessage || result.contentWindow.postMessage)(JSON.stringify({
 				action: 'javascript',
 				data: code
 			}), '*');
