@@ -240,21 +240,13 @@ var _ = window.Editor = function(pre) {
 				selection = ss === se? '': pre.textContent.slice(ss, se);
 				
 			gist.saved = false;
-
-			setTimeout(function(){
-				var newse = pre.selectionEnd,
-					innerHTML = pre.innerHTML;
+			
+			if (evt.clipboardData) {
+				evt.preventDefault();
 				
-				/*innerHTML = pre.innerHTML
-									.replace(/(<\w+)(\s.+?>)/g, '$1>')
-									.replace(/<\/?pre>/g, '')
-									.replace(/(<div>)?<br>|(<div>)+/gi, '\n')
-									.replace(/<\/div>/gi, '')
-									.replace(/&nbsp;/gi, ' ');*/
-									
-				pre.innerHTML = innerHTML;
-									
-				var pasted = pre.textContent.slice(ss, newse);
+				var pasted = evt.clipboardData.getData("text/plain");
+				
+				document.execCommand("insertHTML", false, pasted.replace(/</g, '&lt;'));
 				
 				that.undoManager.action({
 					add: pasted,
@@ -267,7 +259,37 @@ var _ = window.Editor = function(pre) {
 				pre.setSelectionRange(ss, ss);
 				
 				pre.onkeyup();
-			}, 10);
+			}
+			else {
+	
+				setTimeout(function(){
+					var newse = pre.selectionEnd,
+						innerHTML = pre.innerHTML;
+					
+					/*innerHTML = pre.innerHTML
+										.replace(/(<\w+)(\s.+?>)/g, '$1>')
+										.replace(/<\/?pre>/g, '')
+										.replace(/(<div>)?<br>|(<div>)+/gi, '\n')
+										.replace(/<\/div>/gi, '')
+										.replace(/&nbsp;/gi, ' ');*/
+										
+					pre.innerHTML = innerHTML;
+										
+					var pasted = pre.textContent.slice(ss, newse);
+					
+					that.undoManager.action({
+						add: pasted,
+						del: selection,
+						start: ss
+					});
+					
+					ss += pasted.length;
+					
+					pre.setSelectionRange(ss, ss);
+					
+					pre.onkeyup();
+				}, 10);
+			}
 		},
 		
 		keyup: function(evt) {
