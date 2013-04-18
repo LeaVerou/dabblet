@@ -245,12 +245,12 @@ var _ = window.Editor = function(pre) {
 				var newse = pre.selectionEnd,
 					innerHTML = pre.innerHTML;
 				
-				innerHTML = pre.innerHTML
+				/*innerHTML = pre.innerHTML
 									.replace(/(<\w+)(\s.+?>)/g, '$1>')
 									.replace(/<\/?pre>/g, '')
 									.replace(/(<div>)?<br>|(<div>)+/gi, '\n')
 									.replace(/<\/div>/gi, '')
-									.replace(/&nbsp;/gi, ' ');
+									.replace(/&nbsp;/gi, ' ');*/
 									
 				pre.innerHTML = innerHTML;
 									

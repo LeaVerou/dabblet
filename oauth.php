@@ -1,11 +1,8 @@
 <?php
 
-// This file should be the one's URL you give to Github as a callback
+require 'keys.php';
 
 $code = $_REQUEST['code'];
-
-$client_id = 'da931d37076424f332ef';
-$client_secret = 'YOUR_SECRET_HERE';
 
 if($code) {
 	$ch = curl_init('https://github.com/login/oauth/access_token');
@@ -28,6 +25,7 @@ if($code) {
 	}
 }
 ?>
+
 <script>
 opener.gist.oauth[1]('<?= $token ?>');
 close();
