@@ -21,18 +21,18 @@ UndoManager.prototype = {
 		
 		var lastAction = this.undoStack.pop() || null;
 
-		if(lastAction) {
+		if (lastAction) {
 			var push = lastAction.action || action.action
 					|| lastAction.length || action.length
 					|| (action.del && lastAction.add) 
 					|| (action.add && !lastAction.add)
-					|| (lastAction.start + lastAction.add.length - lastAction.del.length != action.start);
-			
-			if(push) {
+					|| (lastAction.start + lastAction.add.length != action.start + action.del.length);
+
+			if (push) {
 			  	this.undoStack.push(lastAction);
 			  	this.undoStack.push(action);
 			}
-			else if(lastAction) {
+			else if (lastAction) {
 				var combined = this.chain(lastAction, action);
 				
 				this.undoStack.push(combined);
@@ -79,7 +79,7 @@ UndoManager.prototype = {
 		return {
 			add: action1.add + action2.add,
 			del: action2.del + action1.del,
-			start: action1.start
+			start: Math.min(action1.start, action2.start)
 		}
 	},
 	
