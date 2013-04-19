@@ -425,6 +425,16 @@ var _ = window.Editor = function(pre) {
 					}
 				}
 			}
+		},
+		
+		input: function(evt) {
+			if (evt.incrementable) {
+				that.undoManager.action({
+					add: evt.add,
+					del: evt.del,
+					start: evt.start
+				});
+			}
 		}
 	}, true);
 	
