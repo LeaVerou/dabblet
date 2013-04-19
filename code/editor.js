@@ -79,20 +79,29 @@ UndoManager.prototype = {
 		return {
 			add: action1.add + action2.add,
 			del: action2.del + action1.del,
-			start: action1.start
+			start: action1.start,
+			type: action1.type
 		}
 	},
 	
 	apply: function(action) {
+
+		var start;
+
 		if(action.length) {
 			for(var i=0; i<action.length; i++) {
 				this.apply(action[i]);
 			}
 			return;
 		}
-		
-		var start = action.start;
-			
+
+		if (action.type === 'backspace') {
+			start = action.start - action.del.length + 1;
+		}
+		else {
+			start = action.start;
+		}
+
 		if(action.action) {
 			this.editor.action(action.action, {
 				inverse: action.inverse,
@@ -112,15 +121,23 @@ UndoManager.prototype = {
 	},
 	
 	applyInverse: function(action) {
+
+		var start;
+
 		if(action.length) {
 			for(var i=action.length-1; i>=0; i--) {
 				this.applyInverse(action[i]);
 			}
 			return;
 		}
-		
-		var start = action.start;
-		
+
+		if (action.type === 'backspace') {
+			start = action.start - action.del.length + 1;
+		}
+		else {
+			start = action.start;
+		}
+
 		if(action.action) {
 			this.editor.action(action.action, {
 				inverse: !action.inverse,
@@ -168,7 +185,8 @@ var _ = window.Editor = function(pre) {
 					that.undoManager.action({
 						add: '',
 						del: this.textContent.slice(start, se),
-						start: start
+						start: start,
+						type: 'backspace'
 					});
 					
 					break;
