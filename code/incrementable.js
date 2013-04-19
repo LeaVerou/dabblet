@@ -49,9 +49,16 @@ var _ = window.Incrementable = function(textField, multiplier, units) {
 			this[property] = this[property].replace(regex, function($0, $1, $2) {
 				$1 = $1 || '';
 				if ($1.length <= caret && $1.length + $2.length >= caret) {
-					me.changed = true;
+					
 					var stepValue = me.stepValue($2, evt.keyCode == 40, multiplier);
 					caret = caret + (stepValue.length - $2.length);
+					
+					me.changed = {
+						add: stepValue,
+						del: $2,
+						start: $1.length
+					};
+
 					return $1 + stepValue;
 				}
 				else {
@@ -69,6 +76,11 @@ var _ = window.Incrementable = function(textField, multiplier, units) {
 				var evt = document.createEvent("HTMLEvents");
 				
 				evt.initEvent('input', true, true );
+				
+				evt.add = me.changed.add;
+				evt.del = me.changed.del;
+				evt.start = me.changed.start;
+				evt.incrementable = true;
 		
 				this.dispatchEvent(evt);
 			}
