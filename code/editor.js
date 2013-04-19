@@ -24,17 +24,17 @@ UndoManager.prototype = {
 		if (lastAction) {
 			var push = lastAction.action || action.action
 					|| lastAction.length || action.length
-					|| (action.del && lastAction.add) 
-					|| (action.add && !lastAction.add)
-					|| (lastAction.start + lastAction.add.length != action.start + action.del.length);
+					|| (action.del && lastAction.add) // Different types?
+					|| (action.add && !lastAction.add) // Different types?
+					|| (action.add && action.del) || (lastAction.add && lastAction.del) // Combo actions should not be chained with anything
+					|| (lastAction.start + lastAction.add.length != action.start + action.del.length); // Different positions?
 
 			if (push) {
 			  	this.undoStack.push(lastAction);
 			  	this.undoStack.push(action);
 			}
-			else if (lastAction) {
+			else {
 				var combined = this.chain(lastAction, action);
-				
 				this.undoStack.push(combined);
 			}
 		}
@@ -530,8 +530,10 @@ _.actions = {
 		var ss = state.ss,
 			lf = state.before.lastIndexOf('\n') + 1,
 			indent = (state.before.slice(lf).match(/^\s+/) || [''])[0];
-		
+
 		state.before += '\n' + indent;
+		
+		var selection = state.selection;
 		state.selection = '';	
 		
 		state.ss += indent.length + 1;
@@ -539,7 +541,7 @@ _.actions = {
 		
 		return {
 			add: '\n' + indent,
-			del: state.selection,
+			del: selection,
 			start: ss
 		};
 	},
