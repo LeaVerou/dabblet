@@ -23,9 +23,12 @@ if($gist_id) {
 	
 	try {
 		$raw = file_get_contents($uri);
-	} catch(Exception $e) {
+	}
+	catch(Exception $e) {
 		echo $e;
 	}
+	
+	//echo $uri;
 	
 	if($raw) {
 		if(function_exists('json_decode')) {
