@@ -115,15 +115,15 @@ var gist = {
 		
 		var files = {};
 
-		if (cssCode || !creatingNew) {
+		if (cssCode ||  (!creatingNew && gist.files && gist.files['dabblet.css'])) {
 			files['dabblet.css'] = cssCode? { content: cssCode } : null;
 		}
 		
-		if (htmlMarkup || !creatingNew) {
+		if (htmlMarkup ||  (!creatingNew && gist.files && gist.files['dabblet.html'])) {
 			files['dabblet.html'] = htmlMarkup? { content: htmlMarkup } : null;
 		}
 		
-		if (jsCode || !creatingNew) {
+		if (jsCode || (!creatingNew && gist.files && gist.files['dabblet.js'])) {
 			files['dabblet.js'] = jsCode? { content: jsCode } : null;
 		}
 		
@@ -175,7 +175,7 @@ var gist = {
 			callback: function(data){
 				gist.update(data);
 				
-				var files = data.files;
+				var files = gist.files = data.files;
 				
 				var cssFile = files['dabblet.css'],
 					htmlFile = files['dabblet.html'],
