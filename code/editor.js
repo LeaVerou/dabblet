@@ -246,7 +246,7 @@ var _ = window.Editor = function(pre) {
 				
 				var pasted = evt.clipboardData.getData("text/plain");
 				
-				document.execCommand("insertHTML", false, pasted.replace(/</g, '&lt;'));
+				document.execCommand("insertHTML", false, pasted.replace(/</g, '&lt;').replace(/&/g, '&amp;'));
 				
 				that.undoManager.action({
 					add: pasted,
