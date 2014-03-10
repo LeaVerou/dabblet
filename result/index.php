@@ -22,7 +22,21 @@ if($gist_id) {
 	$uri .= "?client_id=$client_id&client_secret=$client_secret";
 	
 	try {
-		$raw = file_get_contents($uri);
+                //curl call with user agent header.
+		$curl = curl_init();		
+		$agent= 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.102 Safari/537.36';
+		
+		curl_setopt_array($curl, array(
+			CURLOPT_RETURNTRANSFER => 1,
+			CURLOPT_URL => $uri,
+			CURLOPT_SSL_VERIFYPEER => 0,
+			CURLOPT_SSL_VERIFYHOST => 0,
+			CURLOPT_VERBOSE => 0,
+			CURLOPT_USERAGENT => $agent
+		));		
+		
+		$raw = curl_exec($curl);
+		curl_close($curl);
 	}
 	catch(Exception $e) {
 		echo $e;
