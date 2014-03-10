@@ -22,9 +22,9 @@ if($gist_id) {
 	$uri .= "?client_id=$client_id&client_secret=$client_secret";
 	
 	try {
-                //curl call with user agent header.
+		//curl call with user agent header.
 		$curl = curl_init();		
-		$agent= 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.102 Safari/537.36';
+		$agent= 'Dabblet.com';
 		
 		curl_setopt_array($curl, array(
 			CURLOPT_RETURNTRANSFER => 1,
