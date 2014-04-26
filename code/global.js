@@ -242,6 +242,8 @@ var gist = {
 		});
 	},
 	
+	// Update UI with fetched gist info
+	// Does NOT update an existing gist. This is done by gist.save()
 	update: function(data) {
 		var id = data.id,
 			rev = data.history && data.history[0] && data.history[0].version || '';
@@ -258,8 +260,8 @@ var gist = {
 			history.pushState(null, '', '/gist/' + id + '/' + rev + location.search + location.hash);
 		}
 		
-		if(data.user) {
-			gist.user = data.user;
+		if (data.user || data.owner) {
+			gist.user = data.user || data.owner;
 		}
 		
 		var gistUser = window['gist-user'];
@@ -315,7 +317,7 @@ Object.defineProperty(gist, 'saved', {
 });
 
 var Dabblet = {
-	version: '1.0.6',
+	version: '1.0.7',
 	
 	user: {
 		login: function() {
