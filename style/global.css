@@ -533,8 +533,8 @@ body[data-loading] > #loader {
 		}
 }
 
-
-@media (min-height: 799px) and (min-width: 1000px) {
+/* Auto-hiding top bar */
+@media (min-height: 600px) {
 	body {
 		border-top-width: 3.4em;
 	}
