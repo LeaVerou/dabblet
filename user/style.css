@@ -152,6 +152,7 @@ div[role=main] {
 	.dabblet iframe {
 		position: absolute;
 		top: 0;
+		left: 0;
 		width: 800px;
 		height: 600px;
 		border: 0;
