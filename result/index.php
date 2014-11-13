@@ -109,6 +109,7 @@ if (!$js) {
 if (parent === window) {
 	document.addEventListener('DOMContentLoaded', function() {
 		<?= $js ?>
+		
 	});
 }
 </script>
