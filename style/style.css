@@ -484,7 +484,8 @@ body[data-page="javascript"] #jserror.active {
 	color: #07a;
 }
 
-.operator {
+.operator,
+.language-css .string {
 	color: #a67f59;
 	background: hsla(0,0%,100%,.5);
 }

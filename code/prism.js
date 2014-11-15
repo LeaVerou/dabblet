@@ -480,7 +480,8 @@ if (Prism.languages.markup) {
 					inside: Prism.languages.markup.tag.inside
 				},
 				rest: Prism.languages.css
-			}
+			},
+			alias: 'language-css'
 		}
 	});
 	
@@ -497,7 +498,8 @@ if (Prism.languages.markup) {
 					pattern: /.+/gi,
 					inside: Prism.languages.css
 				}
-			}
+			},
+			alias: 'language-css'
 		}
 	}, Prism.languages.markup.tag);
 };
@@ -556,7 +558,8 @@ if (Prism.languages.markup) {
 					inside: Prism.languages.markup.tag.inside
 				},
 				rest: Prism.languages.javascript
-			}
+			},
+			alias: 'language-css'
 		}
 	});
 }
