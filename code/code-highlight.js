@@ -188,7 +188,7 @@ Prism.languages.insertBefore('css', 'important', {
 	}, 'ig')
 });
 
-Prism.languages.insertBefore('css', 'ignore', {
+Prism.languages.insertBefore('css', {
 	'important': /\B!important\b/gi,
 	'abslength': RegExp.create('(\\b|\\B){{number}}{{unit}}\\b', {
 			number: number,

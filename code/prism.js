@@ -81,6 +81,19 @@ var _ = self.Prism = {
 		insertBefore: function (inside, before, insert, root) {
 			root = root || _.languages;
 			var grammar = root[inside];
+			
+			if (arguments.length == 2) {
+				insert = arguments[1];
+				
+				for (var newToken in insert) {
+					if (insert.hasOwnProperty(newToken)) {
+						grammar[newToken] = insert[newToken];
+					}
+				}
+				
+				return grammar;
+			}
+			
 			var ret = {};
 
 			for (var token in grammar) {
