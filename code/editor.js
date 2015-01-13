@@ -4,7 +4,7 @@
  
 (function(){
 
-var CRLF = crlf = /\r?\n|\r/g;
+var CRLF = /\r?\n|\r/g;
 
 var UndoManager = function(editor) {
 	this.editor = editor;

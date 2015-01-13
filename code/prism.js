@@ -592,7 +592,7 @@ function hasClass(element, className) {
   return (" " + element.className + " ").replace(/[\n\t]/g, " ").indexOf(className) > -1
 }
 
-var CRLF = crlf = /\r?\n|\r/g;
+var CRLF = /\r?\n|\r/g;
     
 function highlightLines(pre, lines, classes) {
 	var ranges = lines.replace(/\s+/g, '').split(','),
