@@ -51,7 +51,7 @@ var _ = self.Prism = {
 					return clone;
 
 				case 'Array':
-					return o.slice();
+					return o.map(function(v) { return _.util.clone(v); });
 			}
 
 			return o;
@@ -74,7 +74,7 @@ var _ = self.Prism = {
 		 * As this needs to recreate the object (we cannot actually insert before keys in object literals),
 		 * we cannot just provide an object, we need anobject and a key.
 		 * @param inside The key (or language id) of the parent
-		 * @param before The key to insert before
+		 * @param before The key to insert before. If not provided, the function appends instead.
 		 * @param insert Object with the key/value pairs to insert
 		 * @param root The object that contains `inside`. If equal to Prism.languages, it can be omitted.
 		 */
@@ -182,6 +182,8 @@ var _ = self.Prism = {
 			return;
 		}
 
+		code = code.replace(/^(?:\r?\n|\r)/,'');
+
 		var env = {
 			element: element,
 			language: language,
@@ -211,7 +213,7 @@ var _ = self.Prism = {
 			}));
 		}
 		else {
-			env.highlightedCode = _.highlight(env.code, env.grammar, env.language)
+			env.highlightedCode = _.highlight(env.code, env.grammar, env.language);
 
 			_.hooks.run('before-insert', env);
 
@@ -455,7 +457,7 @@ Prism.languages.markup = {
 
 		}
 	},
-	'entity': /\&#?[\da-z]{1,8};/gi
+	'entity': /&#?[\da-z]{1,8};/gi
 };
 
 // Plugin to make entity title show the real entity, idea by Roman Komarov
@@ -469,7 +471,7 @@ Prism.hooks.add('wrap', function(env) {
 Prism.languages.css = {
 	'comment': /\/\*[\w\W]*?\*\//g,
 	'atrule': {
-		pattern: /@[\w-]+?.*?(;|(?=\s*{))/gi,
+		pattern: /@[\w-]+?.*?(;|(?=\s*\{))/gi,
 		inside: {
 			'punctuation': /[;:]/g
 		}
@@ -477,7 +479,7 @@ Prism.languages.css = {
 	'url': /url\((["']?).*?\1\)/gi,
 	'selector': /[^\{\}\s][^\{\};]*(?=\s*\{)/g,
 	'property': /(\b|\B)[\w-]+(?=\s*:)/ig,
-	'string': /("|')(\\?.)*?\1/g,
+	'string': /("|')(\\\n|\\?.)*?\1/g,
 	'important': /\B!important\b/gi,
 	'punctuation': /[\{\};:]/g,
 	'function': /[-a-z0-9]+(?=\()/ig
@@ -527,7 +529,7 @@ Prism.languages.clike = {
 			lookbehind: true
 		}
 	],
-	'string': /("|')(\\?.)*?\1/g,
+	'string': /("|')(\\\n|\\?.)*?\1/g,
 	'class-name': {
 		pattern: /((?:(?:class|interface|extends|implements|trait|instanceof|new)\s+)|(?:catch\s+\())[a-z0-9_\.\\]+/ig,
 		lookbehind: true,
@@ -544,14 +546,15 @@ Prism.languages.clike = {
 		}
 	},
 	'number': /\b-?(0x[\dA-Fa-f]+|\d*\.?\d+([Ee]-?\d+)?)\b/g,
-	'operator': /[-+]{1,2}|!|<=?|>=?|={1,3}|&{1,2}|\|?\||\?|\*|\/|\~|\^|\%/g,
+	'operator': /[-+]{1,2}|!|<=?|>=?|={1,3}|&{1,2}|\|?\||\?|\*|\/|~|\^|%/g,
 	'ignore': /&(lt|gt|amp);/gi,
 	'punctuation': /[{}[\];(),.:]/g
 };
 ;
 Prism.languages.javascript = Prism.languages.extend('clike', {
 	'keyword': /\b(break|case|catch|class|const|continue|debugger|default|delete|do|else|enum|export|extends|false|finally|for|function|get|if|implements|import|in|instanceof|interface|let|new|null|package|private|protected|public|return|set|static|super|switch|this|throw|true|try|typeof|var|void|while|with|yield)\b/g,
-	'number': /\b-?(0x[\dA-Fa-f]+|\d*\.?\d+([Ee]-?\d+)?|NaN|-?Infinity)\b/g
+	'number': /\b-?(0x[\dA-Fa-f]+|\d*\.?\d+([Ee][+-]?\d+)?|NaN|-?Infinity)\b/g,
+	'function': /(?!\d)[a-z0-9_$]+(?=\()/ig
 });
 
 Prism.languages.insertBefore('javascript', 'keyword', {
@@ -572,7 +575,7 @@ if (Prism.languages.markup) {
 				},
 				rest: Prism.languages.javascript
 			},
-			alias: 'language-css'
+			alias: 'language-javascript'
 		}
 	});
 }
@@ -592,7 +595,7 @@ function hasClass(element, className) {
   return (" " + element.className + " ").replace(/[\n\t]/g, " ").indexOf(className) > -1
 }
 
-var CRLF = /\r?\n|\r/g;
+var CRLF = crlf = /\r?\n|\r/g;
     
 function highlightLines(pre, lines, classes) {
 	var ranges = lines.replace(/\s+/g, '').split(','),
