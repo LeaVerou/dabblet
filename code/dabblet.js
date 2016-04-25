@@ -532,6 +532,12 @@ document.addEventListener('keydown', function(evt) {
 				
 				evt.stopPropagation();
 				evt.preventDefault();
+
+				// Blur the focus so it doesn't end up on the result <iframe>,
+				// which would stop propogation of further keypress events.
+				if(page === 'result') {
+					document.activeElement.blur();
+				}
 				return false;
 			}
 		}
