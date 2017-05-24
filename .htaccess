@@ -1,20 +1,4 @@
-RewriteEngine On
-
-RewriteCond %{HTTP_HOST} !^dabblet\.com
-RewriteCond %{HTTP_HOST} !^labs\.dabblet\.com
-RewriteCond %{HTTP_HOST} !^result\.dabblet\.com
-RewriteCond %{HTTP_HOST} !^localhost
-RewriteRule ^(.*)$ http://dabblet.com/$1 [R=301,L]
-
-RewriteBase /
-RewriteCond %{REQUEST_METHOD} POST
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^.*$ /index-php.php [L]
-
 RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^.*$ /index.html [L]
-
-# Compress code
-AddOutputFilterByType DEFLATE text/plain text/html text/xml text/css text/javascript image/svg+xml application/xml application/xhtml+xml application/rss+xml application/javascript application/x-javascript
+RewriteRule . /index.html [L]
