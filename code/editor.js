@@ -197,16 +197,21 @@ var _ = window.Editor = function(pre) {
 					}
 					
 					break;
+				case 219: // bracket
+					evt.shiftKey && that.action('bracket');
+					
+					break;
 			}
 		},
 		
 		keypress: function(evt) {
 			var cmdOrCtrl = evt.metaKey || evt.ctrlKey,
 				code = evt.charCode,
+				isBracket = evt.charCode === 123,
 				ss = this.selectionStart,
 				se = this.selectionEnd;
 			
-			if(code && !cmdOrCtrl) {
+			if(code && !cmdOrCtrl && !isBracket) {
 				var character = String.fromCharCode(code);
 				
 				that.undoManager.action({
@@ -537,23 +542,53 @@ _.actions = {
 	},
 	
 	newline: function(state) {
-		var ss = state.ss,
+		var DEFAULT_INDENT='  ',
+			ss = state.ss,
 			lf = state.before.lastIndexOf('\n') + 1,
-			indent = (state.before.slice(lf).match(/^\s+/) || [''])[0];
+			indent = (state.before.slice(lf).match(/^\s+/) || [''])[0],
+			plf,after='',pIndent = '',indentUnit = indent;
+
+		// Bracket smart indenting
+		if(state.before.slice(ss-1,ss) === '{'){
+			after = '\n' + indent;
+			if (indent !== ''){ 
+				// Finding user indent per line (nested lines)
+				plf = state.before.slice(0,lf-1).lastIndexOf('\n')+1;
+				pIndent = (state.before.slice(plf).match(/^[^\S\n]+/) || [''])[0];
+				indentUnit = indentUnit.replace(pIndent,'') || DEFAULT_INDENT;
+				indent+=indentUnit;
+			} 
+			else 
+				indent=DEFAULT_INDENT;
+		}
 
 		state.before += '\n' + indent;
+		state.after = after + state.after;
 		
 		var selection = state.selection;
-		state.selection = '';	
+		state.selection = '';
 		
 		state.ss += indent.length + 1;
 		state.se = state.ss;
 		
 		return {
-			add: '\n' + indent,
+			add: '\n' + indent + after,
 			del: selection,
 			start: ss
 		};
+	},
+
+	bracket: function(state) {
+		var brkClose = '';
+
+		if(state.after.match(/^\n/)) brkClose='}';
+		state.after = state.selection + brkClose + state.after;
+
+		return {
+			add: '{' + state.selection + brkClose,
+			del: state.selection,
+			start: state.ss
+		}
 	},
 	
 	comment: function(state, options) {
