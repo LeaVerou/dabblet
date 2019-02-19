@@ -245,8 +245,8 @@ var _ = window.Editor = function(pre) {
 				evt.preventDefault();
 
 				var pasted = evt.clipboardData.getData("text/plain");
-				
-				document.execCommand("insertText", false, pasted.replace(/\n/g, "\r\n"));
+
+				document.execCommand("insertText", false, pasted.replace(CRLF, "\r\n"));
 
 				that.undoManager.action({
 					add: pasted,
