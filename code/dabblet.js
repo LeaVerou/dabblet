@@ -51,6 +51,7 @@ window.Dabblet = $u.attach({
 			var form = $u.element.create('form', {
 				properties: {
 					action: 'http://validator.w3.org/check',
+					enctype: 'multipart/form-data',
 					method: 'POST',
 					target: '_blank'
 				},
