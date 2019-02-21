@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>dabblet test run</title>
+    <link rel="stylesheet" href="mocha/mocha.css" />
+    <script src="mocha/mocha.js"></script>
+    <script>mocha.setup('bdd')</script>
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="../code/utils.js"></script>
+    <script src="test.utils.js"></script>
+    <script>
+      if (window.mochaPhantomJS) mochaPhantomJS.run()
+      else mocha.run()
+    </script>
+  </body>
+</html>
