@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 onmessage = function(evt) {
-	if (true || evt.origin === 'http://localhost' || evt.origin === 'http://dabblet.com') {
+	if (evt.origin === 'http://localhost' || evt.origin === 'https://dabblet.com' || evt.origin === 'http://dabblet.com') {
 		var info = JSON.parse(evt.data),
 		    data = info.data;
 
