@@ -6,7 +6,7 @@ $code = $_REQUEST['code'];
 
 if($code) {
 	$ch = curl_init('https://github.com/login/oauth/access_token');
-	
+
 	curl_setopt($ch, CURLOPT_POST, 1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, "client_id=$client_id&client_secret=$client_secret&code=$code");
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -15,7 +15,7 @@ if($code) {
 	));
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-	
+
 	$response = curl_exec($ch);
 
 	curl_close($ch);

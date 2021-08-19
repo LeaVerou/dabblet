@@ -15,15 +15,15 @@ onmessage = function(evt) {
 			case 'title':
 				document.title = data;
 				break;
-				
+
 			case 'css':
 				style.textContent = data;
 				break;
-				
+
 			case 'html':
 				document.body.innerHTML = data;
 				break;
-				
+
 			case 'javascript':
 				if (domLoaded) {
 					try {
@@ -32,7 +32,7 @@ onmessage = function(evt) {
 					}
 					catch (e) {
 						var lineNumber = e.lineNumber - 30 + 1 || (e.stack.match(/<anonymous>:(\d+):\d+/) || [,])[1];
-						
+
 						parent.postMessage(JSON.stringify({
 							action: 'jserror',
 							data: {
