@@ -20,7 +20,7 @@ if($code) {
 
 	curl_close($ch);
 
-	if(preg_match('/access_token=([0-9a-f]+)/', $response, $matches)) {
+	if(preg_match('/access_token=(\\w+)/i', $response, $matches)) {
 		$token = $matches[1];
 	}
 }
