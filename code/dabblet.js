@@ -7,7 +7,7 @@ window.Dabblet = $u.attach({
 	},
 
 	title: function(code) {
-		return (code && code.match(/^\/\*[\s\*\r\n]+(.+?)($|\*\/)/m) || [,'Untitled'])[1];
+		return (code && code.match(/^\/\*[\s\*\r\n]+(.+?)($|\*\/)/m) || [, 'Untitled'])[1];
 	},
 
 	wipe: function() {
@@ -15,7 +15,7 @@ window.Dabblet = $u.attach({
 						(gist.saved? '' : 'unsaved changes and ') +
 						'your local draft.';
 
-		if(confirm(question)) {
+		if (confirm(question)) {
 			localStorage.removeItem('dabblet.css');
 			localStorage.removeItem('dabblet.html');
 			localStorage.removeItem('dabblet.js');
@@ -31,7 +31,7 @@ window.Dabblet = $u.attach({
 	},
 
 	set popup(url) {
-		if(url) {
+		if (url) {
 			popup.src = url;
 			popup.parentNode.style.display = 'block';
 		}
@@ -108,7 +108,7 @@ window.Dabblet = $u.attach({
 				data: title + ' ✿ Dabblet result'
 			}), '*');
 
-			if(!raw) {
+			if (!raw) {
 				code = 'html{' + code + '}';
 			}
 
@@ -151,11 +151,11 @@ window.Dabblet = $u.attach({
 					input = window['page-' + page],
 					pre = window[page] || css;
 
-				if(currentid == page) {
+				if (currentid == page) {
 					return;
 				}
 
-				if(current) {
+				if (current) {
 					var ss = current.selectionStart,
 						se = current.selectionEnd;
 
@@ -163,7 +163,7 @@ window.Dabblet = $u.attach({
 					se && current.setAttribute('data-se', se);
 				}
 
-				if(input && input.value != page || input.checked === false) {
+				if (input && input.value != page || input.checked === false) {
 					input.click();
 				}
 
@@ -171,14 +171,14 @@ window.Dabblet = $u.attach({
 
 				self.Previewer && Previewer.hideAll();
 
-				if(!Dabblet.embedded) {
+				if (!Dabblet.embedded) {
 					pre.focus && pre.focus();
 				}
 
 				var ss = pre.getAttribute('data-ss'),
 					se = pre.getAttribute('data-se');
 
-				if((ss || se) && pre.setSelectionRange) {
+				if ((ss || se) && pre.setSelectionRange) {
 					setTimeout(function(){
 						pre.setSelectionRange(ss, se);
 					}, 2);
@@ -211,16 +211,16 @@ window.Dabblet = $u.attach({
 				var name = input.name,
 				    isToggle = input.type === 'radio' || input.type === 'checkbox';
 
-				if(!(name in settings)) {
+				if (!(name in settings)) {
 					// Assign default value
 					settings[name] = input.hasAttribute('checked') || !isToggle? input.value : '';
 				}
 
-				if(isToggle) {
-					if(input.checked) {
+				if (isToggle) {
+					if (input.checked) {
 						settings[name] = input.value;
 					}
-					else if(input.type === 'checkbox') {
+					else if (input.type === 'checkbox') {
 						settings[name] = '';
 					}
 				}
@@ -235,10 +235,10 @@ window.Dabblet = $u.attach({
 		apply: function() {
 			var settings;
 
-			if(arguments.length === 0) {
+			if (arguments.length === 0) {
 				settings = this.current();
 			}
-			else if(arguments.length === 1) {
+			else if (arguments.length === 1) {
 				settings = arguments[0];
 			}
 			else {
@@ -246,7 +246,7 @@ window.Dabblet = $u.attach({
 				settings[arguments[0]] = arguments[1];
 			}
 
-			for(var name in settings) {
+			for (var name in settings) {
 				this.applyOne(name, settings[name]);
 			}
 
@@ -256,7 +256,7 @@ window.Dabblet = $u.attach({
 
 				if (input.type === 'radio') {
 					(input.onclick = function(evt){
-						if(this.checked) {
+						if (this.checked) {
 							Dabblet.settings.applyOne(name, this.value);
 						}
 					}).call(input);
@@ -281,10 +281,10 @@ window.Dabblet = $u.attach({
 			var current = this.current(name),
 				controls = document.getElementsByName(name);
 
-			for(var i=0; i<controls.length; i++) {
+			for (var i=0; i<controls.length; i++) {
 				var control = controls[i];
 
-				if(control.type === 'checkbox' || control.type === 'radio') {
+				if (control.type === 'checkbox' || control.type === 'radio') {
 					control.checked = control.value == value;
 				}
 				else {
@@ -292,13 +292,13 @@ window.Dabblet = $u.attach({
 				}
 			}
 
-			if(name in this.handlers) {
+			if (name in this.handlers) {
 				this.handlers[name](value);
 			}
 			else {
 				var attribute = 'data-' + name;
 
-				if(value === '') {
+				if (value === '') {
 					document.body.removeAttribute(attribute);
 				}
 				else {
@@ -307,18 +307,18 @@ window.Dabblet = $u.attach({
 			}
 
 			// Super-dirty fix for Safari bug. See issue #7. Gonna wash hands now, kthxbai
-			if(PrefixFree.Prefix === 'Webkit') {
+			if (PrefixFree.Prefix === 'Webkit') {
 				document.body.style.WebkitAnimation = 'bugfix infinite 1s';
 				setTimeout(function(){
 					document.body.style.WebkitAnimation = '';
-				},1);
+				}, 1);
 			}
 
 			// Update localStorage if not in gist
-			if(!gist.id) {
+			if (!gist.id) {
 				var stored = localStorage.settings? JSON.parse(localStorage.settings) : {};
 
-				if(!(name in stored) || stored[name] != value) {
+				if (!(name in stored) || stored[name] != value) {
 					stored[name] = value;
 					localStorage.settings = JSON.stringify(stored);
 				}
@@ -331,7 +331,7 @@ window.Dabblet = $u.attach({
 }, window.Dabblet);
 
 window.onbeforeunload = function(){
-	if(!gist.saved) {
+	if (!gist.saved) {
 		html.onkeyup();
 		css.onkeyup();
 		javascript.onkeyup();
@@ -339,7 +339,7 @@ window.onbeforeunload = function(){
 		css.onblur();
 		html.onblur();
 		javascript.onblur();
-		//return 'You have unsaved changes.';
+		// return 'You have unsaved changes.';
 	}
 };
 
@@ -353,7 +353,7 @@ result.onload = function(){
 
 // Fix Chrome bug
 setTimeout(function(){
-	if(!result.loaded) {
+	if (!result.loaded) {
 		result.onload();
 	}
 }, 500);
@@ -361,9 +361,9 @@ setTimeout(function(){
 document.addEventListener('DOMContentLoaded', function() {
 	var a = $('h1 > a');
 
-	if(parent !== window) {
+	if (parent !== window) {
 		Dabblet.embedded = true;
-		document.body.setAttribute('data-embedded', '')
+		document.body.setAttribute('data-embedded', '');
 
 		a.href = '';
 		a.target = '_blank';
@@ -379,8 +379,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	if (path) {
 		// Viewing a gist?
 		var parts = path.match(/\bgist\/([\da-f]+)(?:\/([\da-f]+))?/i);
-		if(parts) {
-			if('withCredentials' in new XMLHttpRequest) {
+		if (parts) {
+			if ('withCredentials' in new XMLHttpRequest) {
 				gist.id = parts[1];
 				gist.rev = parts[2];
 				css.textContent = html.textContent = javascript.textContent = '';
@@ -393,17 +393,17 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	}
 
-	if(!gist.id) {
+	if (!gist.id) {
 		if (!/\bpost\b/.test(document.body.className)) {
-			if(typeof localStorage['dabblet.css'] === 'string') {
+			if (typeof localStorage['dabblet.css'] === 'string') {
 				css.textContent = localStorage['dabblet.css'];
 			}
 
-			if(typeof localStorage['dabblet.html'] === 'string') {
+			if (typeof localStorage['dabblet.html'] === 'string') {
 				html.textContent = localStorage['dabblet.html'];
 			}
 
-			if(typeof localStorage['dabblet.js'] === 'string') {
+			if (typeof localStorage['dabblet.js'] === 'string') {
 				javascript.textContent = localStorage['dabblet.js'];
 
 			}
@@ -411,7 +411,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		Dabblet.update.JavaScript();
 
-		if(typeof localStorage.settings === 'string') {
+		if (typeof localStorage.settings === 'string') {
 			Dabblet.settings.apply(JSON.parse(localStorage.settings));
 		}
 		else {
@@ -428,7 +428,7 @@ $$('.editor.page > pre').forEach(function(editor){
 		    id = this.id,
 		    code = this.textContent;
 
-		if(id === 'css') {
+		if (id === 'css') {
 			document.title = Dabblet.title(code) + ' ✿ dabblet.com';
 
 			Dabblet.update.CSS(code);
@@ -437,7 +437,7 @@ $$('.editor.page > pre').forEach(function(editor){
 			Dabblet.update.HTML(code);
 		}
 
-		if(keyCode) {
+		if (keyCode) {
 			gist.saved = false;
 
 			if (id === 'javascript') {
@@ -455,7 +455,7 @@ $$('.editor.page > pre').forEach(function(editor){
 	});
 
 	$u.event.bind(editor, 'blur', function (evt) {
-		if(!gist.saved) {
+		if (!gist.saved) {
 			// Save draft
 			localStorage['dabblet.css'] = css.textContent;
 			localStorage['dabblet.html'] = html.textContent;
@@ -470,14 +470,14 @@ document.addEventListener('keydown', function(evt) {
 		character = String.fromCharCode(code),
 		cmdOrCtrl = evt.metaKey || evt.ctrlKey;
 
-	if(cmdOrCtrl && !evt.altKey) {
+	if (cmdOrCtrl && !evt.altKey) {
 		switch (character) {
 			case 'S':
 				gist.save();
 				evt.preventDefault();
 				return false;
 			case 'N':
-				if(Dabblet.wipe()) {
+				if (Dabblet.wipe()) {
 					location.pathname = '/';
 				}
 				evt.preventDefault();
@@ -509,7 +509,7 @@ document.addEventListener('keydown', function(evt) {
 		var currentPage = Dabblet.settings.current('page');
 
 		if (evt.shiftKey) {
-			if(code === 219) {
+			if (code === 219) {
 				// Go to previous tab
 				var page = ({
 					'html': 'css',
@@ -528,7 +528,7 @@ document.addEventListener('keydown', function(evt) {
 		}
 
 		if (page) {
-			if(currentPage !== page) {
+			if (currentPage !== page) {
 				Dabblet.settings.applyOne('page', page);
 
 				evt.stopPropagation();
@@ -536,18 +536,18 @@ document.addEventListener('keydown', function(evt) {
 
 				// Blur the focus so it doesn't end up on the result <iframe>,
 				// which would stop propogation of further keypress events.
-				if(page === 'result') {
+				if (page === 'result') {
 					document.activeElement.blur();
 				}
 				return false;
 			}
 		}
 
-		if([48, 187, 189].indexOf(code) > -1 // 0, +, -
+		if ([48, 187, 189].indexOf(code) > -1 // 0, +, -
 			&& /^pre$/i.test(document.activeElement.nodeName)) {
 			var fontSize;
 
-			if(code === 48) {
+			if (code === 48) {
 				fontSize = 100;
 			}
 			else {
@@ -560,7 +560,7 @@ document.addEventListener('keydown', function(evt) {
 		}
 	}
 
-	if(code == 27) { // Esc
+	if (code == 27) { // Esc
 		var active = document.activeElement;
 
 		if (active && active != document.body && active.blur) {
@@ -572,7 +572,7 @@ document.addEventListener('keydown', function(evt) {
 		}
 	}
 
-	if(code == 112) { // F1
+	if (code == 112) { // F1
 		location.hash = '#help';
 		return false;
 	}
@@ -608,7 +608,7 @@ onmessage = function(evt) {
 		}
 	});
 
-	if(slider.type === 'range') {
+	if (slider.type === 'range') {
 		document.documentElement.classList.add('supports-range');
 	}
 

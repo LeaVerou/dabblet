@@ -5,15 +5,15 @@
 
 (function (html) {
 
-var username = (location.pathname.match(/\/user\/(\w+)/i) || [,''])[1].trim();
+var username = (location.pathname.match(/\/user\/(\w+)/i) || [, ''])[1].trim();
 
-if(username) {
+if (username) {
 	document.title = username + '’s profile';
 
 	$('.nickname', profile).textContent = username;
 
 	addEventListener('gotUserInfo', function() {
-		if(window.user && username.toLowerCase() === window.user.login.toLowerCase()) {
+		if (window.user && username.toLowerCase() === window.user.login.toLowerCase()) {
 			// Viewing own profile
 			html.classList.add('own');
 		}
@@ -50,7 +50,7 @@ if(username) {
 				$('.fn', profile).textContent = user.name || '';
 			}
 
-			$('.nickname', profile).textContent = user.login
+			$('.nickname', profile).textContent = user.login;
 
 			$('.note', profile).textContent = user.bio || '';
 			$('.adr', profile).textContent = user.location || 'Earth';
@@ -164,7 +164,7 @@ var Templates = {
 			inside: '#dabblets'
 		});
 	}
-}
+};
 
 addEventListener('hashchange', function() {
 	$$('.tab').forEach(function(tab) {
@@ -194,14 +194,14 @@ window.UserProfile = {
 			render: function (gist, section) {
 				var files = gist.files;
 
-				if('dabblet.css' in files && 'dabblet.html' in files) {
+				if ('dabblet.css' in files && 'dabblet.html' in files) {
 					Templates.dabblet(gist);
 				}
 			},
 			afterRender: function(page) {
 				UserProfile.loadPreviews();
 
-				if(page == 1) {
+				if (page == 1) {
 					$u.event.bind(window, ['scroll', 'resize'], function (e) {
 						$$('iframe[data-src].scrolled-off').forEach(function(iframe) {
 							iframe.classList.remove('scrolled-off');
@@ -239,7 +239,7 @@ window.UserProfile = {
 
 		var page = +section.getAttribute('data-next');
 
-		if(page < 1) {
+		if (page < 1) {
 			return;
 		}
 
@@ -248,15 +248,15 @@ window.UserProfile = {
 			callback: function(bits, xhr) {
 				section.style.display = 'none';
 
-				var nextPage = ((xhr.getResponseHeader('Link') + '').match(/(\d+)>; rel="next"/) || [,0])[1];
+				var nextPage = ((xhr.getResponseHeader('Link') + '').match(/(\d+)>; rel="next"/) || [, 0])[1];
 
 				section.setAttribute('data-next', nextPage);
 
-				if(!nextPage) {
+				if (!nextPage) {
 					$('.more', section).style.display = 'none';
 				}
 
-				for(var i=0, bit; bit = bits[i++];) {
+				for (var i=0, bit; bit = bits[i++];) {
 					config.render(bit, section);
 				}
 
@@ -271,7 +271,7 @@ window.UserProfile = {
 		var iframe = $('iframe[data-src]:not(.scrolled-off)');
 
 		// Does it exist?
-		if(!iframe) {
+		if (!iframe) {
 			return;
 		}
 
@@ -280,7 +280,7 @@ window.UserProfile = {
 		// Is it visible?
 		var visible = offset.top < innerHeight + pageYOffset && offset.top + 250 > pageYOffset;
 
-		if(!visible) {
+		if (!visible) {
 			// Mark it and move on
 			iframe.classList.add('scrolled-off');
 			UserProfile.loadPreviews();
@@ -312,7 +312,7 @@ window.UserProfile = {
 			}
 		});
 	}
-}
+};
 
 // Load iframes asynchronously, one at a time
 
@@ -326,7 +326,7 @@ function prettyUrl(url) {
 // long ago the date represents.
 // Inspired by John Resig's Pretty Date function
 function prettyDate(time){
-	var date = new Date((time || "").replace(/-/g,"/").replace(/[TZ]/g," ")),
+	var date = new Date((time || '').replace(/-/g, '/').replace(/[TZ]/g, ' ')),
 		now = new Date(),
 		diff = ((now.getTime() + now.getTimezoneOffset()*60000 - date.getTime()) / 1000),
 		day_diff = Math.floor(diff / 86400);
@@ -337,15 +337,15 @@ function prettyDate(time){
 
 	var number, unit;
 
-	if(diff < 60) {
+	if (diff < 60) {
 		return 'just now';
 	}
 
-	if(diff < 3600) {
+	if (diff < 3600) {
 		number = Math.round(diff / 60);
 		unit = 'minute';
 	}
-	else if(diff < 86400) {
+	else if (diff < 86400) {
 		number = Math.round(diff / 3600);
 		unit = 'hour';
 	}
@@ -358,7 +358,7 @@ function prettyDate(time){
 	}
 	else if (day_diff < 31) {
 		number = Math.ceil( day_diff / 7 );
-		unit = 'week'
+		unit = 'week';
 	}
 	else {
 		number = Math.round(day_diff/30);

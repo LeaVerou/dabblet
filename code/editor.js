@@ -15,7 +15,7 @@ var UndoManager = function(editor) {
 
 UndoManager.prototype = {
 	action: function(action) {
-		if(!action || !(action.length || action.action || action.add || action.del)) {
+		if (!action || !(action.length || action.action || action.add || action.del)) {
 			return;
 		}
 
@@ -49,7 +49,7 @@ UndoManager.prototype = {
 
 		var action = this.undoStack.pop();
 
-		if(!action) {
+		if (!action) {
 			return;
 		}
 
@@ -64,7 +64,7 @@ UndoManager.prototype = {
 
 		var action = this.redoStack.pop();
 
-		if(!action) {
+		if (!action) {
 			return;
 		}
 
@@ -80,12 +80,12 @@ UndoManager.prototype = {
 			add: action1.add + action2.add,
 			del: action2.del + action1.del,
 			start: Math.min(action1.start, action2.start)
-		}
+		};
 	},
 
 	apply: function(action) {
-		if(action.length) {
-			for(var i=0; i<action.length; i++) {
+		if (action.length) {
+			for (var i=0; i<action.length; i++) {
 				this.apply(action[i]);
 			}
 			return;
@@ -93,7 +93,7 @@ UndoManager.prototype = {
 
 		var start = action.start;
 
-		if(action.action) {
+		if (action.action) {
 			this.editor.action(action.action, {
 				inverse: action.inverse,
 				start: start,
@@ -112,8 +112,8 @@ UndoManager.prototype = {
 	},
 
 	applyInverse: function(action) {
-		if(action.length) {
-			for(var i=action.length-1; i>=0; i--) {
+		if (action.length) {
+			for (var i=action.length-1; i>=0; i--) {
 				this.applyInverse(action[i]);
 			}
 			return;
@@ -121,7 +121,7 @@ UndoManager.prototype = {
 
 		var start = action.start;
 
-		if(action.action) {
+		if (action.action) {
 			this.editor.action(action.action, {
 				inverse: !action.inverse,
 				start: start,
@@ -158,7 +158,7 @@ var _ = window.Editor = function(pre) {
 		keydown: function(evt) {
 			var cmdOrCtrl = evt.metaKey || evt.ctrlKey;
 
-			switch(evt.keyCode) {
+			switch (evt.keyCode) {
 				case 8: // Backspace
 					var ss = this.selectionStart,
 						se = this.selectionEnd,
@@ -173,7 +173,7 @@ var _ = window.Editor = function(pre) {
 
 					break;
 				case 9: // Tab
-					if(!cmdOrCtrl) {
+					if (!cmdOrCtrl) {
 						that.action('indent', {
 							inverse: evt.shiftKey
 						});
@@ -184,14 +184,14 @@ var _ = window.Editor = function(pre) {
 					that.action('newline');
 					return false;
 				case 90:
-					if(cmdOrCtrl) {
+					if (cmdOrCtrl) {
 						that.undoManager[evt.shiftKey? 'redo' : 'undo']();
 						return false;
 					}
 
 					break;
 				case 191:
-					if(cmdOrCtrl && !evt.altKey) {
+					if (cmdOrCtrl && !evt.altKey) {
 						that.action('comment', { lang: this.id });
 						return false;
 					}
@@ -206,7 +206,7 @@ var _ = window.Editor = function(pre) {
 				ss = this.selectionStart,
 				se = this.selectionEnd;
 
-			if(code && !cmdOrCtrl) {
+			if (code && !cmdOrCtrl) {
 				var character = String.fromCharCode(code);
 
 				that.undoManager.action({
@@ -222,7 +222,7 @@ var _ = window.Editor = function(pre) {
 			se = this.selectionEnd,
 			selection = ss === se? '': this.textContent.slice(ss, se);
 
-			if(selection) {
+			if (selection) {
 				that.undoManager.action({
 					add: '',
 					del: selection,
@@ -244,9 +244,9 @@ var _ = window.Editor = function(pre) {
 			if (evt.clipboardData) {
 				evt.preventDefault();
 
-				var pasted = evt.clipboardData.getData("text/plain");
+				var pasted = evt.clipboardData.getData('text/plain');
 
-				document.execCommand("insertText", false, pasted.replace(CRLF, "\r\n"));
+				document.execCommand('insertText', false, pasted.replace(CRLF, '\r\n'));
 
 				that.undoManager.action({
 					add: pasted,
@@ -266,7 +266,7 @@ var _ = window.Editor = function(pre) {
 					var newse = pre.selectionEnd,
 						innerHTML = pre.innerHTML;
 
-					/*innerHTML = pre.innerHTML
+					/* innerHTML = pre.innerHTML
 										.replace(/(<\w+)(\s.+?>)/g, '$1>')
 										.replace(/<\/?pre>/g, '')
 										.replace(/(<div>)?<br>|(<div>)+/gi, '\n')
@@ -296,11 +296,11 @@ var _ = window.Editor = function(pre) {
 			var keyCode = evt && evt.keyCode || 0,
 				code = this.textContent;
 
-			if(keyCode < 9 || keyCode == 13 || keyCode > 32 && keyCode < 41) {
+			if (keyCode < 9 || keyCode == 13 || keyCode > 32 && keyCode < 41) {
 				$u.event.fire(this, 'caretmove');
 			}
 
-			if([
+			if ([
 				9, 91, 93, 16, 17, 18, // modifiers
 				20, // caps lock
 				13, // Enter (handled by keydown)
@@ -321,30 +321,30 @@ var _ = window.Editor = function(pre) {
 				Prism.highlightElement(this);
 
 				// Dirty fix to #2
-				if(!/\n$/.test(code)) {
+				if (!/\n$/.test(code)) {
 					this.innerHTML = this.innerHTML + '\n';
 				}
 
-				if(ss !== null || se !== null) {
+				if (ss !== null || se !== null) {
 					this.setSelectionRange(ss, se);
 				}
 			}
 
 			// Show a previewer, if needed
-			if(self.Previewer) {
+			if (self.Previewer) {
 				var selection = getSelection();
 
-				if(selection.rangeCount) {
+				if (selection.rangeCount) {
 					var range = selection.getRangeAt(0),
 						element = range.startContainer;
 
-					if(element.nodeType == 3) {
+					if (element.nodeType == 3) {
 						element = element.parentNode;
 					}
 
 					var type = Previewer.get(element);
 
-					if(type) {
+					if (type) {
 						Previewer.active = element;
 						Previewer.s[type].token = element;
 					}
@@ -365,17 +365,21 @@ var _ = window.Editor = function(pre) {
 				se = this.getAttribute('data-se');
 			var pre = this;
 
-			if(ss || se) {
+			if (ss || se) {
 				setTimeout(function(){
 					pre.setSelectionRange(ss, se);
 				}, 2);
 			}
 
 			function modifiers(evt) {
-				if(evt.altKey) {
-					if(evt.shiftKey) { return 10; }
+				if (evt.altKey) {
+					if (evt.shiftKey) {
+ return 10;
+}
 
-					if(evt.ctrlKey) { return .1; }
+					if (evt.ctrlKey) {
+ return .1;
+}
 
 					return 1;
 				}
@@ -383,7 +387,7 @@ var _ = window.Editor = function(pre) {
 				return 0;
 			}
 
-			if(!window.Incrementable) {
+			if (!window.Incrementable) {
 				$u.script('/code/incrementable.js', function() {
 					that.incrementable = new Incrementable(pre, modifiers);
 				});
@@ -398,7 +402,7 @@ var _ = window.Editor = function(pre) {
 		},
 
 		mouseover: function(evt) {
-			if(!self.Previewer) {
+			if (!self.Previewer) {
 				return;
 			}
 
@@ -422,7 +426,7 @@ var _ = window.Editor = function(pre) {
 							var type = Previewer.get(active);
 							Previewer.s[type].token = active;
 						}
-					}
+					};
 				}
 			}
 		},
@@ -475,14 +479,14 @@ _.prototype = {
 				se: se,
 				before: text.slice(0, ss),
 				after: text.slice(se),
-				selection: text.slice(ss,se)
+				selection: text.slice(ss, se)
 			};
 
 	  	var textAction = _.actions[action](state, options);
 
 		pre.textContent = state.before + state.selection + state.after;
 
-		if(textAction && !options.noHistory) {
+		if (textAction && !options.noHistory) {
 			this.undoManager.action(textAction);
 		}
 
@@ -497,7 +501,7 @@ _.actions = {
 		var lf = state.before.lastIndexOf('\n') + 1;
 
 		if (options.inverse) {
-			if(/\s/.test(state.before.charAt(lf))) {
+			if (/\s/.test(state.before.charAt(lf))) {
 				state.before = state.before.splice(lf, 1);
 
 				state.ss--;
@@ -565,7 +569,7 @@ _.actions = {
 			closeBefore = state.before.lastIndexOf(close),
 			openAfter = state.after.indexOf(start);
 
-		if(start > -1 && end > -1
+		if (start > -1 && end > -1
 		   	&& (start > closeBefore || closeBefore === -1)
 		   && (end < openAfter || openAfter === -1)
 		   ) {
@@ -590,7 +594,7 @@ _.actions = {
 		}
 		else {
 			// Comment
-			if(state.selection) {
+			if (state.selection) {
 				// Comment selection
 				state.selection = open + state.selection + close;
 
@@ -609,11 +613,11 @@ _.actions = {
 				var start = state.before.lastIndexOf('\n') + 1,
 					end = state.after.indexOf('\n');
 
-				if(end === -1) {
+				if (end === -1) {
 					end = after.length;
 				}
 
-				while(/\s/.test(state.before.charAt(start))) {
+				while (/\s/.test(state.before.charAt(start))) {
 					start++;
 				}
 
@@ -638,6 +642,6 @@ _.actions = {
 			return textAction;
 		}
 	}
-}
+};
 
 })();
