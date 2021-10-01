@@ -16,7 +16,7 @@ var gist = {
 		},
 		// Step 2: Get access token and store it
 		function(token){
-			if(token) {
+			if (token) {
 				window.ACCESS_TOKEN = localStorage['access_token'] = token;
 
 				gist.getUser(gist.oauth.callback);
@@ -38,7 +38,7 @@ var gist = {
 
 		var anon = o.anon || o.method === 'GET';
 
-		if(!anon && !window.ACCESS_TOKEN) {
+		if (!anon && !window.ACCESS_TOKEN) {
 			gist.oauth[0](function(){
 				gist.request(o);
 			});
@@ -54,7 +54,7 @@ var gist = {
 			method: o.method,
 			url: 'https://api.github.com/' + path + (!o.anon && window.ACCESS_TOKEN? '?access_token=' + ACCESS_TOKEN : ''),
 			headers: Object.assign(o.headers || {}, {
-				"Authorization": "token " + window.ACCESS_TOKEN
+				'Authorization': 'token ' + window.ACCESS_TOKEN
 			}),
 			callback: function(xhr) {
 				var data = xhr.responseText? JSON.parse(xhr.responseText) : null;
@@ -99,7 +99,7 @@ var gist = {
 		var anonymous = options.anon || !window.user,
 		    creatingNew = anonymous || options.forceNew;
 
-		if(gist.id
+		if (gist.id
 		&& (!gist.user || !window.user || gist.user.id != user.id)
 		&& !anonymous
 		) {
@@ -129,7 +129,7 @@ var gist = {
 			files['dabblet.js'] = jsCode? { content: jsCode } : null;
 		}
 
-		files['settings.json'] = { "content": JSON.stringify(Dabblet.settings.current(null, 'file')) };
+		files['settings.json'] = { 'content': JSON.stringify(Dabblet.settings.current(null, 'file')) };
 
 		gist.request({
 			anon: options.anon,
@@ -139,14 +139,14 @@ var gist = {
 				'Content-Type': 'application/json; charset=UTF-8'
 			},
 			callback: function(data, xhr) {
-				if(data.id) {
+				if (data.id) {
 					gist.update(data);
 				}
 			},
 			data: {
-				"description": title,
-				"public": true,
-				"files": files
+				'description': title,
+				'public': true,
+				'files': files
 			}
 		});
 	},
@@ -160,7 +160,7 @@ var gist = {
 				'Content-Type': 'text/plain; charset=UTF-8'
 			},
 			callback: function(data, xhr) {
-				if(data.id) {
+				if (data.id) {
 					gist.update(data);
 
 					callback && callback();
@@ -184,8 +184,8 @@ var gist = {
 					jsFile = files['dabblet.js'],
 					settings = files['settings.json'];
 
-				if(!cssFile || !htmlFile || !jsFile) {
-					for(var filename in files) {
+				if (!cssFile || !htmlFile || !jsFile) {
+					for (var filename in files) {
 						var ext = filename.slice(filename.lastIndexOf('.'));
 
 						if (!cssFile && ext == '.css') {
@@ -220,20 +220,24 @@ var gist = {
 					javascript.textContent = jsFile.content;
 					javascript.onkeyup();
 
-					//if (!Dabblet.embedded) {
+					// if (!Dabblet.embedded) {
 						Dabblet.update.JavaScript();
-					//}
+					// }
 				}
 
 				var defaultSettings = Dabblet.settings.current();
 
-				if(typeof localStorage.settings === 'string') {
+				if (typeof localStorage.settings === 'string') {
 					defaultSettings = $u.merge(defaultSettings, JSON.parse(localStorage.settings));
 				}
 
-				if(settings) {
-					try { settings = JSON.parse(settings.content); }
-					catch(e) { settings = {}; }
+				if (settings) {
+					try {
+						settings = JSON.parse(settings.content);
+					}
+					catch (e) {
+						settings = {};
+					}
 				}
 				else {
 					settings = {};
@@ -250,13 +254,13 @@ var gist = {
 		var id = data.id,
 			rev = data.history && data.history[0] && data.history[0].version || '';
 
-		if(gist.id != id) {
+		if (gist.id != id) {
 			gist.id = id;
 			gist.rev = undefined;
 
 			history.pushState(null, '', '/gist/' + id + location.search + location.hash);
 		}
-		else if(gist.rev && gist.rev !== rev) {
+		else if (gist.rev && gist.rev !== rev) {
 			gist.rev = rev;
 
 			history.pushState(null, '', '/gist/' + id + '/' + rev + location.search + location.hash);
@@ -267,7 +271,7 @@ var gist = {
 		}
 
 		var gistUser = window['gist-user'];
-		if(gist.user && gist.user != window.user) {
+		if (gist.user && gist.user != window.user) {
 			gistUser.innerHTML = gist.getUserHTML(gist.user);
 			gistUser.href = gist.getUserURL(gist.user);
 			gistUser.removeAttribute('aria-hidden');
@@ -298,20 +302,20 @@ Object.defineProperty(gist, 'saved', {
 	set: function(saved) {
 		saved = !!saved;
 
-		if(saved === this._saved) {
+		if (saved === this._saved) {
 			return;
 		}
 
 		this._saved = saved;
 
-		if(saved) {
+		if (saved) {
 			document.body.removeAttribute('data-unsaved');
 			window['save-cmd'].setAttribute('data-disabled', '');
 		}
 		else {
 			document.body.setAttribute('data-unsaved', '');
 
-			if(window.user) {
+			if (window.user) {
 				window['save-cmd'].removeAttribute('data-disabled');
 			}
 		}
@@ -331,14 +335,14 @@ var Dabblet = {
 		afterLogin: function(user){
 			var login = user.login;
 
-			if(window.currentuser) {
+			if (window.currentuser) {
 				currentuser.innerHTML = gist.getUserHTML(user);
 				currentuser.href = gist.getUserURL(user);
 				currentuser.parentNode.className = currentuser.parentNode.className.replace('-inactive-', '-');
 				$('.my-profile').href = '/user/' + user.login;
 			}
 
-			if(window['save-button']) {
+			if (window['save-button']) {
 				window['save-button'].onclick = window['save-cmd'].onclick = gist.save;
 				window['save-cmd'].removeAttribute('data-disabled');
 				window['save-new-cmd'].removeAttribute('data-disabled');
@@ -346,7 +350,7 @@ var Dabblet = {
 		},
 
 		logout: function() {
-			if(confirm('Are you sure you want to log out?')) {
+			if (confirm('Are you sure you want to log out?')) {
 				localStorage.removeItem('access_token');
 			}
 		}
@@ -356,13 +360,13 @@ var Dabblet = {
 window.ACCESS_TOKEN = localStorage['access_token'];
 
 currentuser.onclick = function(){
-	if(!this.hasAttribute('href')) {
+	if (!this.hasAttribute('href')) {
 		Dabblet.user.login();
 	}
-}
+};
 
 // Add loader to the page
-if(!$('#loader')) {
+if (!$('#loader')) {
 	$u.element.create('div', {
 		properties: { id: 'loader' },
 		inside: 'body'
@@ -370,7 +374,7 @@ if(!$('#loader')) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-	if(ACCESS_TOKEN) {
+	if (ACCESS_TOKEN) {
 		gist.getUser(function(user){
 			Dabblet.user.afterLogin(user);
 		});
@@ -385,8 +389,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		do {
 			ancestor = ancestor.parentNode;
-			ancestor.classList[action](className)
-		} while(ancestor && ancestor != document.body);
+			ancestor.classList[action](className);
+		} while (ancestor && ancestor != document.body);
 	}
 
 	$u.event.bind('header a, header input, header button, header [tabindex="0"], pre', {
