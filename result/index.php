@@ -102,7 +102,7 @@ if (!$js) {
 	|| $settings['prefixfree']
 	|| $settings['settings']['prefixfree']
 	): ?>
-<script src="http://dabblet.com/code/prefixfree.min.js"></script>
+<script src="https://dabblet.com/code/prefixfree.min.js"></script>
 <? endif; ?>
 <? if ($js): ?>
 <script>

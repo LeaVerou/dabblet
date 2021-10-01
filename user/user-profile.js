@@ -105,7 +105,7 @@ var Templates = {
 			contents: [{
 						tag: 'a',
 					properties: {
-						href: 'http://dabblet.com/gist/' + gist.id,
+						href: 'https://dabblet.com/gist/' + gist.id,
 						target: '_blank'
 					}
 				}, {
