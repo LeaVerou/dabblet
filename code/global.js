@@ -50,12 +50,16 @@ var gist = {
 				(o.rev? '/' + o.rev : '') +
 				(o.gpath || '');
 
+		let headers = o.headers || {};
+
+		if (window.ACCESS_TOKEN) {
+			headers['Authorization'] = 'token ' + window.ACCESS_TOKEN;
+		}
+
 		$u.xhr({
 			method: o.method,
 			url: 'https://api.github.com/' + path + (!o.anon && window.ACCESS_TOKEN? '?access_token=' + ACCESS_TOKEN : ''),
-			headers: Object.assign(o.headers || {}, {
-				'Authorization': 'token ' + window.ACCESS_TOKEN
-			}),
+			headers,
 			callback: function(xhr) {
 				var data = xhr.responseText? JSON.parse(xhr.responseText) : null;
 
