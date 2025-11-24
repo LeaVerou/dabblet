@@ -1,8 +1,20 @@
 # OAuth callback redirect
 /oauth /.netlify/functions/oauth 200
 
-# Gist result redirect
+# Legacy PHP file redirects (for old bookmarks/links)
+/oauth.php /oauth 301
+
+# Gist result redirect (handles both /result/gist/* and old patterns)
 /result/gist/* /.netlify/functions/gist-result 200!
 
-# SPA fallback - serve index.html for all other routes
-/* /index.html 200
+# SPA routing for gist URLs only (client-side routing)
+/gist/* / 200
+
+# User profile pages - serve user/index.html (needed for dynamic paths like /user/username)
+/user/* /user/ 200
+
+# Preview pages (legacy subdomain support - redirect to result.html)
+/preview/* /result.html 301
+
+# SPA fallback - must be last to catch everything else
+/* / 200
