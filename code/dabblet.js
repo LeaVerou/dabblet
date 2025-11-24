@@ -579,7 +579,17 @@ document.addEventListener('keydown', function(evt) {
 }, true);
 
 onmessage = function(evt) {
-	if (evt.origin === 'http://localhost' || evt.origin === 'https://dabblet.com' || evt.origin === 'http://dabblet.com') {
+	// Support localhost with any port, main domain, and Netlify preview deployments
+	const allowedOriginPatterns = [
+		/^https?:\/\/localhost(:\d+)?$/,
+		/^https?:\/\/dabblet\.com$/,
+		/^https:\/\/dabblet\.netlify\.app$/,
+		/^https:\/\/.*--dabblet\.netlify\.app$/  // Netlify branch previews
+	];
+	
+	const isAllowed = allowedOriginPatterns.some(pattern => pattern.test(evt.origin));
+	
+	if (isAllowed) {
 		var info = JSON.parse(evt.data),
 		    data = info.data;
 
