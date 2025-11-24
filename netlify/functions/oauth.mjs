@@ -1,8 +1,6 @@
 /**
  * Netlify Function to handle GitHub OAuth callback
- * Replaces oauth.php
  */
-
 export const handler = async function (event, context) {
 	// Only allow GET requests
 	if (event.httpMethod !== "GET") {
