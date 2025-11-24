@@ -3,7 +3,8 @@
  */
 
 var gist = {
-	clientId: 'da931d37076424f332ef',
+	// clientId: 'da931d37076424f332ef',
+	clientId: 'Ov23liPosltrsNbxULJG',
 
 	oauth: [
 		// Step 1: Ask permission
