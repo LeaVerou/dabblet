@@ -10,9 +10,12 @@ var gist = {
 		function(callback){
 			gist.oauth.callback = callback;
 
+			// Use Netlify function endpoint for OAuth callback
+			let redirectUri = location.origin + '/oauth';
 			var popup = open('https://github.com/login/oauth/authorize' +
 				'?client_id=' + gist.clientId +
-				'&scope=gist,user', 'popup', 'width=1015,height=500');
+				'&scope=gist,user' +
+				'&redirect_uri=' + encodeURIComponent(redirectUri), 'popup', 'width=1015,height=500');
 		},
 		// Step 2: Get access token and store it
 		function(token){

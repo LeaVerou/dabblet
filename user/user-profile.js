@@ -105,13 +105,13 @@ var Templates = {
 			contents: [{
 						tag: 'a',
 					properties: {
-						href: 'https://dabblet.com/gist/' + gist.id,
+						href: '/gist/' + gist.id,
 						target: '_blank'
 					}
 				}, {
 					tag: 'iframe',
 					attributes: {
-						'data-src': 'http://result.dabblet.com/gist/' + gist.id,
+						'data-src': '/result/gist/' + gist.id,
 						'scrolling': 'no'
 					}
 				}, {

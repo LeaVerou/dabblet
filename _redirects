@@ -1,0 +1,8 @@
+# OAuth callback redirect
+/oauth /.netlify/functions/oauth 200
+
+# Gist result redirect
+/result/gist/* /.netlify/functions/gist-result 200!
+
+# SPA fallback - serve index.html for all other routes
+/* /index.html 200
