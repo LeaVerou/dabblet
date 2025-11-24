@@ -1,3 +1,20 @@
+# Domain-level redirects for subdomains
+# Note: Domains must be assigned to the site in Netlify settings
+
+# result.dabblet.com - gist result viewer
+http://result.dabblet.com/gist/* https://dabblet.com/result/gist/:splat 301!
+https://result.dabblet.com/gist/* https://dabblet.com/result/gist/:splat 301!
+http://result.dabblet.com/* https://dabblet.com/result.html 301!
+https://result.dabblet.com/* https://dabblet.com/result.html 301!
+
+# preview.dabblet.com - preview iframe
+http://preview.dabblet.com/* https://dabblet.com/result.html 301!
+https://preview.dabblet.com/* https://dabblet.com/result.html 301!
+
+# labs.dabblet.com - experimental features
+http://labs.dabblet.com/* https://dabblet.com/:splat 301!
+https://labs.dabblet.com/* https://dabblet.com/:splat 301!
+
 # OAuth callback redirect
 /oauth /.netlify/functions/oauth 200
 
@@ -12,9 +29,6 @@
 
 # User profile pages - serve user/index.html (needed for dynamic paths like /user/username)
 /user/* /user/ 200
-
-# Preview pages (legacy subdomain support - redirect to result.html)
-/preview/* /result.html 301
 
 # SPA fallback - must be last to catch everything else
 /* / 200
