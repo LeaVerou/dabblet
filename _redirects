@@ -9,9 +9,9 @@ https://result.dabblet.com/gist/* /.netlify/functions/gist-result 200!
 http://result.dabblet.com/* /result.html 200!
 https://result.dabblet.com/* /result.html 200!
 
-# preview.dabblet.com - preview iframe
-http://preview.dabblet.com/* https://dabblet.com/result.html 301!
-https://preview.dabblet.com/* https://dabblet.com/result.html 301!
+# preview.dabblet.com - preview iframe (redirect to result subdomain for security)
+http://preview.dabblet.com/* https://result.dabblet.com/:splat 301!
+https://preview.dabblet.com/* https://result.dabblet.com/:splat 301!
 
 # labs.dabblet.com - experimental features
 http://labs.dabblet.com/* https://dabblet.com/:splat 301!
