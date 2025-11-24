@@ -1,11 +1,13 @@
 # Domain-level redirects for subdomains
 # Note: Domains must be assigned to the site in Netlify settings
 
-# result.dabblet.com - gist result viewer
-http://result.dabblet.com/gist/* https://dabblet.com/result/gist/:splat 301!
-https://result.dabblet.com/gist/* https://dabblet.com/result/gist/:splat 301!
-http://result.dabblet.com/* https://dabblet.com/result.html 301!
-https://result.dabblet.com/* https://dabblet.com/result.html 301!
+# result.dabblet.com - gist result viewer (must be different origin for security)
+# Proxy to Netlify function while keeping result.dabblet.com domain
+http://result.dabblet.com/gist/* /.netlify/functions/gist-result 200!
+https://result.dabblet.com/gist/* /.netlify/functions/gist-result 200!
+# Other paths on result subdomain serve result.html
+http://result.dabblet.com/* /result.html 200!
+https://result.dabblet.com/* /result.html 200!
 
 # preview.dabblet.com - preview iframe
 http://preview.dabblet.com/* https://dabblet.com/result.html 301!
@@ -21,8 +23,8 @@ https://labs.dabblet.com/* https://dabblet.com/:splat 301!
 # Legacy PHP file redirects (for old bookmarks/links)
 /oauth.php /oauth 301
 
-# Gist result redirect (handles both /result/gist/* and old patterns)
-/result/gist/* /.netlify/functions/gist-result 200!
+# Redirect /result/gist/* on main domain to result.dabblet.com (security: results must be from different origin)
+/result/gist/* https://result.dabblet.com/gist/:splat 301!
 
 # SPA routing for gist URLs only (client-side routing)
 /gist/* / 200

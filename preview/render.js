@@ -7,9 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 onmessage = function(evt) {
-	// Allow messages from same origin (for Netlify deployment flexibility)
-	let allowedOrigins = ['http://localhost', 'https://dabblet.com', 'http://dabblet.com'];
-	if (allowedOrigins.includes(evt.origin) || evt.origin === location.origin) {
+	if (evt.origin === 'http://localhost' || evt.origin === 'https://dabblet.com' || evt.origin === 'http://dabblet.com') {
 		var info = JSON.parse(evt.data),
 		    data = info.data;
 
