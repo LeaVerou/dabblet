@@ -23,6 +23,9 @@ https://labs.dabblet.com/* https://dabblet.com/:splat 301
 # Legacy PHP file redirects (for old bookmarks/links)
 /oauth.php /oauth 301
 
+# POST requests
+/post /.netlify/functions/post 200
+
 # Redirect /result/gist/* on main domain to result.dabblet.com (security: results must be from different origin)
 /result/gist/* https://result.dabblet.com/gist/:splat 301
 

@@ -1,11 +1,3 @@
-# Redirect POST requests to the post function
-# Only POST requests are routed here
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/post"
-  status = 200
-  methods = ["POST"]
-
 # Allow the post function to access the template file
 [functions.post]
   included_files = ["post-template.html"]
